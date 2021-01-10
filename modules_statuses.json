@@ -1,0 +1,13 @@
+{
+    "Installation": true,
+    "Util": true,
+    "User": true,
+    "Website": true,
+    "Test": true,
+    "Church": false,
+    "Member": false,
+    "HR": false,
+    "Plan": false,
+    "Org": true,
+    "Properties": true
+}
