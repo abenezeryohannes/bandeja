@@ -21,7 +21,7 @@ class Menu
             ]],
             ['expand'=>false,  'icon' => 'fa fa-money-bill-alt', 'name'=> 'Incomes' , 'label' => 'incomes', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [
                 ['expand'=>false, 'label' => 'invoices', 'name' => 'Invoices' ],
-                ['expand'=>false, 'label' => 'revenues', 'name' => 'Revenues' ],
+                ['expand'=>false, 'label' => 'revenues', 'name' => 'Revenue' ],
                 ['expand'=>false, 'label' => 'tenants', 'name' => 'Tenants' ],
             ]],
             ['expand'=>false,  'icon' => 'fa fa-lemon', 'name'=> 'Expenses' , 'label' => 'expenses', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [

@@ -20,7 +20,7 @@ class CreatePropertyCategoriesTable extends Migration
             $table->double("rent_price")->default(0.0);
             $table->double("sell_price")->default(0.0);
             $table->string("size")->default("Unknown");
-            $table->string("picture")->nullalbe();
+            $table->string("picture")->nullable();
             $table->boolean("enabled")->default(true);
 
             $table->timestamps();

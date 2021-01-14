@@ -1,0 +1,13 @@
+{
+    "name": "Incomes",
+    "alias": "incomes",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Incomes\\Providers\\IncomesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -9,5 +9,7 @@
     "HR": false,
     "Plan": false,
     "Org": true,
-    "Properties": true
+    "Properties": true,
+    "Incomes": true,
+    "Accounts": true
 }

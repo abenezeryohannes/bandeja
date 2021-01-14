@@ -14,7 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \Modules\Installation\Console\ChurchInfo::class,
-        \Modules\Installation\Console\Users::class,
+        \Modules\Properties\Console\Install::class,
+        \Modules\Incomes\Console\Install::class,
+        \Modules\Accounts\Console\Install::class,
     ];
 
     /**
