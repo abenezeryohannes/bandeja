@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Incomes\Http\Controllers;
+namespace Modules\Accounts\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class IncomesController extends Controller
+class PaymentMethodsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class IncomesController extends Controller
      */
     public function index()
     {
-        return view('incomes::index');
+        return view('accounts::index');
     }
 
     /**
@@ -23,7 +23,7 @@ class IncomesController extends Controller
      */
     public function create()
     {
-        return view('incomes::create');
+        return view('accounts::create');
     }
 
     /**
@@ -43,7 +43,7 @@ class IncomesController extends Controller
      */
     public function show($id)
     {
-        return view('incomes::show');
+        return view('accounts::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class IncomesController extends Controller
      */
     public function edit($id)
     {
-        return view('incomes::edit');
+        return view('accounts::edit');
     }
 
     /**
@@ -77,14 +77,3 @@ class IncomesController extends Controller
         //
     }
 }
-
-
-
-
-
-
-
-
-
-
-
