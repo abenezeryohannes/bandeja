@@ -13,7 +13,7 @@ class Menu
     protected $all_menu = [
         'main' => [
             ['expand'=>false, 'name'=> 'Home' , 'label' => 'dashboard', 'min_permission' => 'PLAN.INDEX', 'order' => 0, 'icon' => 'fa fa-comment'],
-            ['expand'=>false,  'icon' => 'fa fa-home', 'name'=> 'Properties' , 'label' => 'properties', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [
+            ['expand'=>false,  'icon' => 'fa fa-home', 'name'=> 'PropertiesM' , 'label' => 'properties', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [
                 ['expand'=>false, 'label' => 'properties', 'name' => 'Properties' ],
                 ['expand'=>false, 'label' => 'categories', 'name' => 'Categories' ],
                 ['expand'=>false, 'label' => 'sites', 'name' => 'Sites' ],
@@ -21,7 +21,7 @@ class Menu
             ]],
             ['expand'=>false,  'icon' => 'fa fa-money-bill-alt', 'name'=> 'Incomes' , 'label' => 'incomes', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [
                 ['expand'=>false, 'label' => 'invoices', 'name' => 'Invoices' ],
-                ['expand'=>false, 'label' => 'revenues', 'name' => 'Revenue' ],
+                ['expand'=>false, 'label' => 'revenues', 'name' => 'Revenues' ],
                 ['expand'=>false, 'label' => 'tenants', 'name' => 'Tenants' ],
             ]],
             ['expand'=>false,  'icon' => 'fa fa-lemon', 'name'=> 'Expenses' , 'label' => 'expenses', 'min_permission' => 'PLAN.INDEX', 'order' => 4, 'dropdown' => true,       'li' => [

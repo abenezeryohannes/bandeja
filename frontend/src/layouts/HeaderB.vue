@@ -4,13 +4,16 @@
             <div class="header-body">
                 <div class="row py-4 align-items-center">
                     <div class="col-xs-12 col-sm-4 col-md-5 align-items-center">
-                        <h2 class="d-inline-flex mb-0 long-texts">{{page.title}}</h2> 
+                        <h2 class="d-inline-flex mb-0 long-texts">{{page.title }}</h2> 
                         <slot name="left"></slot>
 
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-7">
                         <div class="text-right">
-                        	<slot name="right"></slot>
+<!--                             <span><a  class="btn btn-white btn-sm header-button-top"><span class="fa fa-plus"></span> &nbsp;Add ssss</a></span>
+                            <span><a  class="btn btn-success btn-sm header-button-top" style="color: white;"><span class="fa fa-plus"></span> &nbsp;Add ssss</a></span> -->
+
+                        	<slot name="buttons-panel"></slot>
                         </div>
                     </div>
                 </div>

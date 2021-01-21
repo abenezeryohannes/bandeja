@@ -2,7 +2,9 @@
 
 namespace Modules\Accounts\Console;
 
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Console\Command;
+use Modules\Accounts\Database\Seeders\AccountsDatabaseSeeder;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -13,14 +15,14 @@ class install extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'install:accounts';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description.';
+    protected $description = 'adding sample bank account, taxes, categories, payment methods';
 
     /**
      * Create a new command instance.
@@ -39,7 +41,9 @@ class install extends Command
      */
     public function handle()
     {
-        //
+        $this->comment('installing bank_account, taxes, categories, payment_methods ...');
+        $accountSeeder = new AccountsDatabaseSeeder();
+        $accountSeeder->run();
     }
 
     /**

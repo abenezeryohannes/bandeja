@@ -12,9 +12,12 @@ class WebsiteController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function printable_invoice()
     {
-        return view('website::index');
+        $the_data = (object)[ 'tenant' => (object)[ 'physical_address' => '', 'name' => '', 'tin_number' => '', 'phone_number' => '', 'email_address' => '' ], 'status' => '', 'invoice_number' =>1, 'invoice_date' => '', 'due_date' => 12 ];
+        return view('printable_invoice', [
+            'the_data' => $the_data  
+        ]);
     }
 
     /**

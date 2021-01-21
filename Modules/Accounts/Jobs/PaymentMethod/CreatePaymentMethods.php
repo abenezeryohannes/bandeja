@@ -1,20 +1,21 @@
 <?php
 
-namespace Modules\Accounts\Jobs\Tax;
+namespace Modules\Accounts\Jobs\PaymentMethod;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Modules\Accounts\Entities\PaymentMethod;
 use Modules\Accounts\Entities\Tax;
 
-class CreateTax implements ShouldQueue
+class CreatePaymentMethods implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 
-    protected $tax = null;
+    protected $payment_method = null;
     protected $response = null;
     protected $request;
 
@@ -38,15 +39,15 @@ class CreateTax implements ShouldQueue
 
         \DB::transaction(function() {
             //check if same tax is already present
-            $tax = Tax::where('name', '=', $this->request['name'])->first();
-            if($tax!=null){ $this->response = "Same tax is already present."; return; }
+            $payment_method = PaymentMethod::where('name', '=', $this->request['name'])->first();
+            if($payment_method!=null){ $this->response = "Same Payment Method is already present."; return; }
 
             //create category
-            $this->tax = Tax::create($this->request->all());
+            $this->payment_method = PaymentMethod::create($this->request->all());
 
-            if($this->tax == null) $this->response = "Internal Server Error!";
+            if($this->payment_method == null) $this->response = "Internal Server Error!";
         });
-        return ($this->response ==null)? $this->tax : $this->response;
+        return ($this->response ==null)? $this->payment_method : $this->response;
     }
 
 }

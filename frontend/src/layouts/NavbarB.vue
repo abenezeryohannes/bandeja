@@ -246,10 +246,10 @@ export default {
 
     },
     watch: {
-        d: {
-            handler: 'checkNotification',
-            immediate: true
-        },
+        // d: {
+        //     handler: 'checkNotification',
+        //     immediate: true
+        // },
         header_info: 'set_data'
     },
     computed: {

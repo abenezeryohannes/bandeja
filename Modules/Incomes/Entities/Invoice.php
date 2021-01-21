@@ -12,7 +12,7 @@ class Invoice extends Model
     protected $casts = [
         "canceled" => "boolean",
     ];
-    protected $fillable = ['tenant_id', 'category_id', 'property_id', 'tax_id',
+    protected $fillable = ['tenant_id', 'category_id', 'property_id', 'tax_id','canceled',
         'start_date', 'end_date', 'due_date', 'invoice_number', 'renewed_invoice_id', 'note',
         'attachment1', 'attachment2', 'attachment3', 'price'];
 

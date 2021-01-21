@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Accounts\Transformers\Mini;
+namespace Modules\Accounts\Transformers\Index;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +17,7 @@ class Tax extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'rate' => $this->rate,
             'enabled' => $this->enabled,
         ];
     }

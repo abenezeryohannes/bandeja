@@ -4,7 +4,7 @@ namespace Modules\Accounts\Transformers\Mini;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Account extends JsonResource
+class PaymentMethod extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,6 @@ class Account extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'bank' => $this->bank,
-            'main_account' => $this->main_account,
-            'enabled' => $this->enabled,
         ];
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Modules\Accounts\Entities\Transaction;
 use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Jobs\Invoice\CancelInvoice;
 use Modules\Incomes\Jobs\Invoice\CreateInvoice;
@@ -20,89 +21,60 @@ class InvoicesController extends Controller
 {
 
     public $perpage = 20;
-    /**
-     * Display a listing of the resource.
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function index()
     {
         $invoices = Invoice::simplepaginate($this->perpage);
         return Index::Collection($invoices);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
+
     public function create()
     {
-        return view('accounts::create');
+        $form = new \Modules\Incomes\UI\Forms\InvoiceForm('create');
+        return response()->json($form->generate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function store(Request $request)
     {
         //validating the input fields
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'tenant_id' => 'bail|required',
             'category_id' => 'bail|required',
             'property_id' => 'bail|required',
         ]);
 
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return ResponseWrapper::WrapSuccess($validator->errors()->first("tenant_id") . $validator->errors()->first("category_id") . $validator->errors()->first("property_id") , null);
-        }
-
 
         //save to database and return the response
         $response = CreateInvoice::dispatchNow($request);
-        return $response;//ResponseWrapper::WrapSuccess($response, 'Account');
+        // return $response;//
+        return ResponseWrapper::WrapSuccess($response, 'Account');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return string
-     */
+
     public function show($id)
     {
         $invoice = Invoice::find($id);
         if($invoice==null)$invoice = "No Invoice found with this id";
         return ResponseWrapper::WrapSuccess($invoice, 'showInvoice');
-    } /**
-     * Show the specified resource.
-     * @param int $id
-     * @return string
-     */
+    }
+
     public function transactions($id)
     {
         $invoice = Invoice::find($id);
         if($invoice==null)$invoice = "No Invoice found with this id";
-        $transactions = $invoice->transactions()->get();
+        $transactions = Transaction::InvoiceTransactions($invoice->id)->get();
         return ResponseWrapper::WrapSuccess($transactions, 'indextransactioncollection');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function edit($id)
     {
         return view('accounts::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function update(Request $request, $id)
     {
         //save to database and return the response
@@ -113,32 +85,33 @@ class InvoicesController extends Controller
 
     }
 
+
+
+    public function pay_form()
+    {
+
+        $form = new \Modules\Incomes\UI\Forms\InvoiceForm('pay');
+        return response()->json($form->generate());
+    }
+
     public function pay(Request $request, $id)
     {
 
         //validating the input fields
-        $validator = Validator::make($request->all(), [
-            'invoice_payment_id' => 'bail|required',
+        $request->validate([
+//            'invoice_payment_id' => 'bail|required',
             'period' => 'bail|required',
-            'payed' => 'bail|required',
+            'amount' => 'bail|required',
             'transaction_date' => 'bail|required',
         ]);
 
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return ResponseWrapper::WrapSuccess(
-                $validator->errors()->first("invoice_payment_id") .
-                $validator->errors()->first("period") .
-                $validator->errors()->first("payed") .
-                $validator->errors()->first("transaction_date")
-                , null);
-        }
+
 
         //save to database and return the response
         $response = PayInvoice::dispatchNow($request, $id);
 
         //$response returns the data inserted into the database
-        return $response;//ResponseWrapper::WrapSuccess($response, 'Account');
+        return ResponseWrapper::WrapSuccess($response, 'InvoicePayment');
 
     }
 
@@ -154,23 +127,23 @@ class InvoicesController extends Controller
 
         //returning the error if input is not correct
         if ($validator->fails()) {
-            return ResponseWrapper::WrapSuccess($validator->errors()->first("tenant_id") . $validator->errors()->first("category_id") . $validator->errors()->first("property_id") , null);
+            return ResponseWrapper::WrapSuccess(
+                $validator->errors()->first("reason")
+                . $validator->errors()->first("by")
+                . $validator->errors()->first("months") , null);
         }
 
 
         //save to database and return the response
         $response = CancelInvoice::dispatchNow($request, $id);
 
+
         //$response returns the data inserted into the database
-        return $response;//ResponseWrapper::WrapSuccess($response, 'Account');
+        return ResponseWrapper::WrapSuccess($response, 'CancelIndex');
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function destroy($id)
     {
         //save to database and return the response

@@ -10,17 +10,21 @@ use \Modules\Properties\Transformers\Index\PropertyCategory as PropertyCategoryI
 use \Modules\Properties\Transformers\Show\PropertyCategory as PropertyCategoryShowResource;
 use \Modules\Properties\Entities\PropertyCategory;
 use \Modules\Properties\Transformers\ResponseWrapper;
-use \Modules\properties\Jobs\Propertycategory\CreatePropertyCategory;
-use \Modules\properties\Jobs\Propertycategory\UpdatePropertyCategory;
+use \Modules\Properties\Jobs\Propertycategory\CreatePropertyCategory;
+use \Modules\Properties\Jobs\Propertycategory\UpdatePropertyCategory;
 use \Modules\Properties\Jobs\Propertycategory\DeletePropertyCategory;
+use Modules\Properties\UI\Forms\PropertyCategoriesForm;
 
 class PropertyCategoriesController extends Controller
 {
     public $perpage = 20;
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index(Request $request)
     {
         $property_categories = PropertyCategory::simplepaginate($this->perpage);
@@ -28,49 +32,29 @@ class PropertyCategoriesController extends Controller
     }
     
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
+
     public function create()
     {
-        return view('properties::create');
+        $form = new PropertyCategoriesForm('create');
+        return response()->json($form->generate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
+
     public function store(Request $request)
     {
-         //validating the input fields
-         $validator = Validator::make($request->all(), [
-            'name' => 'bail|required|string',
+        $request->validate([
+                        'name' => 'bail|required|string',
             'rent_price' => 'bail|required|string',
         ]);
-
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => "error", 
-                "message" => $validator->errors()->first("name") . $validator->errors()->first("rent_price")
-            ]);
-        }
 
         //save to database and return the response
         $response = CreatePropertyCategory::dispatchNow($request);
 
         //$response returns the data inserted into the database
-        
         return ResponseWrapper::WrapSuccess($response, 'PropertyCategory');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function show($id)
     {
         
@@ -79,39 +63,24 @@ class PropertyCategoriesController extends Controller
         return ResponseWrapper::WrapSuccess($propertyCategory, 'showPropertyCategory');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
+
     public function edit($id)
     {
-        return view('properties::edit');
+        $propertyCategory = PropertyCategory::find($id);
+        $form = new \Modules\Properties\UI\Forms\PropertyCategoriesForm('edit');
+        return response()->json($form->generate($id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
+
     public function update(Request $request, $id)
     {
         //validating the input fields
-         $validator = Validator::make($request->all(), [
+         $request->validate([
             'name' => 'bail|required|string',
             'rent_price' => 'bail|required|string',
         ]);
 
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => "error", 
-                "message" => $validator->errors()->first("name") . $validator->errors()->first("rent_price")
-            ]);
-        }
-
-     
         //save to database and return the response
         $response = UpdatePropertyCategory::dispatchNow($request, $id);
 
@@ -119,14 +88,9 @@ class PropertyCategoriesController extends Controller
         return ResponseWrapper::WrapSuccess($response, 'PropertyCategory');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function destroy($id)
     {
-        
         //save to database and return the response
         $response = DeletePropertyCategory::dispatchNow($id);
 

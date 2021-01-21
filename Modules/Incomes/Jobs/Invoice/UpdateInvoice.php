@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Jobs\InvoicePayment\CreateInvoicePayment;
 use Modules\Incomes\Jobs\InvoicePayment\UpdateInvoicePayment;
+use Modules\Properties\Entities\Property;
 
 class UpdateInvoice implements ShouldQueue
 {
@@ -69,6 +70,12 @@ class UpdateInvoice implements ShouldQueue
 
                 //save the new invoice
                 $this->invoice = $this->invoice->update($this->request->all());
+
+
+                //update properties available_after
+                Property::where('id', '=', $this->invoice->property_id)->update([
+                    'available_after' => Carbon::parse($this->invoice->end_date)
+                ]);
             }
         });
         return ($this->response == null || !is_string($this->response))? $this->invoice : $this->response;

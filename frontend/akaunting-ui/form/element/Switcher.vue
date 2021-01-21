@@ -1,8 +1,15 @@
 <template>
-    <div :class="['form-group', column, required]">
+    <div :class="['form-group', column, required]"  style="padding-left: 15px;">
         <label for="enabled" class="form-control-label">{{label}}</label>
-        <div role="tabpanel" class="tab-pane tab-example-result fade show active">
-            <div data-toggle="buttons" class="btn-group btn-group-toggle radio-yes-no">
+
+
+
+        <div class="input-group input-group-merge ">
+
+            <!-- <div class="input-group-prepend"><span class="input-group-text"></span></div>  -->
+
+        <!-- <div role="tabpanel" class="tab-pane tab-example-result fade show active"> -->
+            <div  class="btn-group btn-group-toggle radio-yes-no">
             	<!-- <label class="btn btn-success active">Yes</label>  -->
             	<label v-for="f in options" :class="get_option_class(f.value || f,selected)" v-on:click="select_option(f.value || f)">{{f.label || f}}</label>
             </div>

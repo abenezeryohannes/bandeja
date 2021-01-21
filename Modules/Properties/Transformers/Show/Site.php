@@ -20,12 +20,18 @@ class Site extends JsonResource
         $noOfproperties = $this->properties->count() + $properties_insideBlock;
         $noOfAvailableProperties = $this->properties->where('available_after', '<=', $current_date)->where('properties.enabled','!=', 0)->count() 
                               +  $this->GetBlockedProperties($this->id)->whereDate('available_after', '<=', $current_date)->where('properties.enabled', '!=', 0)->count();
+
+        $picture = $this->picture;
+        if ($picture) {
+            $picture = route('media',['path' => $picture['files'][0] ?? 'placeholder.jpg' ]);
+        }
+
         return [
             "id" => $this->id,
             "name" => $this->name,
             "address" => $this->address,
             "enabled" => $this->enabled,
-            "picture" => $this->picture,
+            "picture" => $picture,
             "no_of_blocks" => $this->blocks->count(),
             "no_of_properties" => $noOfproperties,
             "no_of_available_properties" => $noOfAvailableProperties,

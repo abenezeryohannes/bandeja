@@ -41,6 +41,20 @@ class Tenant extends Model
          ->where('invoice_payments.due_date', '<=',Carbon::now())
            ->sum('invoice_payments.price');
     }
+
+    protected $tenant_id;
+    public function scopeCurrentWaiting($query, $tenant_id){
+        $this->tenant_id = $tenant_id;
+        return $query->join('invoices', function ($join){
+            $join->on('invoices.tenant_id', '=', 'tenants.id');
+        })->join('invoice_payments', function ($join){
+            $join->on('invoice_payments.invoice_id', '=', 'invoices.id');
+        })->where('tenants.id','=', $this->tenant_id)
+            ->where('invoice_payments.transaction_id', '=', null)
+            ->where('invoice_payments.due_date', '>',Carbon::now())
+            ->where('invoice_payments.invoice_date', '<',Carbon::now())
+            ->sum('invoice_payments.price');
+    }
     //open_invoices
 
     public function scopeTotalPaidInv($query){
@@ -62,6 +76,7 @@ class Tenant extends Model
             ->where('invoice_payments.due_date', '>',Carbon::now())
             ->sum('invoice_payments.price');
      }
+
      public function scopeTotalPaidRev($query){
         return $query->join('revenues', function ($join){
             $join->on('revenues.tenant_id', '=', 'tenants.id');
@@ -105,6 +120,7 @@ class Tenant extends Model
             $join->on('transactions.id', '=', 'revenues.transaction_id');
         })->where('revenues.transaction_id', '!=', null);
     }
+
 
 
 }

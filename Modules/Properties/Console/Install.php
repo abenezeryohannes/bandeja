@@ -5,10 +5,11 @@ namespace Modules\Properties\Console;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Console\Command;
 use Modules\Properties\Entities\site;
+use Modules\Properties\Database\Seeders\SitesTableSeeder;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class install extends Command
+class Install extends Command
 {
     /**
      * The name and signature of the console command.
@@ -43,7 +44,8 @@ class install extends Command
     {
         $this->comment('Installing properties ...');
         //populate sites
-        site::factory()->count(10)->create();
+        $seeder = new SitesTableSeeder();
+        $seeder->run();
     }
 
     /**
@@ -54,7 +56,7 @@ class install extends Command
     protected function getArguments()
     {
         return [
-            ['example', InputArgument::REQUIRED, 'An example argument.'],
+            // ['example', InputArgument::REQUIRED, 'An example argument.'],
         ];
     }
 

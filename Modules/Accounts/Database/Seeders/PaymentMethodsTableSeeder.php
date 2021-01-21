@@ -4,8 +4,9 @@ namespace Modules\Accounts\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Accounts\Entities\PaymentMethod;
 
-class PaymentMethodsDatabaseSeederTableSeeder extends Seeder
+class PaymentMethodsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,6 +17,10 @@ class PaymentMethodsDatabaseSeederTableSeeder extends Seeder
     {
         Model::unguard();
 
+        if(PaymentMethod::all()->count()<2) {
+            PaymentMethod::create(['name' => 'CASH']);
+            PaymentMethod::create(['name' => 'Bank transfer']);
+        }
         // $this->call("OthersTableSeeder");
     }
 }

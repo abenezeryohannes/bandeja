@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Properties\Jobs\property;
+namespace Modules\Properties\Jobs\Property;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 

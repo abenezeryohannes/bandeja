@@ -16,6 +16,5 @@ class MediaController extends Controller
         if ($f) {
             return response()->file(base_path('storage/app/'.$path));
         }
-        dd("ddd", $f);
     }
 }

@@ -22,7 +22,7 @@ class SiteFactory extends Factory
         return [
             'name' => $this->faker->city,
             'address' => $this->faker->address,
-            'picture' => "picture" . rand(1, 10) . ".jpg",
+            'picture' => "{\"files\":[\"public\/2021\/01\/18\/property_category\/placeholder.jpg\"],\"permissions\":[]}",
             'enabled' => rand(1, 2) == 1? 1:0,
         ];
     }

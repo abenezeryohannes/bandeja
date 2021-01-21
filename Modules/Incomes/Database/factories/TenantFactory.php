@@ -3,7 +3,7 @@ namespace Modules\Incomes\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TenantsFactory extends Factory
+class TenantFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

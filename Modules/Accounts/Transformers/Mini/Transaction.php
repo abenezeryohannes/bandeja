@@ -14,14 +14,16 @@ class Transaction extends JsonResource
      */
     public function toArray($request)
     {
+        $tax = $this->tax;
 
         return [
             'id' => $this->id,
+            'transaction_number'=>"TR" . ($this->id),
             'transaction_date' => $this->transaction_date,
             'amount' => $this->transaction_date,
+            'tax' => ($tax!=null)?new Tax($this->tax):null,
             'category' => new Category($this->category),
-            'account' => new \Modules\Accounts\Transformers\Index\Account($this->account),
-
+            'account' => new \Modules\Accounts\Transformers\Mini\Account($this->account),
         ];
     }
 }

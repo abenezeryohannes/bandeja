@@ -16,6 +16,6 @@ Route::get('login', 'AuthController@login')->name('login');
 Route::get('logout', 'AuthController@logout')->name('logout');
 Route::post('login', 'AuthController@login_post')->name('login.post');
 
-Route::prefix('website')->group(function() {
-    Route::get('/', 'WebsiteController@index');
+Route::prefix('print')->group(function() {
+    Route::get('/invoice/{id}', 'WebsiteController@printable_invoice');
 });

@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Accounts\Transformers;
+use Modules\Accounts\Transformers\Index\Interest as InterestIndex;
 use Modules\Accounts\Transformers\Mini\Account as AccountMiniResource;
 
 use Modules\Accounts\Transformers\Show\Account as AccountShowResource;
@@ -31,17 +32,13 @@ class ResponseWrapper
 
     public static function getType($data, $transformer){
         $response = null;
-        switch($transformer){
-            case "Account":
+        switch(strtolower($transformer)){
+            case "accountindex":
                 $response = new AccountMiniResource($data);
                 break;
 
-            case "showAccount":
-                $response = new AccountShowResource($data);
-                break;
-
-            case "indexAccount":
-                $response = new AccountIndexResource($data);
+            case "interestindex":
+                $response = new InterestIndex($data);
                 break;
             default: 
                 $response = null;

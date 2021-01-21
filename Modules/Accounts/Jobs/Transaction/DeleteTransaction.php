@@ -9,6 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Accounts\Entities\Account;
 use Modules\Accounts\Entities\Transaction;
+use Modules\Expenses\Entities\Bill;
+use Modules\Expenses\Entities\Payment;
 use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Entities\Revenue;
 
@@ -39,6 +41,7 @@ class DeleteTransaction implements ShouldQueue
                 $this->response =  "No transaction is found with this id!";
             }else {
 
+
                 //check if it is attached to invoice
                 if(strtolower($this->transaction->type)=="invoice"){
                     Invoice::where('id', '=', $this->transaction->invoice_id)->update([
@@ -53,18 +56,18 @@ class DeleteTransaction implements ShouldQueue
                     ]);
                 }
 
-//                //check if it is attached to payment
-//                if(strtolower($this->transaction->type)=="payment"){
-//                    Payment::where('id', '=', $this->transaction->payment_id)->update([
-//                        'transaction_id' => null,
-//                    ]);
-//                }
-//                //check if it is attached to bill
-//                if(strtolower($this->transaction->type)=="bill"){
-//                    Bill::where('id', '=', $this->transaction->bill_id)->update([
-//                        'transaction_id' => null,
-//                    ]);
-//                }
+                //check if it is attached to payment
+                if(strtolower($this->transaction->type)=="payment"){
+                    Payment::where('id', '=', $this->transaction->payment_id)->update([
+                        'transaction_id' => null,
+                    ]);
+                }
+                //check if it is attached to bill
+                if(strtolower($this->transaction->type)=="bill"){
+                    Bill::where('id', '=', $this->transaction->bill_id)->update([
+                        'transaction_id' => null,
+                    ]);
+                }
 
                 $account = Account::find($this->transaction->account_id);
                 if($account != null){

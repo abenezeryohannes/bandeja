@@ -3,6 +3,8 @@
 namespace Modules\Incomes\Console;
 
 use Illuminate\Console\Command;
+use Modules\Accounts\Database\Seeders\AccountsDatabaseSeeder;
+use Modules\Incomes\Database\Seeders\IncomesDatabaseSeeder;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -13,14 +15,14 @@ class install extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'install:incomes';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description.';
+    protected $description = 'installing tenants.';
 
     /**
      * Create a new command instance.
@@ -40,6 +42,9 @@ class install extends Command
     public function handle()
     {
         //
+        $this->comment('installing tenants, invoices, revenues...');
+        $Seeder = new IncomesDatabaseSeeder();
+        $Seeder->run();
     }
 
     /**

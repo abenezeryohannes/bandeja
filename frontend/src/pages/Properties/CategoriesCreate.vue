@@ -3,8 +3,8 @@
 
         <ak-form-a 
             :boot_data="page_info"
-            action_api="/api/v1/propertycategories/store"
-            method="patch"
+            :action_api="action_api"
+            :method="method"
             :return_url="{ name: 'Categories' }"
         />
             <!-- boot_api="/api/v1/user/profile/create" -->
@@ -28,7 +28,9 @@ export default {
                 parent: 'PropertiesM',
                 breadcrumb: []
             },
-            api: '/api/v1/propertycategories/create',
+            api: null,
+            action_api: null,
+            method: null,
             isActive: [],
 
             table: {
@@ -47,6 +49,20 @@ export default {
 
     methods: {
 
+    },
+
+    mounted(){
+        var p = this.$route.params.id
+        if (p) {
+            this.api = '/api/v1/propertycategories/edit/'+p
+            this.action_api = '/api/v1/propertycategories/update/'+p
+            this.method  = 'put'
+        }else{
+            this.api = '/api/v1/propertycategories/create'
+            this.action_api = '/api/v1/propertycategories/store'
+            this.method  = 'patch'
+        }
+        console.log(p)
     }
 }
 

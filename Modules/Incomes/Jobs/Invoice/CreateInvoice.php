@@ -22,21 +22,13 @@ class CreateInvoice implements ShouldQueue
     protected $response = null;
     protected $request;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param  $request
-     */
+
     public function __construct($request)
     {
         $this->request = ($request);
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
+
     public function handle()
     {
 
@@ -51,12 +43,29 @@ class CreateInvoice implements ShouldQueue
                 $this->response = "No tenant with this id!";
                 return;
             }
+
             $property = Property::find($this->request['property_id']);
             if($property == null){
                 $this->response = "No Property with this id!";
                 return;
             }
+
+            if(Carbon::parse($property->available_after)->isAfter(Carbon::now()->addDay())){
+                $this->response = "This property is not available!";
+                return;
+            }
+
             //check if end date and due date is prior to start date
+            if(Carbon::parse($this->request['start_date'])->isAfter(Carbon::parse($this->request['end_date'])))
+            {$this->response = "Invoice end date must be after invoice start date!"; return;}
+
+            if(Carbon::parse($this->request['start_date'])->isAfter(Carbon::parse($this->request['due_date'])))
+            {$this->response = "Invoice due date can't precede invoice start date!"; return;}
+
+//            if(Carbon::parse($this->request['due_date'])->isAfter(Carbon::parse($this->request['end_date'])))            {$this->response = "No tenant with this id!"; return;}
+//            {$this->response = "Invoice end date must be after due date"; return;}
+
+
 
             //if no price set use property price else use inserted price
             if(!array_key_exists('price', $this->request->all()))
@@ -64,6 +73,12 @@ class CreateInvoice implements ShouldQueue
 
             //create invoice
             $this->invoice = Invoice::create($this->request->all());
+
+            //update properties available_after
+            Property::where('id', '=', $this->invoice->property_id)->update([
+                'available_after' => Carbon::parse($this->invoice->end_date)
+            ]);
+
 
             //get the month deference between invoice date and end date
             //get the difference in days between invoice date and due date

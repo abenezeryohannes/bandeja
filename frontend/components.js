@@ -13,33 +13,26 @@ Vue.component('layout-b',
 
 
 
-Vue.component('k-tab',
-	require('./the-office/KTab').default);
+Vue.component('ak-switcher',
+	require('./akaunting-ui/form/element/Switcher.vue').default);
+Vue.component('ak-input',
+	require('./akaunting-ui/form/element/Input.vue').default);
+Vue.component('ak-select',
+	require('./akaunting-ui/form/element/Select.vue').default);
+Vue.component('ak-file',
+	require('./akaunting-ui/form/element/File.vue').default);
+Vue.component('ak-textarea',
+	require('./akaunting-ui/form/element/Textarea.vue').default);
+Vue.component('ak-blank',
+	require('./akaunting-ui/form/element/Blank.vue').default);
 
-Vue.component('k-table',
-	require('./the-office/KTable.vue').default);
-
-Vue.component('k-table2',
-	require('./the-office/KTable2.vue').default);
-
-Vue.component('k-add-item',
-	require('./the-office/KAddItem.vue').default);
-
-
-Vue.component('avatar-mgt',
-	require('./the-office/AvatarMgt.vue').default);
-
-Vue.component('several-actions',
-	require('./the-office/SeveralActions.vue').default);
-
-Vue.component('k-view-edit',
-	require('./the-office/KViewEdit.vue').default);
-
-// Vue.component('calendar-box',
-// 	require('./common/Calendar.vue').default);
-// Vue.component('k-tab',
-// 	require('./common/low/KTab').default);
+Vue.component('ak-form-a',
+	require('./akaunting-ui/form/FormA.vue').default);
 
 
-// Vue.component('k-table',
-// 	require('./common/KTable.vue').default);
+Vue.component('ak-table',
+	require('./akaunting-ui/table/Table.vue').default);
+Vue.component('ak-actions',
+	require('./akaunting-ui/button/ActionButton.vue').default);
+Vue.component('ak-dropup',
+	require('./akaunting-ui/button/DropupButton.vue').default);

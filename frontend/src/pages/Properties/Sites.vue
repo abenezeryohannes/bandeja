@@ -9,6 +9,11 @@
         <ak-table
             :columns="table.columns"
             boot_api="/api/v1/sites/"
+            :actions="{
+                show: 'SitesShow',
+                edit: 'SitesUpdate',
+                destroy: 'CategoriesUpdate',
+            }"
 
         />
             <!-- boot_api="/api/v1/user/profile/create" -->
@@ -41,7 +46,7 @@ export default {
                     { label: 'Name', name: 'name', column: 3 },
                     { label: 'Address', name: 'address', column: 3 },
                     { label: 'No of Properties', name: 'no_of_properties', column: 2 },
-                    { label: 'Status', name: 'enabled' , column: 1},
+                    { label: 'Status', name: 'enabled' , column: 1, type: 'status'},
                     { label: 'Actions', name: '##' },
                 ]
             }

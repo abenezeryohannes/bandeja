@@ -15,12 +15,14 @@ class Index extends JsonResource
      */
     public function toArray($request)
     {
+        $open_invoice = $this->CurrentWaiting($this->id);
+        $defaulted = $this->TotalDefaulted();
         return [
             "id" => $this->id,
             "name" => $this->name,
             "phone_number" => $this->phone_number,
-            "no_of_open_invoices" => $this->invoices()->where('end_date', '>', Carbon::now())->count(),
-            "no_of_defaulted" => $this->TotalDefaulted()
+            "no_of_open_invoices" => "ETB ". number_format($open_invoice, 2),
+            "no_of_defaulted" => "ETB ". number_format($defaulted, 2)
         ];
     }
 }

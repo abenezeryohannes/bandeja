@@ -15,12 +15,19 @@
                 }" :page="page" :boot_the_app="boot_the_app" />
             <div id="main-body">
                 <header-b  :page="page">
+
+                            <template v-slot:buttons-panel>
+                        <slot name="buttons-panel">
+<!--                             <buttons-panel>
+                            </buttons-panel> -->
+                        </slot>
+                            </template>
                 </header-b> 
                 <div class="container-fluid content-layout mt--6">
                     <div id="app">                    
                         <slot v-if="page_status_code == '1'" ></slot>
                         <div v-else-if="page_status_code == 401" >Unauthorized</div>
-                        <div v-else >Loading ...</div>
+                        <div v-else  style="min-height: 500px;"></div>
                     </div>
                     <footer class="footer">
                         <div class="row">
@@ -215,6 +222,9 @@ export default {
         } else {
             this.boot_from_state()
         }
+        console.log('slots')
+        console.log(this.$slots)
+
     },
     updated() {},
 };

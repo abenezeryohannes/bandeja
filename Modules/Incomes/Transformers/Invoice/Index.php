@@ -31,14 +31,18 @@ class Index extends JsonResource
                 }
             } else $status = "paid";
         }
+        $price = ($last_payment_request==null)?$this->price:$last_payment_request->price;
+        $invoice_date = ($last_payment_request==null)?$this->start_date:$last_payment_request->invoice_date;
+        $due_date = ($last_payment_request==null)?$this->due_date:$last_payment_request->due_date;
         return [
+            "id"=>$this->id,
             "invoice_id"=>$this->id,
             "invoice_payment_id"=>($last_payment_request==null)?null:$last_payment_request->id,
             "invoice_number"=>$this->invoice_number,
-            "tenant_name"=>$this->tenant()->first()->name,
-            "price"=>($last_payment_request==null)?$this->price:$last_payment_request->price,
-            "invoice_date"=> ($last_payment_request==null)?$this->start_date:$last_payment_request->invoice_date,
-            "due_date"=> ($last_payment_request==null)?$this->due_date:$last_payment_request->due_date,
+            "tenant_name"=> mb_strimwidth($this->tenant()->first()->name, 0, 16, '...'),
+            "price"=>"ETB ". number_format($price, 2),
+            "invoice_date"=> Carbon::parse($invoice_date)->toFormattedDateString(),
+            "due_date"=> Carbon::parse($due_date)->toFormattedDateString(),
             "status"=> ($this->canceled_invoice_id!=null)?"canceled":$status
         ];
     }

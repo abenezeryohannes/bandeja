@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Properties\Jobs\propertycategory;
+namespace Modules\Properties\Jobs\Propertycategory;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;

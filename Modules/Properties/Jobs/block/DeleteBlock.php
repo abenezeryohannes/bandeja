@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Properties\Jobs\block;
+namespace Modules\Properties\Jobs\Block;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use \Modules\Properties\Jobs\Property\DeleteProperty;

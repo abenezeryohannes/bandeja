@@ -5,75 +5,72 @@ namespace Modules\Accounts\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
+use Modules\Accounts\Entities\PaymentMethod;
+use Modules\Accounts\Jobs\PaymentMethod\CreatePaymentMethods;
+use Modules\Accounts\Jobs\PaymentMethod\DeletePaymentMethods;
+use Modules\Accounts\Jobs\PaymentMethod\UpdatePaymentMethods;
+use Modules\Accounts\Transformers\ResponseWrapper;
 
 class PaymentMethodsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+    public $perpage = 20;
+
     public function index()
     {
-        return view('accounts::index');
+        $payment_method = PaymentMethod::simplepaginate($this->perpage);
+        return \Modules\Accounts\Transformers\Mini\PaymentMethod::Collection($payment_method);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('accounts::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
-        //
+        //validating the input fields
+        $request->validate( [
+            'name' => 'bail|required|string',
+        ]);
+
+        //save to database and return the response
+        $response = CreatePaymentMethods::dispatchNow($request);
+        return ResponseWrapper::WrapSuccess($response, 'PaymentMethodIndex');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function show($id)
     {
-        return view('accounts::show');
+        $payment_method = PaymentMethod::find($id);
+        if($payment_method==null)$payment_method = "No payment method found with this id";
+        return new \Modules\Accounts\Transformers\Mini\PaymentMethod($payment_method);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function edit($id)
     {
         return view('accounts::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
+
     public function update(Request $request, $id)
     {
-        //
+
+        //save to database and return the response
+        $response = UpdatePaymentMethods::dispatchNow($request, $id);
+
+        //$response returns the data inserted into the database
+        return ResponseWrapper::WrapSuccess($response, 'PaymentMethodIndex');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        //save to database and return the response
+        $response = DeletePaymentMethods::dispatchNow($id);
+
+        //$response returns the data inserted into the database
+        return ResponseWrapper::WrapSuccess($response, null);
     }
 }

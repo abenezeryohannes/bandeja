@@ -12,6 +12,7 @@ use Modules\Incomes\Entities\CanceledInvoice;
 use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Jobs\InvoicePayment\DeleteInvoicePayment;
 use Modules\Incomes\Jobs\InvoicePayment\UpdateInvoicePayment;
+use Modules\Properties\Entities\Property;
 
 class CancelInvoice implements ShouldQueue
 {
@@ -46,8 +47,19 @@ class CancelInvoice implements ShouldQueue
                 $this->response =  "No invoice found with this id!";
             }else {
 
-
+                if($this->invoice->canceled){$this->response = "This invoice is already canceled";return;}
                 $cancel_date = Carbon::now()->addMonths($this->request['months']);
+
+                //if the invoice is already ended
+                if(Carbon::parse($this->invoice->end_date)->isBefore(Carbon::now()))
+                {$this->response = "This invoice is already ended";return;}
+
+                //if request[month] is more than the end date
+                if($cancel_date->isAfter(Carbon::parse($this->invoice->end_date)))
+                {$this->response = "This invoice will be ended after ".
+                    Carbon::parse($this->invoice->end_date)->diffInMonths(Carbon::now())
+                    ." months so no need to cancel it.";return;}
+
 
                 $dif_in_month = Carbon::parse($cancel_date)->diffInMonths(Carbon::parse($this->invoice->start_date));
 
@@ -67,7 +79,14 @@ class CancelInvoice implements ShouldQueue
                     else $this->response = null;
                 }
 
-                $this->invoice->update(["end_date"=>$new_end_date]);
+                //update invoice end date to canceled date
+                $this->invoice->update(["end_date"=>$new_end_date, "canceled"=>true]);
+
+                //update properties available_after
+                Property::where('id', '=', $this->invoice->property_id)->update([
+                    'available_after' => Carbon::parse($this->invoice->end_date)
+                ]);
+
             }
         });
         return ($this->response == null || !is_string($this->response))? $this->canceled_invoice : $this->response;

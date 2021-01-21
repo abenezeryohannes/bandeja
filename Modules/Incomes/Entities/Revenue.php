@@ -11,7 +11,7 @@ class Revenue extends Model
     use HasFactory;
 
     protected $fillable = [ 'tenant_id', 'category_id',
-         'price', 'payed', 'status', 'transaction_id'];
+         'price',  'status', 'transaction_id'];
 
     protected static function newFactory()
     {

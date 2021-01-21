@@ -7,10 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class site extends Model
 {
-    use HasFactory;
+    use HasFactory, \Modules\Util\Traits\Mediable;
+
 
     protected $fillable = ["name", "address", "picture", "enabled"];
-    
+
+
+    protected $casts= [
+        "enabled"=>"boolean"
+    ];
+
+    protected $media_folder = "site";
+
+    protected $media_columns = ['picture'];
+
     protected static function newFactory()
     {
         return \Modules\Properties\Database\factories\SiteFactory::new();

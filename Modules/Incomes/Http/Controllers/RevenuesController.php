@@ -18,30 +18,21 @@ class RevenuesController extends Controller
 
 
     public $perpage = 20;
-    /**
-     * Display a listing of the resource.
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
+
     public function index()
     {
         $revenues = Revenue::where('transaction_id', '!=', null)->simplepaginate($this->perpage);
         return Index::Collection($revenues);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+     public function create()
     {
-        return view('accounts::create');
+        $form = new \Modules\Incomes\UI\Forms\RevenueForm('create');
+        return response()->json($form->generate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+
+
     public function store(Request $request)
     {
         //validating the input fields
@@ -52,7 +43,9 @@ class RevenuesController extends Controller
 
         //returning the error if input is not correct
         if ($validator->fails()) {
-            return ResponseWrapper::WrapSuccess($validator->errors()->first("name"), null);
+            return ResponseWrapper::WrapSuccess(
+                $validator->errors()->first("tenant_id") .
+                $validator->errors()->first("category_id"), null);
         }
 
 
@@ -61,11 +54,7 @@ class RevenuesController extends Controller
         return $response;//ResponseWrapper::WrapSuccess($response, 'Account');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return string
-     */
+
     public function show($id)
     {
         $revenues = Revenue::find($id);
@@ -73,22 +62,13 @@ class RevenuesController extends Controller
         return ResponseWrapper::WrapSuccess($revenues, 'showRevenue');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function edit($id)
     {
         return view('accounts::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function update(Request $request, $id)
     {
         //save to database and return the response

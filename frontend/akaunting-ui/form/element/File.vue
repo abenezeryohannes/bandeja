@@ -41,6 +41,7 @@ export default {
             ) {
                 this.img_preview = URL.createObjectURL(file)
             }
+            this.$emit('input', file)
             // console.log(file)
         },
     },

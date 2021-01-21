@@ -9,10 +9,19 @@ class PaymentMethod extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
+    protected $fillable = ['name', 'enabled'];
+
+    protected $casts = [
+        "enabled" => "boolean",
+    ];
+
     protected static function newFactory()
     {
         return \Modules\Accounts\Database\factories\PaymentMethodFactory::new();
+    }
+
+
+    public function transactions(){
+        return $this->hasMany('\Modules\Accounts\Entities\Transaction');
     }
 }

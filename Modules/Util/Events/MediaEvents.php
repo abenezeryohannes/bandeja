@@ -10,6 +10,8 @@ class MediaEvents
 {
     use SerializesModels, Dispatchable;
 
+    public $paths;
+
     /**
      * Create a new event instance.
      *
@@ -17,25 +19,24 @@ class MediaEvents
      */
     public function __construct($type, $files, $folder, ...$args )
     {
+        $paths = [];
         $permissions = $args[0] ?? null;
-        // dd($t, $args);
         $d = now()->format('d');
         $m = now()->format('m');
         $y = now()->format('Y');
         $directory = 'public/'.$y.'/'.$m.'/'.$d.'/'.$folder;
-        // $directory = 'public/'.$y.'/'.$m.'/'.$d;
-        // $directory = 'public/'.$y;
-            Storage::makeDirectory($directory, 0755, true, true);
+        Storage::makeDirectory($directory, 0755, true, true);
         foreach ($files as $file) {
-            # code...
-        Storage::put($directory, $file);
-        }
+            $path = Storage::put($directory, $file);
 
+            array_push($paths, $path);
+        }
+        $this->paths = $paths;
     }
 
-    public function handle($event)
+    public function handle()
     {
-        // dd($event);
+        return $this->paths;   
     }
 
     /**

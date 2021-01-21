@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header border-bottom-0">
-            <form method="GET" action="http://localhost:8000/sales/invoices" accept-charset="UTF-8" role="form" class="mb-0">
+            <div method="GET" accept-charset="UTF-8" role="form" class="mb-0">
                 <div class="align-items-center">
                     <div class="el-select pl-20 mr-40">
                         <div class="el-input el-input--suffix">
@@ -33,7 +33,7 @@
                 </div>
                 <!---->
                 <!---->
-            </form>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-flush table-hover">
@@ -42,14 +42,17 @@
                         <template v-for="(c,k) in columns">
                             <template v-if="c.name == '#'">
                                 <th class="col-sm-2 col-md-1 col-lg-1 col-xl-1 d-none d-sm-block">
-                                    <div class="custom-control custom-checkbox"><input id="table-check-all" type="checkbox" class="custom-control-input"> <label for="table-check-all" class="custom-control-label"></label></div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input id="table-check-all" type="checkbox" class="custom-control-input"> 
+                                        <label for="table-check-all" class="custom-control-label"></label>
+                                    </div>
                                 </th>
                             </template>
                             <template v-else-if="c.name == '##'">
-                                <th class="col-sm-2 d-none d-md-block"><a rel="nofollow" class="col-aka">{{c.label}}</a>&nbsp; <i class="fas fa-sort-numeric-up"></i></th>
+                                <th class="col-sm-2 d-none text-center d-md-block"><a rel="nofollow" class="col-aka">{{c.label}}</a></th>
                             </template>
                             <template v-else>
-                                <th :class="['col-sm-'+get_col_size(c,k,columns), 'text-center','d-none d-md-block']"><a>{{c.label}}</a></th>
+                                <th :class="['col-sm-'+get_col_size(c,k,columns), 'text-center','d-none d-md-block']"><a>{{c.label}}</a>&nbsp; <i class="fas fa-sort-numeric-up"></i></th>
                             </template>
                         </template>
                     </tr>
@@ -59,14 +62,24 @@
                         <template v-for="(c,k) in columns">
                             <template v-if="c.name == '#'">
                                 <td class="col-sm-2 col-md-1 col-lg-1 col-xl-1 d-none d-sm-block">
-                                    <div class="custom-control custom-checkbox"><input id="table-check-all" type="checkbox" class="custom-control-input"> <label for="table-check-all" class="custom-control-label"></label></div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input :id="'check-'+r.id" type="checkbox" class="custom-control-input"> 
+                                        <label :for="'check-'+r.id" class="custom-control-label"></label>
+                                    </div>
                                 </td>
                             </template>
                             <template v-else-if="c.name == '##'">
-                                <td class="col-sm-2 d-none d-md-block"></td>
+                                <td class="col-sm-2 d-none d-md-block">
+                                    <ak-actions :id="r.id" :actions="actions" ></ak-actions>
+                                </td>
                             </template>
                             <template v-else>
-                                <td :class="['col-sm-'+get_col_size(c,k,columns), 'text-center','d-none d-md-block']"><a>{{r[c.name]}}</a></td>
+                                <td :class="['col-sm-'+get_col_size(c,k,columns), 'text-center','d-none d-md-block']">
+                                    <span v-if="c.type == 'status'" class="badge badge-lg badge-pill " :class="{'badge-success': r[c.name],'badge-danger': !r[c.name] }">
+                                        {{get_status(r,c)}}
+                                    </span>
+                                    <a v-else>{{get_label(r,c)}} </a>
+                                </td>
                             </template>
                         </template>
                         </td>
@@ -76,15 +89,18 @@
         </div>
         <div class="card-footer table-action">
             <div class="row">
-                <div class="col-xs-12 col-sm-5 d-flex align-items-center"><select name="limit" class="form-control form-control-sm d-inline-block w-auto d-none d-md-block">
+                <div class="col-xs-12 col-sm-5 d-flex align-items-center">
+                    <!-- <select name="limit" class="form-control form-control-sm d-inline-block w-auto d-none d-md-block">
                         <option value="10">10</option>
                         <option value="25" selected="selected">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
-                    </select> <span class="table-text d-none d-lg-block ml-2">
+                    </select> 
+                    <span class="table-text d-none d-lg-block ml-2">
                         per page.
                         1-25 of 100 records.
-                    </span></div>
+                    </span> -->
+                </div>
                 <div class="col-xs-12 col-sm-7 pagination-xs">
                     <nav class="float-right">
                         <ul class="pagination mb-0">
@@ -103,7 +119,7 @@
 </template>
 <script>
 export default {
-    props: ["boot_api", "columns"],
+    props: ["boot_api", "columns","actions"],
     data() {
         return {
             file_name: 'select file',
@@ -126,6 +142,27 @@ export default {
         // active_tab : 'notify_up'
     },
     methods: {
+        get_status(r,c){
+            if (r[c.name]) {
+                return "Enabled"
+            }
+            return "Disabled"
+        },
+        get_label(r,c){
+            const rr = c.name.split('.');
+            if (rr.length == 1) {
+                return r[c.name]
+            }
+            var ans = r
+            for (var i = 0 ; i < rr.length; i++) {
+                if (ans[rr[i]] !== undefined) {
+                    ans = ans[rr[i]]
+                }else{
+                    return null
+                }
+            }
+            return ans
+        },
         get_col_size(c, k, columns) {
             if (c.column) {
                 return c.column

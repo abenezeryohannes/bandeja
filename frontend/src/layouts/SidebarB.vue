@@ -4,12 +4,12 @@
             <div class="sidenav-header d-flex align-items-center">
                 <ul class="navbar-nav" v-click-outside="close_company">
                     <li :class="company_class">
-                        <a class="nav-link" v-on:click="toggle_company" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="avatar menu-avatar background-unset">
                                 <img class="border-radius-none border-0 mr-3" alt="Akaunting" :src="header_info.home_img">
                             </span>
-                            <span class="nav-link-text long-texts pl-2 mwpx-100">My Company</span>
-                            <i class="fas fa-sort-down pl-2"></i>
+                            <span class="nav-link-text long-texts pl-2 mwpx-150">Walta Ethiopia</span>
+                            <!-- <i class="fas fa-sort-down pl-2"></i> -->
                         </a>
                         <!-- <div class="dropdown-menu dropdown-menu-right menu-dropdown menu-dropdown-width"> -->
                         <div :class="company_class2">
@@ -25,7 +25,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="ml-auto left-menu-toggle-position overflow-hidden">
+<!--                 <div class="ml-auto left-menu-toggle-position overflow-hidden">
                     <div class="sidenav-toggler d-none d-xl-block left-menu-toggle active" data-action="sidenav-unpin" data-target="#sidenav-main">
                         <div class="sidenav-toggler-inner">
                             <i class="sidenav-toggler-line"></i>
@@ -33,7 +33,7 @@
                             <i class="sidenav-toggler-line"></i>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="navbar-inner">
                 <!-- Collapse -->
@@ -138,10 +138,10 @@ export default {
 
     },
     watch: {
-        d: {
-            handler: 'checkNotification',
-            immediate: true
-        },
+        // d: {
+        //     handler: 'checkNotification',
+        //     immediate: true
+        // },
         header_info: 'set_data'
     },
     computed: {

@@ -11,5 +11,6 @@
     "Org": true,
     "Properties": true,
     "Incomes": true,
-    "Accounts": true
+    "Accounts": true,
+    "Expenses": true
 }

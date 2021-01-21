@@ -9,6 +9,11 @@
         <ak-table
             :columns="table.columns"
             boot_api="/api/v1/blocks/"
+            :actions="{
+                show: 'BlocksShow',
+                edit: 'BlocksUpdate',
+                destroy: 'BlocksUpdate',
+            }"
 
         />
             <!-- boot_api="/api/v1/user/profile/create" -->
@@ -39,11 +44,11 @@ export default {
                 columns: [
                     { label: '', name: '#', column: 1 },
                     { label: 'Name', name: 'name', column: 3 },
-                    { label: 'Site', name: 'address', column: 2 },
-                    { label: 'Properties', name: 'no_of_properties', column: 2 },
-                    { label: 'Floors', name: 'enabled' , column: 1},
-                    { label: 'Status', name: 'enabled' , column: 1},
-                    { label: 'Actions', name: '##' },
+                    { label: 'Site', name: 'site.name', column: 2 },
+                    { label: 'Properties', name: 'no_of_properties', column: 1 },
+                    { label: 'Floors', name: 'floors' , column: 1},
+                    { label: 'Status', name: 'enabled' , column: 2, type: 'status'},
+                    { label: 'Actions', name: '##' , column: 2},
                 ]
             }
         }

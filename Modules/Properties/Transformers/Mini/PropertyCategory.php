@@ -14,11 +14,19 @@ class PropertyCategory extends JsonResource
      * @param  \Illuminate\Http\Request
      * @return array
      */
+
     public function toArray($request)
     {
+
+        $picture = $this->picture;
+        if ($picture) {
+            $picture = route('media',['path' => $picture['files'][0] ?? 'placeholder.jpg' ]);
+        }
+
         return [
             "id" => $this->id,
-            "name" => $this->name, 
+            "name" => $this->name,
+            "picture" => $picture,
             "enabled" => $this->enabled, 
         ];
     }

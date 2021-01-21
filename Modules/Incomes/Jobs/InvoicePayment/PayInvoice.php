@@ -43,18 +43,30 @@ class PayInvoice implements ShouldQueue
     {
         \DB::transaction(function() {
 
-            $$this->invoice_payment_id = $this->request['invoice_payment_id'];
-            if($this->invoice_payment_id ==null || $this->invoice_id == null){
-                $this->response = "Invoice id or payment id is not provided";
-                return;
-            }
 
-            $this->invoice_payment = InvoicePayment::find($this->invoice_payment_id);
+            if( $this->invoice_id == null){
+                $this->response = "Invoice id is not provided"; return;
+            }
             $this->invoice = Invoice::find($this->invoice_id);
 
-            if($this->invoice == null || $this->invoice_payment_id == null){
-                $this->response = "Invoice or invoice payment is not known";
-                return;
+
+            if($this->request['invoice_payment_id'] == null){
+                $this->invoice_payment = InvoicePayment::where('invoice_id', '=', $this->invoice_id)->where('transaction_id', '=', null)->first();
+            }else{
+                $this->invoice_payment = InvoicePayment::find($this->request['invoice_payment_id']);
+            }
+
+            if($this->invoice == null || $this->invoice_payment == null){
+                $this->response = "Invoice or invoice payment is not known"; return;
+            }
+
+            if($this->invoice_payment->invoice_id!=$this->invoice->id){
+                {$this->response = "This invoice payment id and invoice don't match!";return;}
+            }
+
+            if($this->invoice_payment->status == "payed") {
+                if($this->invoice_payment->transaction_id!=null)
+                {$this->response = "This invoice is already paid!";return;}
             }
 
             $this->request['type'] = "invoice";
@@ -96,9 +108,11 @@ class PayInvoice implements ShouldQueue
                     }
                 }
 
-                $this->invoice_payment->payment_type_id = $this->request['payment_type_id'];
+                // $this->invoice_payment->payment_type_id = $this->request['payment_type_id'];
                 $this->invoice_payment->period = $this->request['period'];
-                $this->invoice_payment_id->save();
+                $this->invoice_payment->price = $this->invoice_payment->price * $this->invoice_payment->period;
+                $this->invoice_payment->status = "payed";
+                $this->invoice_payment->save();
                 $this->response = null;
             }
         });

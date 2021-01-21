@@ -13,10 +13,13 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \Modules\Installation\Console\ChurchInfo::class,
+        \Modules\Installation\Console\Info::class,
         \Modules\Properties\Console\Install::class,
+        \Modules\Expenses\Console\Install::class,
         \Modules\Incomes\Console\Install::class,
         \Modules\Accounts\Console\Install::class,
+        \Modules\Installation\Console\Install::class,
+        \Modules\Installation\Console\Users::class,
     ];
 
     /**

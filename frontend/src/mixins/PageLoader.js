@@ -16,6 +16,9 @@ export default {
     mounted: function() {
         this.get_page_info()
     },
+    watch: {
+        api: 'get_page_info'
+    },
     methods: {
         change_active_tab(t) {
             this.active_tab = t
@@ -28,6 +31,9 @@ export default {
         },
 
         get_page_info() {
+            if (!this.api) {
+                return ;
+            }
             console.log("PAGE API = " + this.api)
             // var self = this
             this.$axios
@@ -42,6 +48,7 @@ export default {
                 })
                 .catch(error => {
 
+                    console.log(this.api)
                     console.log("PAGE ERROR CODE = " + error.response.status)
                     this.page_status_code = error.response.status
                     this.error_page_info = error.response.data

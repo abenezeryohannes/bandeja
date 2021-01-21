@@ -9,6 +9,11 @@
         <ak-table
             :columns="table.columns"
             boot_api="/api/v1/propertycategories/"
+            :actions="{
+                show: 'CategoriesShow',
+                edit: 'CategoriesUpdate',
+                destroy: 'CategoriesUpdate',
+            }"
 
         />
             <!-- boot_api="/api/v1/user/profile/create" -->
@@ -42,7 +47,7 @@ export default {
                     { label: 'Description', name: 'description', column: 3 },
                     { label: 'Price', name: 'rent_price', column: 2 },
                     { label: 'No of Properties', name: 'no_of_properties' },
-                    { label: 'Status', name: 'enabled' },
+                    { label: 'Status', name: 'enabled', type: 'status' },
                     { label: 'Actions', name: '##' },
                 ]
             }

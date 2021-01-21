@@ -1,10 +1,11 @@
 <?php
 
-namespace Modules\Properties\Jobs\site;
+namespace Modules\Properties\Jobs\Site;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Modules\Properties\Entities\Site;
 
 class CreateSite implements ShouldQueue
 {
@@ -33,7 +34,10 @@ class CreateSite implements ShouldQueue
     {
 
         \DB::transaction(function() {
-            $this->site = \Modules\Properties\Entities\Site::create($this->request->all());
+            $this->site = Site::create($this->request->all());
+            if($this->request['picture']!=null)
+                $this->site->set_media('picture',$this->request['picture']);
+            $this->site->save();
         });
         return $this->site;
     }

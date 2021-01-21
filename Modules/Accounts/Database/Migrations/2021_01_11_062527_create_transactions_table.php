@@ -19,7 +19,7 @@ class CreateTransactionsTable extends Migration
             $table->string('type');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('account_id');
-            $table->unsignedBigInteger('payment_type_id')->nullable();
+            $table->unsignedBigInteger('payment_method_id')->nullable();
 
             $table->unsignedBigInteger('tax_id')->nullable();
 
@@ -37,12 +37,8 @@ class CreateTransactionsTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('account_id')->references('id')->on('accounts');
             $table->foreign('tax_id')->references('id')->on('taxes');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
 
-//            $table->foreign('invoice_payment_id')->references('id')->on('invoice_payments');
-//            $table->foreign('revenue_id')->references('id')->on('revenues');
-
-//            $table->foreign('bill_payment_id')->references('id')->on('bill_payments');
-//            $table->foreign('purchase_id')->references('id')->on('purchases');
         });
     }
 

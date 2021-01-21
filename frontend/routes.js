@@ -1,81 +1,83 @@
-// import ChurchMembers from './church-cloud/components/pages/ChurchMembers/ChurchMembers.vue';
-// import ChurchMemberSingle from './church-cloud/components/pages/ChurchMembers/ChurchMemberSingle.vue';
-// import Charity from './church-cloud/components/pages/Charity/Charity.vue'
 
-// import Inventory from './common/Inventory.vue';
-// import AdminCenter from './common/AdminCenter.vue';
-// import Notifications from './common/Notifications.vue';
-// import FourOFour from './common/404.vue'
-// import FourOThree from './common/403.vue'
-// import HR from './common/HR.vue';
-// import ToDo from './common/ToDo.vue';
-// import Messages from './common/Messages.vue';
-// import MyAccount from './common/MyAccount.vue';
-// import Dashboard from './church-cloud/components/pages/Dashboard/Dashboard.vue';
-// import Finance from './church-cloud/components/pages/Finance/Finance.vue';
-// import Payroll from './church-cloud/components/pages/Finance/Payroll.vue'
-// import SearchPage from './common/SearchPage'
-// import ChurchMemberGroup from './church-cloud/components/pages/ChurchMembers/Group/ChurchMemberGroup'
-// import EventMgt from './church-cloud/components/pages/EventMgt/EventMgt'
-
-
-import Finance from './src/pages/Finance/Finance'
-import Plan from './src/pages/Plan/Plan'
-import Sales from './src/pages/Sales/Sales'
-import HR from './src/pages/HR/HR'
-import HREmployeeSingle from './src/pages/HR/HREmployeeSingle.vue';
+import FourOFour from './src/pages/Misc/FourOFour'
 
 import Dashboard from './src/pages/Dashboard/Dashboard'
 
 import Profile from './src/pages/User/Profile'
 import Accounts from './src/pages/Banking/Accounts'
 
+import Categories from './src/pages/Properties/Categories'
+import CategoriesCreate from './src/pages/Properties/CategoriesCreate'
+import CategoriesShow from './src/pages/Properties/CategoriesShow'
+import Properties from './src/pages/Properties/Properties'
+import PropertiesCreate from './src/pages/Properties/PropertiesCreate'
+import PropertiesShow from './src/pages/Properties/PropertiesShow'
+import Sites from './src/pages/Properties/Sites'
+import SitesCreate from './src/pages/Properties/SitesCreate'
+import SitesShow from './src/pages/Properties/SitesShow'
+import Blocks from './src/pages/Properties/Blocks'
+import BlocksCreate from './src/pages/Properties/BlocksCreate'
+import BlocksShow from './src/pages/Properties/BlocksShow'
+
+import Invoices from './src/pages/Incomes/Invoices'
+import InvoicesCreate from './src/pages/Incomes/InvoicesCreate'
+import InvoicesShow from './src/pages/Incomes/InvoicesShow'
+import InvoicePay from './src/pages/Incomes/InvoicePay'
+import Revenues from './src/pages/Incomes/Revenues'
+import RevenuesCreate from './src/pages/Incomes/RevenuesCreate'
+import RevenuesShow from './src/pages/Incomes/RevenuesShow'
+import Tenants from './src/pages/Incomes/Tenants'
+import TenantsCreate from './src/pages/Incomes/TenantsCreate'
+import TenantsShow from './src/pages/Incomes/TenantsShow'
 
 export const routes = [
 
-    // { path: '/app/search/:query', component: SearchPage, name: 'SearchPage' },
 
-    { path: '/app', component: Dashboard, name: 'Home' },
-    // { path: '/app/notifications', component: Notifications, name: 'Notifications', },
-    // { path: '/app/messages', component: Messages, name: 'Messages' },
+    { path: '/app/incomes/invoices', component: Invoices, name: 'Invoices' },
+    { path: '/app/incomes/invoices/create', component: InvoicesCreate, name: 'InvoicesCreate' },
+    { path: '/app/incomes/invoices/update/:id', component: InvoicesCreate, name: 'InvoicesUpdate' },
+    { path: '/app/incomes/invoices/show/:id', component: InvoicesShow, name: 'InvoicesShow' },
+    { path: '/app/incomes/invoices/pay/:id', component: InvoicePay, name: 'InvoicesPay' },
 
-    { path: '/app/plans', component: Plan, name: 'Plan' },
-    { path: '/app/sales', component: Sales, name: 'Sales' },
+    { path: '/app/incomes/revenues', component: Revenues, name: 'Revenues' },
+    { path: '/app/incomes/revenues/create', component: RevenuesCreate, name: 'RevenuesCreate' },
+    { path: '/app/incomes/revenues/update/:id', component: RevenuesCreate, name: 'RevenuesUpdate' },
+    { path: '/app/incomes/revenues/show/:id', component: RevenuesShow, name: 'RevenuesShow' },
 
-    { path: '/app/banking/accounts', component: Accounts, name: 'Accounts' },
+    { path: '/app/incomes/tenants', component: Tenants, name: 'Tenants' },
+    { path: '/app/incomes/tenants/create', component: TenantsCreate, name: 'TenantsCreate' },
+    { path: '/app/incomes/tenants/update/:id', component: TenantsCreate, name: 'TenantsUpdate' },
+    { path: '/app/incomes/tenants/show/:id', component: TenantsShow, name: 'TenantsShow' },
+
+
+    { path: '/app/properties/categories', component: Categories, name: 'Categories' },
+    { path: '/app/properties/categories/create', component: CategoriesCreate, name: 'CategoriesCreate' },
+    { path: '/app/properties/categories/update/:id', component: CategoriesCreate, name: 'CategoriesUpdate' },
+    { path: '/app/properties/categories/show/:id', component: CategoriesShow, name: 'CategoriesShow' },
+
+    { path: '/app/properties/sites', component: Sites, name: 'Sites' },
+    { path: '/app/properties/sites/create', component: SitesCreate, name: 'SitesCreate' },
+    { path: '/app/properties/sites/update/:id', component: SitesCreate, name: 'SitesUpdate' },
+    { path: '/app/properties/sites/show/:id', component: SitesShow, name: 'SitesShow' },
+
+    { path: '/app/properties/properties', component: Properties, name: 'Properties' },
+    { path: '/app/properties/properties/create', component: PropertiesCreate, name: 'PropertiesCreate' },
+    { path: '/app/properties/properties/update/:id', component: PropertiesCreate, name: 'PropertiesUpdate' },
+    { path: '/app/properties/properties/show/:id', component: PropertiesShow, name: 'PropertiesShow' },
+
+    { path: '/app/properties/blocks', component: Blocks, name: 'Blocks' },
+    { path: '/app/properties/blocks/create', component: BlocksCreate, name: 'BlocksCreate' },
+    { path: '/app/properties/blocks/update/:id', component: BlocksCreate, name: 'BlocksUpdate' },
+    { path: '/app/properties/blocks/show/:id', component: BlocksShow, name: 'BlocksShow' },
 
 
 
     { path: '/app/user/profile', component: Profile, name: 'Profile' },
 
-    { path: '/app/hr', component: HR, name: 'HR', meta : { permission: "HR_EMPLOYEES" } },
-    { path: '/app/hr/employee/:id', component: HREmployeeSingle, name: 'HREmployeeSingle', meta : { permission: "HR_EMPLOYEES" } },
-
-    // { path: '/app/setting/my-account', component: MyAccount, name: 'MyAccount' },
-    // { path: '/app/setting/admin-center', component: AdminCenter, name: 'AdminCenter', meta : { permission: "ADMIN_CENTER" } },
-
-    // { path: '/app/todo', component: ToDo, name: 'ToDo' },
-
-    // { path: '/app/event-mgt', component: EventMgt, name: 'EventMgt' },
-
-    { path: '/app/finance', component: Finance, name: 'Finance' },
-    // { path: '/app/finance/payroll', component: Payroll, name: 'Payroll' },
-
-    // { path: '/app/charity', component: Charity, name: 'Charity' },
-
-    // { path: '/app/church-members', component: ChurchMembers, name: 'ChurchMembers' },
-    // { path: '/app/church-member/:id', component: ChurchMemberSingle, name: 'ChurchMemberSingle' },
 
 
-    // { path: '/app/church-member-group/:id', component: ChurchMemberGroup, name: 'ChurchMemberGroupSingle' },
-    // //
-
-
-    // { path: '/app/403', component: FourOThree, name: '403' },
-    // { path: '/app/*', component: FourOFour, name: 'FourOFour' },
-  
-
-    // { path: '/app/*', component: FourOFour, name: 'FourOFour' },
+    { path: '/app', component: Dashboard, name: 'Home' },
+    { path: '/app/*', component: FourOFour, name: 'FourOFour' },
 
 
 ]; 

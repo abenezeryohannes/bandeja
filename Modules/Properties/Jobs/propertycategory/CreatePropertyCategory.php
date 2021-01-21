@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Properties\Jobs\propertycategory;
+namespace Modules\Properties\Jobs\Propertycategory;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
@@ -37,6 +37,10 @@ class CreatePropertyCategory implements ShouldQueue
             
             //add property_category into the database
             $this->property_category = \Modules\Properties\Entities\PropertyCategory::create($this->request->all());
+            if($this->request['picture']!=null)
+                $this->property_category->set_media('picture',$this->request['picture']);
+            $this->property_category->save();
+
             if($this->property_category == null) $this->response = "Inserted Data are not correct!";
 
 

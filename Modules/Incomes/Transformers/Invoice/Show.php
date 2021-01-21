@@ -5,6 +5,7 @@ namespace Modules\Incomes\Transformers\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Accounts\Entities\Tax;
+use Modules\Properties\Transformers\Mini\Property;
 
 class Show extends JsonResource
 {
@@ -53,6 +54,7 @@ class Show extends JsonResource
         return [
             "invoice_id"=>$this->id,
             "invoice_payment_id"=>($last_payment_request==null)?null:$last_payment_request->id,
+            "title"=>$this->invoice_number,
             "invoice_number"=>$this->invoice_number,
             "price"=>($last_payment_request==null)?0:$last_payment_request->price,
             "invoice_date"=> ($last_payment_request==null)?$this->start_date:$last_payment_request->invoice_date,
@@ -60,13 +62,14 @@ class Show extends JsonResource
             "status"=> ($this->canceled_invoice_id!=null)?"canceled":$status,
             "created_at"=>$this->created_at,
             "day_left"=>($last_payment_request==null)?0:Carbon::now()->diffInDays($last_payment_request->due_date),
-            "tenant"=> new \Modules\Incomes\Transformers\Tenant\Profile($this->tenant()->first()),
             "tax"=> ($tax==null)?null:$tax->name,
             "subtotal"=>$total - $tax_price,
             "period"=>$period,
             "tax_price"=>$tax_price,
-            "canceled"=> \Modules\Incomes\Transformers\Cancel\Index::collection($this->canceled()->get()),
             "total"=>$total,
+            "property"=>new Property($this->property->first()),
+            "tenant"=> new \Modules\Incomes\Transformers\Tenant\Profile($this->tenant()->first()),
+            "canceled"=> new Index($this->canceled()->first())
         ];
     }
 }

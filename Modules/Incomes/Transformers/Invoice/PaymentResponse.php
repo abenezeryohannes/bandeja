@@ -4,8 +4,9 @@ namespace Modules\Incomes\Transformers\Invoice;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Accounts\Transformers\Index\Transaction;
 
-class Index extends JsonResource
+class PaymentResponse extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,31 +16,19 @@ class Index extends JsonResource
      */
     public function toArray($request)
     {
-        $last_payment_request = $this->invoicePayments->where('invoice_date', '>=', Carbon::now())->first();
-        if($last_payment_request==null){
-            $status = "canceled";
-        }else {
-            $transaction = $last_payment_request->transaction()->first();
-            $status = null;
 
-
-            if ($transaction == null) {
-                if (Carbon::parse($last_payment_request->due_date)->isBefore(Carbon::now())) {
-                    $status = "defaulted";
-                } else {
-                    $status = "waiting";
-                }
-            } else $status = "paid";
-        }
+        $invoice = $this->invoice()->first();
         return [
-            "invoice_id"=>$this->id,
-            "invoice_payment_id"=>($last_payment_request==null)?null:$last_payment_request->id,
-            "invoice_number"=>$this->invoice_number,
-            "tenant_name"=>$this->tenant()->first()->name,
-            "price"=>($last_payment_request==null)?$this->price:$last_payment_request->price,
-            "invoice_date"=> ($last_payment_request==null)?$this->start_date:$last_payment_request->invoice_date,
-            "due_date"=> ($last_payment_request==null)?$this->due_date:$last_payment_request->due_date,
-            "status"=> ($this->canceled_invoice_id!=null)?"canceled":$status
+            "invoice_id"=>$invoice->id,
+            "invoice_payment_id"=>$this->id,
+            "invoice_number"=>$invoice->invoice_number,
+            "invoice_date"=> $this->invoice_date,
+            "due_date"=> $this->due_date,
+            "period"=> $this->period,
+            "price"=> $this->price,
+            "status"=> $this->status,
+            "payment_method"=> "CASH",
+            "transaction"=> new Transaction($this->transaction()->first())
         ];
     }
 }

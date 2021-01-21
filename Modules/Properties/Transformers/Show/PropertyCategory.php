@@ -19,14 +19,17 @@ class PropertyCategory extends JsonResource
                             
         $noOfDesabledproperties = 
             $this->properties->where('enabled','==', 0)->count();
-                            
-   
+
+        $picture = $this->picture;
+        if ($picture) {
+            $picture = route('media',['path' => $picture['files'][0] ?? 'placeholder.jpg' ]);
+        }
         return [
             "id" => $this->id,
             "name" => $this->name, 
             "description" => $this->description, 
             "enabled" => $this->enabled, 
-            "picture" => $this->picture, 
+            "picture" => $picture, 
             "rent_price" => $this->rent_price, 
             "sell_price" => $this->sell_price, 
             "no_of_properties" => $this->properties->count(),

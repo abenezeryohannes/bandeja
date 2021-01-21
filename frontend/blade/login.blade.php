@@ -79,8 +79,9 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
-                                            <button :disabled="form.loading" type="submit" class="btn btn-success float-right header-button-top" data-loading-text="Loading...">
-                                                <div class="aka-loader"></div> <span>Login</span>
+                                            <button :disabled="form.loading" id="login_button" type="submit" class="btn btn-success float-right header-button-top" data-loading-text="Loading..." >
+                                                <div class="aka-loader"></div> 
+                                                <span>Login</span>
                                             </button>
                                         </div>
                                     </div>
@@ -107,6 +108,19 @@
                 </div>
             </div>
         </footer>
+
+        <script type="text/javascript">
+            let form = document.querySelector("form");
+            form.addEventListener("submit", (event) => {
+                var t = document.getElementById("login_button")
+                t.setAttribute('disabled',true)
+              
+            });
+
+            // function simulateClick() {
+            // }
+            // document.getElementById("login_button").addEventListener('click', simulateClick);
+        </script>
     </div>
     <!-- <script src="{{url('login_assets/js/main.js')}}"></script> -->
 </body>

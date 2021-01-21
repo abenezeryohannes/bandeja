@@ -1,6 +1,6 @@
 <template>
-    <div :class="['form-group', column, required]">
-        <label for="enabled" class="form-control-label">{{label}}</label>
+    <div :class="['form-group', column, required]"  style="min-width: 30px;">
+        <label v-if="label" for="enabled" class="form-control-label">{{label}}</label>
         <div class="input-group input-group-merge ">
             <div class="input-group-prepend"><span class="input-group-text"><i :class="icon"></i></span></div> 
             <input  :placeholder="placeholder" :type="type" v-bind:value="value" v-on:input="$emit('input', $event.target.value)" class="form-control">

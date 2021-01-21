@@ -16,16 +16,21 @@ class PropertyCategory extends JsonResource
      */
     public function toArray($request)
     {
+        $picture = $this->picture;
+        if ($picture) {
+            $picture = route('media',['path' => $picture['files'][0] ?? 'placeholder.jpg' ]);
+        }
+
         return [
             "id" => $this->id,
             "name" => $this->name, 
-            "description" => $this->description, 
+            "description" => mb_strimwidth($this->description, 0, 30, '...'),
             "enabled" => $this->enabled, 
-            "picture" => $this->picture, 
-            "rent_price" => $this->rent_price, 
-            "sell_price" => $this->sell_price, 
+            "picture" => $picture,
+            "rent_price" => "ETB ". number_format($this->rent_price, 2),
+            "sell_price" => "ETB ". number_format($this->sell_price, 2),
             "no_of_properties" => $this->properties->count(), 
-            "created_at" => Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->toFormattedDateString()
+            "created_at" => Carbon::parse($this->created_at)->toFormattedDateString()
         ];
     }
 }

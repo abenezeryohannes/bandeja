@@ -1,9 +1,9 @@
 <template>
-    <div :class="['form-group', column, required]">
-        <label for="enabled" class="form-control-label">{{label}}</label>
+    <div :class="[outerClass, column, required]">
+        <label v-if="label" for="enabled" class="form-control-label">{{label}}</label>
         <div class="input-group input-group-merge ">
-            <div class="input-group-prepend"><span class="input-group-text"><i :class="icon"></i></span></div> 
-            <select v-bind:value="value" class="form-control el-scrollbar__view el-select-dropdown__list" v-on:input="$emit('input', $event.target.value)">
+            <div v-if="icon" class="input-group-prepend"><span class="input-group-text"><i :class="icon"></i></span></div> 
+            <select style="min-width: 100px;" v-bind:value="value" :class="innerClass" v-on:input="$emit('input', $event.target.value)">
                 <template v-if="options[0] && typeof options[0] == 'string'">                
                     <option class="el-select-dropdown__item" v-for="o in options" :value="o" >{{o}}</option>
                 </template>
@@ -16,9 +16,13 @@
 </template>
 <script>
 export default {
-    props: [ "label", "value","icon","options","required","type","column"],
+    props: [ "label", "value","icon","options","required","type","column", 
+        "innerClassName"
+    ],
     data() {
         return {
+            outerClass: 'form-group',
+            innerClass: this.innerClassName || 'form-control el-scrollbar__view el-select-dropdown__list'
         }
     },
     watch: {

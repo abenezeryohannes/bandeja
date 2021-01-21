@@ -85,9 +85,12 @@ ax.interceptors.response.use((response) => {
   if(error.response.status == "401") {
        window.location.replace(error.response.data.redirect_to);
   }
+  if(error.response.status == "419") {
+       // window.location.replace(error.response.data.redirect_to);
+  }
    // console.log(error)
    // return error
-   // return Promise.reject(error);
+   return Promise.reject(error);
 }
 );
 Vue.prototype.$axios = ax

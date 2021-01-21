@@ -2,6 +2,7 @@
 
 namespace Modules\Incomes\Jobs\Invoice;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Accounts\Jobs\Transaction\DeleteTransaction;
 use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Jobs\InvoicePayment\DeleteInvoicePayment;
+use Modules\Properties\Entities\Property;
 
 class DeleteInvoice implements ShouldQueue
 {
@@ -19,11 +21,7 @@ class DeleteInvoice implements ShouldQueue
     protected $invoice = null;
     protected $response = null;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param  $request
-     */
+
     public function __construct($id)
     {
         $this->id = $id;
@@ -48,6 +46,12 @@ class DeleteInvoice implements ShouldQueue
                     else $this->response = null;
                 }
 
+
+                //update properties available_after
+                Property::where('id', '=', $this->invoice->property_id)->update([
+                    'available_after' => Carbon::now()
+                ]);
+                //delete invoice
                 $this->invoice->delete();
 
             }

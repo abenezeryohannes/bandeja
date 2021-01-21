@@ -20,7 +20,12 @@ class PropertyCategoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "name"=>"Category" . rand(1, 100),
+            "description"=>"random discription text",
+            "rent_price"=>rand(100, 2000), 
+            "sell_price"=>rand(1000000, 4000000),
+            'picture' => "{\"files\":[\"public\/2021\/01\/18\/property_category\/placeholder.jpg\"],\"permissions\":[]}",
+            "size"=>rand(10, 100) . "sqft", 
         ];
     }
 }

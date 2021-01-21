@@ -23,7 +23,7 @@ class CreateInvoicePaymentsTable extends Migration
             $table->double('price')->default(0);
 
             $table->timestamp('due_date');
-            $table->timestamp('invoice_date');
+            $table->timestamp('invoice_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('status')->default("waiting");
             
             $table->timestamps();

@@ -1,45 +1,50 @@
 <template>
     <div>
-        <header-a :header_info="{
+        <sidebar-b :header_info="{
             'main_menu': main_menu,
             'user_info': user_info,
             'home_img': home_img,
             'locale': locale
         }" :page="page" :boot_the_app="boot_the_app" />
-    <div class="content-wrapper">
-        <section class="content-header">
-            <h1>
-                {{page.title}}
-                <small></small>
-            </h1>
-            <ol class="breadcrumb">
-                <template v-for="(b,k) in page.breadcrumb">
-                    <li v-if="k==page.breadcrumb.length-1" class="active">{{b.label}}</li>
-                    <li v-else>
-                        <a href="#"><i :class="'fa fa-'+b.icon"></i>{{b.label}}</a>
-                    </li>
-                </template>
-            </ol>
-        </section>
-        <slot v-if="page_status == 'active'"></slot>
-        <section class="content" v-else-if="page_status == 'loading'" style="text-align: center;">
-            <h1><i class="fa fa-spin fa-refresh"></i> <br />Loading ...</h1>
-        </section>
-        <section class="content" v-else-if="page_status == 'unauthorized'" style="text-align: center;">
-            <h1><i class="fa fa-close"></i> <br />Unauthorized!</h1>
-        </section>
-    </div>
-    <footer class="main-footer">
-        <div class="container">
-            <div class="pull-right hidden-xs">
-                <b>Version</b> {{sys_version}}
+        <div class="main-content" id="panel">
+            <navbar-b :header_info="{
+                    'main_menu': main_menu,
+                    'user_info': user_info,
+                    'home_img': home_img,
+                    'locale': locale
+                }" :page="page" :boot_the_app="boot_the_app" />
+            <div id="main-body">
+                <header-b  :page="page">
+
+                            <template v-slot:buttons-panel>
+                        <slot name="buttons-panel">
+<!--                             <buttons-panel>
+                            </buttons-panel> -->
+                        </slot>
+                            </template>
+                </header-b> 
+                <div class="container-fluid content-layout mt--6">
+                    <div id="app">                    
+                        <slot v-if="page_status_code == '1'" ></slot>
+                        <div v-else-if="page_status_code == 401" >Unauthorized</div>
+                        <div v-else  style="min-height: 500px;"></div>
+                    </div>
+                    <footer class="footer">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="text-sm float-left text-muted footer-texts">
+                                    <a :href="developer_link" target="_blank" class="text-muted">{{developer_name}}</a></div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="text-sm float-right text-muted footer-texts">
+                                    Version {{sys_version}}
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
             </div>
-            <strong v-html="copyright_text"> </strong><strong> <a :href="developer_link" target="_blank"> {{developer_name}}</a>.</strong> {{all_rights}}
         </div>
-    </footer>
-    <a href="#" style="display: inline;position: fixed; right: 15px; bottom: 15px; z-index: 99999; ">
-        <h1><i class="fa fa-arrow-circle-up"></i></h1>
-    </a>
     </div>
 </template>
 <style>
@@ -63,7 +68,9 @@ a:hover {
 <script>
 import { store } from '../state/simpleState';
 
-import HeaderA from './HeaderA'
+import SidebarB from './SidebarB'
+import HeaderB from './HeaderB'
+import NavbarB from './NavbarB'
 
 export default {
     props: {
@@ -88,7 +95,9 @@ export default {
         },
     },
     components: {
-        HeaderA
+        HeaderB,
+        SidebarB,
+        NavbarB
     },
     data: () => ({
         page_status: 'loading',
@@ -163,7 +172,7 @@ export default {
     methods: {
         determinePageStatus() {
             // console.log("layout status"+ this.page_status_code)
-            switch(this.page_status_code){
+            switch (this.page_status_code) {
                 case "1":
                     this.page_status = "active";
                     break;
@@ -177,7 +186,7 @@ export default {
             // console.log(this.page_status)
         },
 
-        
+
         boot_the_app() {
             this.$axios
                 .get('/api/v1/boot')
@@ -210,12 +219,14 @@ export default {
     mounted() {
         if (!store.state.loaded) {
             this.boot_the_app()
-        }else{
+        } else {
             this.boot_from_state()
         }
+        console.log('slots')
+        console.log(this.$slots)
+
     },
-    updated() {
-    },
+    updated() {},
 };
 
 </script>

@@ -19,7 +19,7 @@ class CreateBlocksTable extends Migration
             $table->string("name");
             $table->unsignedInteger("floors")->default(1);
             $table->text("address");
-            $table->string("picture")->nullalbe();
+            $table->string("picture")->nullable();
             $table->boolean("enabled")->default(true);
 
             $table->timestamps();

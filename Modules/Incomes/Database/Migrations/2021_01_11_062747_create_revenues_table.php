@@ -21,7 +21,7 @@ class CreateRevenuesTable extends Migration
 
 
             $table->double('price')->default(0);
-            $table->double('discount')->default(0);
+//            $table->double('discount')->default(0);
 
             $table->string('status')->default("waiting");
             $table->boolean('enabled')->default(true);

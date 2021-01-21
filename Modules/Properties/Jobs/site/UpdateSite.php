@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Properties\Jobs\site;
+namespace Modules\Properties\Jobs\Site;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

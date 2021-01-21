@@ -7,18 +7,13 @@ use Carbon\Carbon;
 
 class Block extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request
-     * @return array
-     */
     public function toArray($request)
     {
         return [
             "id" => $this->id,
             "name" => $this->name, 
-            "address" => $this->address, 
+            "address" => mb_strimwidth($this->address, 0, 30, '...'),
+            "floors" => $this->floors,
             "site" => new \Modules\Properties\Transformers\Mini\Site($this->site),
             "no_of_properties" => $this->properties->count(),
             "enabled" => $this->enabled, 

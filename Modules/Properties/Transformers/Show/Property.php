@@ -15,29 +15,25 @@ class Property extends JsonResource
      */
     public function toArray($request)
     {
+
+        $response = [
+            "id" => $this->id,
+            "name" => $this->name,
+            "inside_block" => $this->inside_block!=0?true:false,
+            "available" => Carbon::now()->isAfter(Carbon::parse($this->available_after)),
+            "enabled" => $this->enabled,
+            "property_category" => new PropertyCategory($this->propertyCategory),
+        ];
+
         if($this->inside_block!=0)
-            return [
-                "id" => $this->id,
-                "name" => $this->name, 
-                "inside_block" => $this->inside_block!=0?true:false,
-                "block" => new \Modules\Properties\Transformers\Mini\Site($this->block), 
-                "floor" => $this->floor, 
-                "property_category" => new \Modules\Properties\Transformers\Mini\PropertyCategory($this->propertyCategory),
-                "available" => Carbon::now()->isAfter(Carbon::parse($this->available_after)), 
-                "enabled" => $this->enabled, 
-                // "created_at" => Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->toFormattedDateString()
-            ];
-        else
-            return[
-                "id" => $this->id,
-                "name" => $this->name, 
-                "inside_block" => $this->inside_block!=0?true:false,
-                "address" => $this->address,
-                "site" => new \Modules\Properties\Transformers\Mini\Site($this->site), 
-                "property_category" => new \Modules\Properties\Transformers\Mini\PropertyCategory($this->propertyCategory),
-                "available" => Carbon::now()->isAfter(Carbon::parse($this->available_after)), 
-                "enabled" => $this->enabled, 
-                // "created_at" => Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->toFormattedDateString()
-            ];
+        {
+            $response["floor"] = ($this->floor!=null)?$this->floor:"Unknown";
+            $response["block"] = new Block($this->block);
+        }else{
+            $response["address"] = $this->address;
+            $response["site"] =  new Site($this->site);
+        }
+
+        return $response;
     }
 }

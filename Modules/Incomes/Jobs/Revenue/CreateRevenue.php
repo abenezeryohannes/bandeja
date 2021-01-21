@@ -58,7 +58,7 @@ class CreateRevenue implements ShouldQueue
 
 
             $trans_req = $this->request;
-            $trans_req['amount'] = $this->request['price'];
+            $trans_req['amount'] = $this->request['price'] ?? $this->request['amount'];
             $trans_req['type'] = 'revenue';
             $this->response = CreateTransaction::dispatchNow($trans_req);
 

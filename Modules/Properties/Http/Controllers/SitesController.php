@@ -8,53 +8,55 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use \Modules\Properties\Transformers\Index\Site as SiteIndexResource;
 use \Modules\Properties\Transformers\Show\Site as SiteShowResource;
-use \Modules\Properties\Jobs\site\CreateSite;
-use \Modules\Properties\Jobs\site\UpdateSite;
-use \Modules\Properties\Jobs\site\DeleteSite;
+use \Modules\Properties\Jobs\Site\CreateSite;
+use \Modules\Properties\Jobs\Site\UpdateSite;
+use \Modules\Properties\Jobs\Site\DeleteSite;
 use \Modules\Properties\Entities\Site;
 use \Modules\Properties\Transformers\ResponseWrapper;
 
 class SitesController extends Controller
 {
     public $perpage = 20;
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
+
+
     public function index(Request $request)
     {
         $site = Site::simplepaginate($this->perpage);
         return \Modules\Properties\Transformers\Index\Site::Collection($site);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
+
     public function create()
     {
-        return view('properties::create');
+        return response()->json([
+            'form' => [
+                'fields' => [
+                    [ 'label' => 'Name', 'required' => 'required', 'icon' => 'fa fa-font', 'type' => 'input', 'column' => 'col-md-6', 'input_type' => 'text', 'default' =>  null, 'name' => 'name' ],
+                    [ 'label' => 'Picture', 'required' => 'required', 'icon' => 'fa fa-key', 'type' => 'file', 'column' => 'col-md-6', 'file_types' => 'img', 'default' =>  null, 'name' => 'picture' ],
+
+                    [ 'label' => 'Address', 'required' => 'required', 'icon' => 'fa fa-envelope', 'type' => 'textarea', 'column' => 'col-md-12', 'input_type' => 'email', 'default' =>  null, 'name' => 'address' ],
+
+                    [ 'label' => 'Status', 'required' => 'required', 'icon' => 'fa fa-save', 'type' => 'switcher', 'column' => 'col-md-6', 'options' => [ [ 'label' => 'Enabled', 'value' => '1'],[ 'label' => 'Disabled', 'value' => '0']  ], 'default' =>  '1', 'name' => 'enabled' ],
+                ],
+                'strings' => [
+                    'save' => 'Save',
+                    'saving' => 'Saving ...',
+                    // 'save' => 'Update',
+                    'cancel' => 'cancel'
+                ]
+            ] 
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
+
     public function store(Request $request)
     {
         //validating the input fields
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'name' => 'bail|required|string',
+            'address' => 'bail|required|string',
+//            'picture' => 'bail|required|string',
         ]);
-
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => "error", 
-                "message" => $validator->errors()->first("name")
-            ]);
-        }
 
         //save to database and return the response
         $response = CreateSite::dispatchNow($request);
@@ -62,11 +64,7 @@ class SitesController extends Controller
         return ResponseWrapper::WrapSuccess($response, 'Site');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function show($id)
     {   
         $site = Site::find($id);
@@ -74,23 +72,14 @@ class SitesController extends Controller
         return ResponseWrapper::WrapSuccess($site, 'showSite');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function edit($id)
     {
         
         return view('properties::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
+
     public function update(Request $request, int $id)
     {
         //validating the input fields
@@ -105,8 +94,6 @@ class SitesController extends Controller
                 "message" => $validator->errors()->first("name")
             ]);
         }
-
-     
         //save to database and return the response
         $response = UpdateSite::dispatchNow($request, $id);
 
@@ -115,15 +102,9 @@ class SitesController extends Controller
    
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
+
     public function destroy($id)
     {
-    
-       
         //save to database and return the response
         $response = DeleteSite::dispatchNow($id);
 

@@ -1,12 +1,14 @@
 <?php
 
 namespace Modules\Incomes\Transformers;
+use Modules\Incomes\Transformers\Cancel\Index as CancelIndex;
 use Modules\Incomes\Transformers\Invoice\Index as InvoiceIndex;
 use Modules\Incomes\Transformers\Invoice\Show as InvoiceShow;
 use Modules\Accounts\Transformers\Index\Transaction as TransacionIndex;
 
 use Modules\Incomes\Transformers\Tenant\Index as TenantIndex;
 use Modules\Incomes\Transformers\Tenant\Show as TenantShow;
+use Modules\Incomes\Transformers\Invoice\PaymentResponse ;
 
 use Modules\Incomes\Transformers\Revenue\Index as RevenueIndex;
 use Modules\Incomes\Transformers\Revenue\Show as RevenueShow;
@@ -39,6 +41,9 @@ class ResponseWrapper
             case "showinvoice":
                 $response = new InvoiceShow($data);
                 break;
+            case "cancelindex":
+                $response =  new CancelIndex($data);
+                break;
             case "indexinvoicecollection":
                 $response =  InvoiceIndex::Collection($data);
                 break;
@@ -48,6 +53,9 @@ class ResponseWrapper
 
             case "showtenant":
                 $response = new TenantShow($data);
+                break;
+            case "invoicepayment":
+                $response = new PaymentResponse($data);
                 break;
 
             case "showrevenue":
