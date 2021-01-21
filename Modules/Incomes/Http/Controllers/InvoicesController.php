@@ -12,6 +12,7 @@ use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Jobs\Invoice\CancelInvoice;
 use Modules\Incomes\Jobs\Invoice\CreateInvoice;
 use Modules\Incomes\Jobs\Invoice\DeleteInvoice;
+use Modules\Incomes\Jobs\Invoice\SearchAndSortInvoice;
 use Modules\Incomes\Jobs\Invoice\UpdateInvoice;
 use Modules\Incomes\Jobs\InvoicePayment\PayInvoice;
 use Modules\Incomes\Transformers\Invoice\Index;
@@ -22,9 +23,9 @@ class InvoicesController extends Controller
 
     public $perpage = 20;
 
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::simplepaginate($this->perpage);
+        $invoices = SearchAndSortInvoice::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($invoices);
     }
 
@@ -151,5 +152,20 @@ class InvoicesController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteInvoice::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

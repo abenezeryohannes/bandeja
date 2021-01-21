@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Incomes\Entities\Revenue;
+use Modules\Incomes\Jobs\Invoice\SearchAndSortInvoice;
 use Modules\Incomes\Jobs\Revenue\CreateRevenue;
 use Modules\Incomes\Jobs\Revenue\DeleteRevenue;
+use Modules\Incomes\Jobs\Revenue\SearchAndSortRevenue;
 use Modules\Incomes\Jobs\Revenue\UpdateRevenue;
 use Modules\Incomes\Transformers\ResponseWrapper;
 use Modules\Incomes\Transformers\Revenue\Index;
@@ -19,9 +21,10 @@ class RevenuesController extends Controller
 
     public $perpage = 20;
 
-    public function index()
+
+    public function index(Request $request)
     {
-        $revenues = Revenue::where('transaction_id', '!=', null)->simplepaginate($this->perpage);
+        $revenues = SearchAndSortRevenue::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($revenues);
     }
 
@@ -79,11 +82,7 @@ class RevenuesController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function destroy($id)
     {
         //save to database and return the response
@@ -91,5 +90,20 @@ class RevenuesController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteRevenue::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

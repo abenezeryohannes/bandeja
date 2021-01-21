@@ -6,6 +6,9 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Modules\Properties\Jobs\Block\SearchAndSortBlock;
+use Modules\Properties\Jobs\Propertycategory\SearchAndSortPropertyCategory;
+use Modules\Properties\Transformers\Index\Block as BlockIndexResource;
 use \Modules\Properties\Transformers\Index\PropertyCategory as PropertyCategoryIndexResource;
 use \Modules\Properties\Transformers\Show\PropertyCategory as PropertyCategoryShowResource;
 use \Modules\Properties\Entities\PropertyCategory;
@@ -27,8 +30,11 @@ class PropertyCategoriesController extends Controller
 
     public function index(Request $request)
     {
-        $property_categories = PropertyCategory::simplepaginate($this->perpage);
+
+        $property_categories = SearchAndSortPropertyCategory::dispatchNow($request['search'],$request['sort_by'],$request['order']);
+
         return PropertyCategoryIndexResource::Collection($property_categories);
+
     }
     
 
@@ -42,10 +48,6 @@ class PropertyCategoriesController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-                        'name' => 'bail|required|string',
-            'rent_price' => 'bail|required|string',
-        ]);
 
         //save to database and return the response
         $response = CreatePropertyCategory::dispatchNow($request);
@@ -75,11 +77,6 @@ class PropertyCategoriesController extends Controller
 
     public function update(Request $request, $id)
     {
-        //validating the input fields
-         $request->validate([
-            'name' => 'bail|required|string',
-            'rent_price' => 'bail|required|string',
-        ]);
 
         //save to database and return the response
         $response = UpdatePropertyCategory::dispatchNow($request, $id);
@@ -95,6 +92,21 @@ class PropertyCategoriesController extends Controller
         $response = DeletePropertyCategory::dispatchNow($id);
 
         //$response returns the data inserted into the database
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeletePropertyCategory::dispatchNow($id);
+        }
+
         return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

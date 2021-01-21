@@ -12,6 +12,7 @@ Route::prefix('api/v1/properties')->group(function() {
     Route::get('/invoices/{id}', 'PropertiesController@invoices');
     Route::post('/update/{id}', 'PropertiesController@update');
     Route::get('/destroy/{id}', 'PropertiesController@destroy');
+    Route::patch('/destroyAll', 'PropertiesController@destroyAll');
 });
 
 Route::prefix('api/v1/sites')->group(function() {
@@ -21,6 +22,7 @@ Route::prefix('api/v1/sites')->group(function() {
     Route::get('/show/{id}', 'SitesController@show');
     Route::post('/update/{id}', 'SitesController@update');
     Route::get('/destroy/{id}', 'SitesController@destroy');
+    Route::patch('/destroyAll', 'SitesController@destroyAll');
 });
 
 Route::prefix('api/v1/blocks')->group(function() {
@@ -30,6 +32,7 @@ Route::prefix('api/v1/blocks')->group(function() {
     Route::get('/show/{id}', 'BlocksController@show');
     Route::post('/update/{id}', 'BlocksController@update');
     Route::get('/destroy/{id}', 'BlocksController@destroy');
+    Route::patch('/destroyAll', 'BlocksController@destroyAll');
 });
 
 
@@ -44,4 +47,5 @@ Route::prefix('api/v1/propertycategories')->group(function() {
     Route::get('/edit/{id}', 'PropertyCategoriesController@edit');
     Route::put('/update/{id}', 'PropertyCategoriesController@update');
     Route::get('/destroy/{id}', 'PropertyCategoriesController@destroy');
+    Route::patch('/destroyAll', 'PropertyCategoriesController@destroyAll');
 });

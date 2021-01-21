@@ -18,11 +18,7 @@ class DeleteInterest implements ShouldQueue
     protected $interest = null;
     protected $response = null;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param  $request
-     */
+
     public function __construct($id)
     {
         $this->id = $id;

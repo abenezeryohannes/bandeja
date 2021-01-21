@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Expenses\Entities\Payment;
 use Modules\Expenses\Jobs\Payment\CreatePayment;
 use Modules\Expenses\Jobs\Payment\DeletePayment;
+use Modules\Expenses\Jobs\Payment\SearchAndSortPayment;
 use Modules\Expenses\Jobs\Payment\UpdatePayment;
 use Modules\Expenses\Transformers\ResponseWrapper;
 use Modules\Expenses\Transformers\Payment\Index;
@@ -20,9 +21,9 @@ class PaymentsController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $payments = Payment::simplepaginate($this->perpage);
+        $payments = SearchAndSortPayment::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($payments);
     }
 
@@ -86,5 +87,19 @@ class PaymentsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){ $response = DeletePayment::dispatchNow($id); }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

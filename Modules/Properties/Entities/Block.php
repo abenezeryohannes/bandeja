@@ -2,12 +2,13 @@
 
 namespace Modules\Properties\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Block extends Model
 {
-    use HasFactory, \Modules\Util\Traits\Mediable;
+    use HasFactory, \Modules\Util\Traits\Mediable, SearchableAndSortable;
 
     // protected $table = "blocks"; 
 
@@ -25,6 +26,8 @@ class Block extends Model
     {
         return \Modules\Properties\Database\factories\BlockFactory::new();
     }
+
+
 
 
     public function properties(){

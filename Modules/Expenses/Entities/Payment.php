@@ -2,12 +2,13 @@
 
 namespace Modules\Expenses\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
     protected $fillable = ['vendor_id', 'category_id', 'tax_id', 'transaction_id', 'amount'];
 
     protected static function newFactory()

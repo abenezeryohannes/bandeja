@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Modules\Properties\Jobs\Site\SearchAndSortSite;
+use Modules\Properties\Transformers\Index\Site as SiteIndex;
 use \Modules\Properties\Transformers\Index\Site as SiteIndexResource;
 use \Modules\Properties\Transformers\Show\Site as SiteShowResource;
 use \Modules\Properties\Jobs\Site\CreateSite;
@@ -21,8 +23,11 @@ class SitesController extends Controller
 
     public function index(Request $request)
     {
-        $site = Site::simplepaginate($this->perpage);
-        return \Modules\Properties\Transformers\Index\Site::Collection($site);
+
+        $site = SearchAndSortSite::dispatchNow($request['search'],$request['sort_by'],$request['order']);
+
+        return SiteIndex::Collection($site);
+
     }
 
 
@@ -82,18 +87,6 @@ class SitesController extends Controller
 
     public function update(Request $request, int $id)
     {
-        //validating the input fields
-        $validator = Validator::make($request->all(), [
-            'name' => 'bail|required|string',
-        ]);
-        
-        //returning the error if input is not correct
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => "error", 
-                "message" => $validator->errors()->first("name")
-            ]);
-        }
         //save to database and return the response
         $response = UpdateSite::dispatchNow($request, $id);
 
@@ -109,6 +102,22 @@ class SitesController extends Controller
         $response = DeleteSite::dispatchNow($id);
 
         //$response returns the data inserted into the database
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteSite::dispatchNow($id);
+        }
+
         return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

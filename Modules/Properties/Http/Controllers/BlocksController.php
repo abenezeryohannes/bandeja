@@ -6,7 +6,9 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Modules\Properties\Jobs\Block\SearchAndSortBlock;
 use \Modules\Properties\Transformers\Index\Block as BlockIndexResource;
+use Modules\Properties\Transformers\Index\Property as PropertyIndexResource;
 use \Modules\Properties\Transformers\Show\Block as BlockShowResource;
 use \Modules\Properties\Entities\Block ;
 use \Modules\Properties\Transformers\ResponseWrapper;
@@ -20,7 +22,7 @@ class BlocksController extends Controller
 
     public function index(Request $request)
     {
-        $blocks = Block::simplepaginate($this->perpage);
+        $blocks = SearchAndSortBlock::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return BlockIndexResource::Collection($blocks);
     }
 
@@ -81,5 +83,19 @@ class BlocksController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, 'Nothing'); 
+    }
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteBlock::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

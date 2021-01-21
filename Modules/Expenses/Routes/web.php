@@ -20,6 +20,7 @@ Route::prefix('api/v1/bills')->group(function() {
     Route::post('/store', 'BillsController@store');
     Route::post('/update/{id}', 'BillsController@update');
     Route::get('/destroy/{id}', 'BillsController@destroy');
+    Route::patch('/destroyAll', 'BillsController@destroyAll');
     Route::get('/show/{id}', 'BillsController@show');
     Route::get('/transactions/{id}', 'BillsController@transactions');
     Route::get('/cancel/{id}', 'BillsController@cancel');
@@ -33,6 +34,8 @@ Route::prefix('api/v1/vendors')->group(function() {
     Route::post('/update/{id}', 'VendorsController@update');
     Route::get('/destroy/{id}', 'VendorsController@destroy');
     Route::get('/show/{id}', 'VendorsController@show');
+    Route::patch('/destroyAll', 'VendorsController@destroyAll');
+
     Route::get('/transactions/{id}', 'VendorsController@transactions');
     Route::get('/bills/{id}', 'VendorsController@bills');
 });
@@ -41,6 +44,8 @@ Route::prefix('api/v1/payments')->group(function() {
     Route::get('/', 'PaymentsController@index');
     Route::post('/store', 'PaymentsController@store');
     Route::post('/update/{id}', 'PaymentsController@update');
+    Route::patch('/destroyAll', 'PaymentsController@destroyAll');
+
     Route::get('/destroy/{id}', 'PaymentsController@destroy');
     Route::get('/show/{id}', 'PaymentsController@show');
 });

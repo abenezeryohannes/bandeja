@@ -18,6 +18,7 @@ Route::prefix('api/v1/accounts')->group(function() {
     Route::post('/update/{id}', 'AccountsController@update');
     Route::get('/destroy/{id}', 'AccountsController@destroy');
     Route::get('/show/{id}', 'AccountsController@show');
+    Route::patch('/destroyAll', 'AccountsController@destroyAll');
 });
 
 
@@ -28,6 +29,7 @@ Route::prefix('api/v1/payment_methods')->group(function() {
     Route::post('/update/{id}', 'PaymentMethodsController@update');
     Route::get('/destroy/{id}', 'PaymentMethodsController@destroy');
     Route::get('/show/{id}', 'PaymentMethodsController@show');
+
 });
 
 
@@ -38,6 +40,7 @@ Route::prefix('api/v1/transactions')->group(function() {
     Route::post('/update/{id}', 'TransactionsController@update');
     Route::get('/destroy/{id}', 'TransactionsController@destroy');
     Route::get('/show/{id}', 'TransactionsController@show');
+    Route::patch('/destroyAll', 'TransactionsController@destroyAll');
 });
 
 
@@ -48,6 +51,7 @@ Route::prefix('api/v1/taxes')->group(function() {
     Route::post('/update/{id}', 'TaxesController@update');
     Route::get('/destroy/{id}', 'TaxesController@destroy');
     Route::get('/show/{id}', 'TaxesController@show');
+
 });
 
 
@@ -65,4 +69,5 @@ Route::prefix('api/v1/interests')->group(function() {
     Route::post('/store', 'InterestsController@store');
     Route::post('/update/{id}', 'InterestsController@update');
     Route::get('/destroy/{id}', 'InterestsController@destroy');
+    Route::patch('/destroyAll', 'InterestsController@destroyAll');
 });

@@ -9,16 +9,18 @@ use Modules\Accounts\Entities\Interest;
 use Modules\Accounts\Jobs\Interest\CreateInterest;
 use Modules\Accounts\Jobs\Interest\DeleteInterest;
 use Modules\Accounts\Jobs\Interest\UpdateInterest;
+use Modules\Accounts\Transformers\Index\Account as AccountIndex;
 use Modules\Accounts\Transformers\ResponseWrapper;
+use Modules\Accounts\Jobs\Interest\SearchAndSortInterest;
 
 class InterestsController extends Controller
 {
 
     public $perpage = 20;
 
-    public function index()
+    public function index(Request $request)
     {
-        $interests = Interest::simplepaginate($this->perpage);
+        $interests = SearchAndSortInterest::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return \Modules\Accounts\Transformers\Mini\Interest::Collection($interests);
     }
 
@@ -67,5 +69,20 @@ class InterestsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteInterest::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

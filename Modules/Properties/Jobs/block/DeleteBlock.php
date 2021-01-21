@@ -39,6 +39,7 @@ class DeleteBlock implements ShouldQueue
             if($this->block == null){
                 $this->response =  "Block is already deleted!";
             }else {
+
                 //delete all properties inside the block
                     $properties = $this->block->properties->pluck('id');
                     foreach($properties as $prop_id) {

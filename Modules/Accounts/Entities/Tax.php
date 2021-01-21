@@ -2,12 +2,13 @@
 
 namespace Modules\Accounts\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tax extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $casts = [
         "enabled" => "boolean",

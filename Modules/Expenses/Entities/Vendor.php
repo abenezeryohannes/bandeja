@@ -2,13 +2,14 @@
 
 namespace Modules\Expenses\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Vendor extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable = ['name', 'vendor_category_id', 'phone_number', 'position', 'postal_address',
         'physical_address', 'tin_number', 'email_address', 'memo', 'bank',

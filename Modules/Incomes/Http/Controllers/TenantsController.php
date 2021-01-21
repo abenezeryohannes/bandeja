@@ -11,6 +11,7 @@ use Modules\Incomes\Entities\Invoice;
 use Modules\Incomes\Entities\Tenant;
 use Modules\Incomes\Jobs\Tenant\CreateTenant;
 use Modules\Incomes\Jobs\Tenant\DeleteTenant;
+use Modules\Incomes\Jobs\Tenant\SearchAndSortTenant;
 use Modules\Incomes\Jobs\Tenant\UpdateTenant;
 use Modules\Incomes\Transformers\ResponseWrapper;
 use Modules\Incomes\Transformers\Tenant\Index;
@@ -20,9 +21,9 @@ class TenantsController extends Controller
 
     public $perpage = 20;
 
-    public function index()
+    public function index(Request $request)
     {
-        $tenants = Tenant::simplepaginate($this->perpage);
+        $tenants = SearchAndSortTenant::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($tenants);
     }
 
@@ -101,5 +102,21 @@ class TenantsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteTenant::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

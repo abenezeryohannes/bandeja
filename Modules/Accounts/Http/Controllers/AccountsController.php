@@ -14,15 +14,18 @@ use Modules\Accounts\Transformers\Index\Transaction;
 use Modules\Accounts\Transformers\ResponseWrapper;
 use Modules\Properties\Entities\site;
 use \Modules\Accounts\Transformers\Index\Account as AccountIndex;
+use Modules\Accounts\Jobs\Account\SearchAndSortAccount;
+use Modules\Properties\Jobs\Block\SearchAndSortBlock;
+use Modules\Properties\Transformers\Index\Block as BlockIndexResource;
 
 class AccountsController extends Controller
 {
 
     public $perpage = 20;
 
-    public function index()
+    public function index(Request $request)
     {
-        $account = Account::simplepaginate($this->perpage);
+        $account = SearchAndSortAccount::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return AccountIndex::Collection($account);
     }
 
@@ -91,5 +94,21 @@ class AccountsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteAccount::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

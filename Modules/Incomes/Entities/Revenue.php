@@ -2,13 +2,14 @@
 
 namespace Modules\Incomes\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Accounts\Entities\Transaction;
 
 class Revenue extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable = [ 'tenant_id', 'category_id',
          'price',  'status', 'transaction_id'];

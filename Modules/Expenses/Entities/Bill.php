@@ -2,12 +2,13 @@
 
 namespace Modules\Expenses\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Bill extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable = ['vendor_id', 'category_id', 'recurring_id', 'tax_id', 'price',
         'start_date', 'due_date', 'bill_number', 'note', 'attachment',

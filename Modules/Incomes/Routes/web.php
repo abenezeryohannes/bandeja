@@ -22,6 +22,7 @@ Route::prefix('api/v1/invoices')->group(function() {
     Route::post('/cancel/{id}', 'InvoicesController@cancel');
     Route::post('/pay/{id}', 'InvoicesController@pay');
     Route::get('/pay/{id}', 'InvoicesController@pay_form');
+    Route::patch('/destroyAll', 'InvoicesController@destroyAll');
 
 });
 
@@ -40,6 +41,7 @@ Route::prefix('api/v1/revenues')->group(function() {
     Route::post('/update/{id}', 'RevenuesController@update');
     Route::get('/destroy/{id}', 'RevenuesController@destroy');
     Route::get('/show/{id}', 'RevenuesController@show');
+    Route::patch('/destroyAll', 'RevenuesController@destroyAll');
 });
 
 Route::prefix('api/v1/tenants')->group(function() {
@@ -51,5 +53,6 @@ Route::prefix('api/v1/tenants')->group(function() {
     Route::get('/show/{id}', 'TenantsController@show');
     Route::get('/invoices/{id}', 'TenantsController@invoices');
     Route::get('/transactions/{id}', 'TenantsController@transactions');
+    Route::patch('/destroyAll', 'TenantsController@destroyAll');
 });
 

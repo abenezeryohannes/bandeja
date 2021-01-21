@@ -11,15 +11,16 @@ use Modules\Accounts\Jobs\Transaction\CreateTransaction;
 use Modules\Accounts\Jobs\Transaction\DeleteTransaction;
 use Modules\Accounts\Jobs\Transaction\UpdateTransaction;
 use Modules\Accounts\Transformers\ResponseWrapper;
+use Modules\Accounts\Jobs\Transaction\SearchAndSortTransaction;
 
 class TransactionsController extends Controller
 {
 
     public $perpage = 20;
 
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::simplepaginate($this->perpage);
+        $transactions = SearchAndSortTransaction::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return \Modules\Accounts\Transformers\Index\Transaction::Collection($transactions);
     }
 
@@ -73,5 +74,20 @@ class TransactionsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteTransaction::dispatchNow($id);
+        }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

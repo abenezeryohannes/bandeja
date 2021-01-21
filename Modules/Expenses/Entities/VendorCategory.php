@@ -2,12 +2,13 @@
 
 namespace Modules\Expenses\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class VendorCategory extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable = ['name', 'enabled'];
 

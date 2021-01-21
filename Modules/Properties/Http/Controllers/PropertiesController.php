@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Incomes\Transformers\Invoice\Index;
+use Modules\Properties\Jobs\Property\SearchAndSortProperty;
 use \Modules\Properties\Transformers\Index\Property as PropertyIndexResource;
 use \Modules\Properties\Transformers\Show\Property as PropertyShowResource;
 use \Modules\Properties\Transformers\ResponseWrapper;
@@ -23,7 +24,7 @@ class PropertiesController extends Controller
 
     public function index(Request $request)
     {
-        $property = Property::simplepaginate($this->perpage);
+        $property = SearchAndSortProperty::dispatchNow($request->search,$request->sort_by,$request->order);
         return PropertyIndexResource::Collection($property);
     }
 
@@ -166,6 +167,21 @@ class PropertiesController extends Controller
         $response = DeleteProperty::dispatchNow($id);
 
         //$response returns the data inserted into the database
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
+    }
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){
+            $response = DeleteProperty::dispatchNow($id);
+        }
+
         return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

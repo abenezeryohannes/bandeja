@@ -9,6 +9,7 @@ use Modules\Accounts\Entities\Transaction;
 use Modules\Expenses\Entities\Vendor;
 use Modules\Expenses\Jobs\Vendor\CreateVendor;
 use Modules\Expenses\Jobs\Vendor\DeleteVendor;
+use Modules\Expenses\Jobs\Vendor\SearchAndSortVendor;
 use Modules\Expenses\Jobs\Vendor\UpdateVendor;
 use Modules\Expenses\Transformers\ResponseWrapper;
 use Modules\Expenses\Transformers\Vendor\Index;
@@ -18,9 +19,9 @@ class VendorsController extends Controller
     public $perpage = 20;
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $vendors = Vendor::simplepaginate($this->perpage);
+        $vendors = SearchAndSortVendor::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($vendors);
     }
 
@@ -98,5 +99,19 @@ class VendorsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){ $response = DeleteVendor::dispatchNow($id); }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }

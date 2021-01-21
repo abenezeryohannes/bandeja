@@ -11,26 +11,15 @@ class CreateProperty implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
-    
     protected $property = null;
     protected $response = null;
     protected $request;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param  $request
-     */
     public function __construct($request)
     {
         $this->request = ($request);
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         // if($this->request['name'] == null) 

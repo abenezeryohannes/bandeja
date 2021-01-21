@@ -2,12 +2,13 @@
 
 namespace Modules\Accounts\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable =  ['type', 'category_id', 'account_id', 'tax_id', 'amount','note','attachment',
         'transaction_date','payment_method_id'];

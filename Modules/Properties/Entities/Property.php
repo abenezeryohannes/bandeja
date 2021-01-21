@@ -2,12 +2,13 @@
 
 namespace Modules\Properties\Entities;
 
+use App\Http\Traits\SearchableAndSortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Property extends Model
 {
-    use HasFactory;
+    use HasFactory, SearchableAndSortable;
 
     protected $fillable = ["name", "inside_block", "site_id", "block_id", "property_category_id",
      "floor", "address", "available_after", "enabled"];
@@ -15,6 +16,9 @@ class Property extends Model
     protected $casts= [
         "enabled"=>"boolean"
     ];
+
+
+
 
 
     protected static function newFactory()

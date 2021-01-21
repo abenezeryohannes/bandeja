@@ -11,6 +11,7 @@ use Modules\Expenses\Entities\Bill;
 use Modules\Expenses\Jobs\Bill\CancelBill;
 use Modules\Expenses\Jobs\Bill\CreateBill;
 use Modules\Expenses\Jobs\Bill\DeleteBill;
+use Modules\Expenses\Jobs\Bill\SearchAndSortBill;
 use Modules\Expenses\Jobs\Bill\UpdateBill;
 use Modules\Expenses\Jobs\BillPayment\PayBill;
 use Modules\Expenses\Transformers\Bill\Index;
@@ -24,9 +25,9 @@ class BillsController extends Controller
     public $perpage = 20;
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $bills = Bill::simplepaginate($this->perpage);
+        $bills = SearchAndSortBill::dispatchNow($request['search'],$request['sort_by'],$request['order']);
         return Index::Collection($bills);
     }
 
@@ -129,5 +130,19 @@ class BillsController extends Controller
 
         //$response returns the data inserted into the database
         return ResponseWrapper::WrapSuccess($response, null);
+    }
+
+
+
+
+    public function destroyAll(Request $request)
+    {
+        $request->validate(['ids'=>'required']);
+
+        $ids = explode(',', $request['ids']);
+
+        foreach ($ids as $id){ $response = DeleteBill::dispatchNow($id); }
+
+        return ResponseWrapper::WrapSuccess($response, 'Nothing');
     }
 }
