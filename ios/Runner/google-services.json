@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "701947281078",
+    "firebase_url": "https://sawetapps-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "sawetapps",
+    "storage_bucket": "sawetapps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701947281078:android:78b19a5e8483a53f4c7017",
+        "android_client_info": {
+          "package_name": "com.mohammad.sawwet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701947281078-etgu5li6gq9tmrqvgh6ksuieikqf3pnl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mohammad.sawwet",
+            "certificate_hash": "de50f67d41f82dd1fa293bd9a4d0bc657d253bfe"
+          }
+        },
+        {
+          "client_id": "701947281078-95np1qhptd06qdphk99u5kqs46ol220u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLeyd8vtgKnFB9xq6zpbe3R9jnBvYOb8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701947281078-95np1qhptd06qdphk99u5kqs46ol220u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "701947281078-5l2e1h1tpjj7j0akl0k247p7a73eav3s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sawwet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

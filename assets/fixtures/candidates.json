@@ -1,0 +1,90 @@
+[
+    {
+        "id": "0",
+        "name": "أسامة المناور",
+        "categoryId": "1",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse1.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover1.jpeg"]
+    },
+    {
+        "id": "1",
+        "name": "عبدالكريم الكندري",
+        "categoryId": "1",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse2.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover2.jpg"]
+    },
+    {
+        "id": "2",
+        "name": "أحمد عبدالعزيز السعدون",
+        "categoryId": "2",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse3.png",
+        "votes": 222,
+        "featured": true,
+        "verified": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover1.jpeg"]
+    },
+    {
+        "id": "3",
+        "name": "يوسف الفضالة",
+        "categoryId": "2",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse4.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover3.jpeg"]
+    },
+    {
+        "id": "4",
+        "name": "عمار محمد العجمي",
+        "categoryId": "2",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse5.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover2.jpg"]
+    },
+    {
+        "id": "5",
+        "name": "هشام الصالح",
+        "categoryId": "3",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse6.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover1.jpeg"]
+    },
+    {
+        "id": "6",
+        "name": "مهند الساير",
+        "categoryId": "3",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse7.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover3.jpeg"]
+    },
+    {
+        "id": "7",
+        "name": "مبارك العرو",
+        "categoryId": "4",
+        "image": "https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/Ellipse8.png",
+        "votes": 222,
+        "verified": true,
+        "featured": true,
+        "videoLink": "https://www.youtube.com",
+        "coverImages":  ["https://us-central1-sawetapps.cloudfunctions.net/app/media?path=public/pictures/cover2.jpg"]
+    }
+]

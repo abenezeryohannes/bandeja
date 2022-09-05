@@ -1,0 +1,32 @@
+[
+    {
+        "id": "0",
+        "name": "الدائرة الثالثة",
+        "number": "1",
+        "banners": [ "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300"    ]
+    },
+    { 
+        "id": "1",
+        "name": "الدائرة الثالثة",
+        "number": "2",
+        "banners": [ ]
+    },
+    {
+        "id": "2",
+        "name": "الدائرة الثالثة",
+        "number": "3",
+        "banners": [ "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300"    ]
+    },
+    {
+        "id": "3",
+        "name": "الدائرة الثالثة",
+        "number": "4",
+        "banners": [ "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300", "https://picsum.photos/id/237/200/300"    ]
+   },
+    {
+        "id": "4",
+        "name": "الدائرة الثالثة",
+        "number": "5",
+        "banners": []
+    }
+]
