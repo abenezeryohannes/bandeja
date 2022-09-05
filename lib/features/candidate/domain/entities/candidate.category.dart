@@ -15,5 +15,5 @@ class CandidateCategory extends Equatable {
       this.banners = const []});
 
   @override
-  List<Object?> get props => [id, name, banners];
+  List<Object?> get props => [id, name, banners, number];
 }
