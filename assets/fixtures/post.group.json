@@ -1,0 +1,9 @@
+{
+    "id": 1,
+    "name": "Indoor",
+    "icon": "icons/indoor.png",
+    "color": "#1976D2",
+    "sequence": 2,
+    "created_at": "2022-09-12 10:02:56",
+    "updated_at": "2022-09-12 10:02:56"
+}

@@ -1,0 +1,6 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_owner.dart
+ASSET_PREFIX=owner
+BUNDLE_NAME=bandeja Owner
+BUNDLE_DISPLAY_NAME=bandeja Owner
