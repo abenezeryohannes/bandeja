@@ -1,6 +1,0 @@
-#include "Generated.xcconfig"
-
-FLUTTER_TARGET=lib/main_main.dart
-ASSET_PREFIX=main
-BUNDLE_NAME=feekpadel
-BUNDLE_DISPLAY_NAME=feekpadel
