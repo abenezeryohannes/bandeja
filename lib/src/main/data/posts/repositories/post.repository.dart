@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
+import 'package:feekpadel/src/main/data/posts/dto/post.dto.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/data/posts/dto/post.dto.dart';
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/domain/posts/entities/post.group.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/network.info.dart';
 import '../../../domain/core/entities/address.dart';
 import '../../../domain/core/entities/location.dart';
+import '../../../domain/posts/entities/post.group.dart';
 import '../../../domain/posts/repositories/i.post.repository.dart';
 import '../source/post/post.local.datasource.dart';
 import '../source/post/post.remote.datasource.dart';

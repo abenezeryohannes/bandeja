@@ -5,7 +5,7 @@ import 'injector.config.dart';
 
 final getIt = GetIt.instance;
 
-const mmain = Environment('user');
+const mmain = Environment('mmain');
 const admin = Environment('admin');
 const owner = Environment('owner');
 

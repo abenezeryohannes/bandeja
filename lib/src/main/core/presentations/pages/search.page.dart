@@ -1,16 +1,16 @@
 import 'dart:ui';
 
+import 'package:feekpadel/src/core/dto/wrapper.dto.dart';
+import 'package:feekpadel/src/core/widgets/show.error.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/presentation/search/search.result.page.dart';
+import 'package:feekpadel/src/main/presentation/search/widget/looking.for.search.card.dart';
+import 'package:feekpadel/src/main/presentation/search/widget/when.search.card.dart';
+import 'package:feekpadel/src/main/presentation/search/widget/where.search.card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/domain/padels/entities/padel.group.dart';
-import '../../../../core/dto/wrapper.dto.dart';
-import '../../../../core/presentation/widgets/show.error.dart';
-import '../../../domain/core/entities/address.dart';
-import '../../../presentation/search/search.result.page.dart';
-import '../../../presentation/search/widget/looking.for.search.card.dart';
-import '../../../presentation/search/widget/when.search.card.dart';
-import '../../../presentation/search/widget/where.search.card.dart';
+import '../../../domain/padels/entities/padel.group.dart';
 import '../controllers/search.controller.dart';
 
 class SearchPage extends StatefulWidget {

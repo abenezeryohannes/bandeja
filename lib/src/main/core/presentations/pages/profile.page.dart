@@ -1,13 +1,6 @@
-import 'package:bandeja/src/core/error/failure.dart';
-import 'package:bandeja/src/main/core/presentations/controllers/profile.controller.dart';
-import 'package:bandeja/src/main/presentation/profile/widgets/user.avatar.dart';
+import 'package:feekpadel/src/core/widgets/image.form.dart';
+import 'package:feekpadel/src/main/presentation/profile/widgets/mine.post.card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../../core/presentation/widgets/custom.shimmer.dart';
-import '../../../../core/presentation/widgets/image.form.dart';
-import '../../../../core/presentation/widgets/loading.bar.dart';
-import '../../../presentation/profile/widgets/mine.post.card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -17,148 +10,96 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final ProfileController controller = Get.put(ProfileController());
-
-  @override
-  void dispose() {
-    Get.delete<ProfileController>();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: _appBar(context),
         body: SingleChildScrollView(
-      child: Obx(() => Column(
+          child: Column(
             children: [
-              if (controller.loading.value) const LoadingBar(),
-              _appBar(context),
               const SizedBox(
                 height: 20,
               ),
               Center(
-                child: UserAvatar(
-                  userDto: controller.user.value,
-                  size: 100,
-                  onUpload: (x) {
-                    controller.avatar.value = x;
-                  },
-                  isLoading: (loading) {
-                    controller.loading.value = loading;
-                  },
-                  localImage: controller.avatar.value,
+                child: ImageForm(
+                  imageLink: "",
+                  placeholder: Image.asset(
+                    "assets/icons/user_account.png",
+                    height: 100,
+                  ),
+                  onUpload: (x) {},
+                  isLoading: (loading) {},
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: controller.user.value.when(
-                      emptyState: () => const SizedBox(),
-                      loadingState: (_) => const CustomShimmer(
-                          show: true, child: Text("This is place holder")),
-                      loadedState: (value) => Text(value.phoneNumber,
-                          style: Theme.of(context).textTheme.bodyText2),
-                      errorState: (_) => const SizedBox())),
+                padding: const EdgeInsets.only(top: 20),
+                child: Text("BoAli",
+                    style: Theme.of(context).textTheme.titleMedium),
+              ),
               Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: controller.user.value.when(
-                      emptyState: () => const SizedBox(),
-                      loadingState: (_) => const CustomShimmer(
-                            show: true,
-                            child: Text("+9765432145789"),
-                          ),
-                      loadedState: (value) => Text(value.phoneNumber,
-                          style: Theme.of(context).textTheme.bodyText2),
-                      errorState: (_) => const SizedBox())),
-              controller.user.value.when(
-                  emptyState: () => const Center(),
-                  loadingState: (_) => CustomShimmer(
-                        show: true,
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              shape: BoxShape.circle),
+                padding: const EdgeInsets.only(top: 8),
+                child: Text("+965 50606050",
+                    style: Theme.of(context).textTheme.bodyText2),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 60),
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 40,
                         ),
-                      ),
-                  loadedState: (value) => Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 60),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Image.asset(
-                                      "assets/icons/marketing_active.png",
-                                      height: 20,
-                                      color: Colors.grey.shade400,
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Text("My Ads",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Image.asset(
-                                      "assets/icons/contact.png",
-                                      height: 20,
-                                      width: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Text("Contact Us",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          _myPosts(context),
-                        ],
-                      ),
-                  errorState: (Failure f) => ImageForm(
-                        placeholder: Image.asset(
-                          "assets/icons/error.png",
-                          height: 100,
+                        Image.asset(
+                          "assets/icons/calendar-clock.png",
+                          height: 20,
+                          width: 20,
                         ),
-                        onUpload: (x) {},
-                        isLoading: (loading) {},
-                      )),
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Text("My Booking",
+                            style: Theme.of(context).textTheme.bodyText2),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Image.asset(
+                          "assets/icons/tennis.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Text("My Courts",
+                            style: Theme.of(context).textTheme.bodyText2),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 60,
+              ),
+              _myPosts(context),
             ],
-          )),
-    ));
+          ),
+        ));
   }
 
   AppBar _appBar(BuildContext context) {

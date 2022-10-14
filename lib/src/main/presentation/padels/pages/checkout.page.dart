@@ -1,10 +1,9 @@
+import 'package:feekpadel/src/main/core/presentations/widgets/padel.card.dart';
+import 'package:feekpadel/src/main/domain/booking/entities/padel.order.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.dart';
+import 'package:feekpadel/src/main/presentation/padels/pages/booking.page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../core/domain/booking/entities/padel.order.dart';
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../core/presentations/widgets/padel.card.dart';
-import 'booking.page.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({Key? key, required this.padel, required this.time})

@@ -1,12 +1,12 @@
+import 'package:feekpadel/src/core/widgets/text.input.form.dart';
+import 'package:feekpadel/src/main/presentation/posts/controllers/add.post.controller.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.images.form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/domain/posts/entities/post.group.dart';
-import '../../../../core/presentation/widgets/show.error.dart';
-import '../../../../core/presentation/widgets/tab.bar.dart';
-import '../../../../core/presentation/widgets/text.input.form.dart';
-import '../controllers/add.post.controller.dart';
-import '../widget/post.images.form.dart';
+import '../../../../core/widgets/show.error.dart';
+import '../../../../core/widgets/tab.bar.dart';
+import '../../../domain/posts/entities/post.group.dart';
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);

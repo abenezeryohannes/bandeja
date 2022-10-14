@@ -22,7 +22,6 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -34,18 +33,18 @@ android {
     productFlavors {
         main {
             dimension "flavor-type"
-            applicationId "com.konrad.bandeja"
-            resValue "string", "app_name", "bandeja"
+            applicationId "com.konrad.padel"
+            resValue "string", "app_name", "feekpadel"
         }
         admin {
             dimension "flavor-type"
-            applicationId "com.konrad.bandeja_admin"
-            resValue "string", "app_name", "bandeja Admin"
+            applicationId "com.konrad.padel_admin"
+            resValue "string", "app_name", "feekpadel Admin"
         }
         owner {
             dimension "flavor-type"
-            applicationId "com.konrad.bandeja_owner"
-            resValue "string", "app_name", "bandeja Owner"
+            applicationId "com.konrad.padel_owner"
+            resValue "string", "app_name", "feekpadel Owner"
         }
     }
 
@@ -69,9 +68,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.konrad.bandeja.bandeja"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+        applicationId "com.konrad.padel"
         minSdkVersion 21//flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -93,6 +90,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:30.4.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

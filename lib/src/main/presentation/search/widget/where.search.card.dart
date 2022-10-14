@@ -1,7 +1,7 @@
-import 'package:bandeja/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/presentation/widgets/tab.bar.dart';
+import '../../../../core/widgets/tab.bar.dart';
 
 class WhereSearchCard extends StatefulWidget {
   const WhereSearchCard(

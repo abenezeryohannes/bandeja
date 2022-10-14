@@ -1,11 +1,10 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:feekpadel/src/main/core/presentations/widgets/padel.card.dart';
+import 'package:feekpadel/src/main/core/presentations/widgets/schedules.card.dart';
+import 'package:feekpadel/src/main/domain/authentication/entities/user.dart';
+import 'package:feekpadel/src/main/presentation/padels/pages/checkout.page.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/domain/authentication/entities/user.dart';
-import '../../../presentation/padels/pages/checkout.page.dart';
-import 'padel.card.dart';
-import 'schedules.card.dart';
 
 class PadelSearchResultCard extends StatefulWidget {
   const PadelSearchResultCard({

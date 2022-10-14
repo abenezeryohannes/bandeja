@@ -1,14 +1,14 @@
+import 'package:feekpadel/src/core/widgets/sizable.pageview.dart';
+import 'package:feekpadel/src/main/core/presentations/controllers/home.controller.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/home/widget/padel.groups.tab.dart';
+import 'package:feekpadel/src/main/presentation/home/widget/padel.card.with.avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/presentation/widgets/show.error.dart';
-import '../../../../core/presentation/widgets/sizable.pageview.dart';
-import '../../../presentation/home/widget/padel.card.with.avatar.dart';
-import '../../../presentation/home/widget/padel.groups.tab.dart';
+import '../../../../core/widgets/show.error.dart';
+import '../../../domain/padels/entities/padel.dart';
 import '../../../presentation/home/widget/post.avatar.dart';
-import '../controllers/home.controller.dart';
 
 class HomePageMain extends StatefulWidget {
   const HomePageMain({Key? key}) : super(key: key);
@@ -44,25 +44,7 @@ class _HomePageMainState extends State<HomePageMain> {
                       }),
                 );
               }, loadingState: (_) {
-                return SizedBox(
-                  height: 70,
-                  child: ItemGroupsTab(
-                      itemGroups: const [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                      ],
-                      onItemClick: (value) {
-                        c.padelRepository.getFeaturedPadels();
-                      }),
-                );
+                return const CircularProgressIndicator();
               })),
           Expanded(
             child: Center(
@@ -78,7 +60,7 @@ class _HomePageMainState extends State<HomePageMain> {
                         }, loadedState: (value) {
                           return _featuredPadelList(value);
                         }, loadingState: (_) {
-                          return _featuredPadelList([null, null, null]);
+                          return const CircularProgressIndicator();
                         })),
               ),
             ),
@@ -92,7 +74,7 @@ class _HomePageMainState extends State<HomePageMain> {
                 }, loadedState: (value) {
                   return _featuredOffers(value);
                 }, loadingState: (_) {
-                  return _featuredOffers([null, null, null, null, null, null]);
+                  return const CircularProgressIndicator();
                 })),
           ),
           const SizedBox(height: 24)
@@ -101,17 +83,18 @@ class _HomePageMainState extends State<HomePageMain> {
     );
   }
 
-  Widget _featuredPadelList(List<PadelModel?> value) {
+  Widget _featuredPadelList(List<PadelModel> value) {
     return SizablePageView(
         bodies: value
             .map((e) => Padding(
                   padding: EdgeInsets.only(
-                      right: value.indexOf(e) == value.length - 1 ? 10 : 20,
-                      left: value.indexOf(e) > 0 ? 0 : 20),
+                      right: value.indexOf(e) == value.length - 1 ? 20 : 0,
+                      left: value.indexOf(e) > 0 ? 0 : 16),
                   child: PadelCardWithAvatar(
                     item: e,
                     avatarBorderColor: Colors.white,
                     avatarRadius: 40,
+                    //  avatarMargins: ,
                     onClick: (_, __) {},
                     avatarHeroTag: "avatarHeroTag",
                     cardHeroTag: "cardHeroTag",
@@ -123,7 +106,7 @@ class _HomePageMainState extends State<HomePageMain> {
         viewFraction: 0.85);
   }
 
-  Widget _featuredOffers(List<PostModel?> value) {
+  Widget _featuredOffers(List<PostModel> value) {
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: value.length,
@@ -142,7 +125,7 @@ class _HomePageMainState extends State<HomePageMain> {
                     margins: const EdgeInsets.only(bottom: 5),
                     hero: "hero",
                     onClick: () {}),
-                Text(value[index] == null ? '' : value[index]!.title,
+                Text(value[index].title,
                     style: Theme.of(context).textTheme.bodyText1)
               ],
             ),

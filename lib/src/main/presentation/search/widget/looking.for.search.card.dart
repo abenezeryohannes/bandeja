@@ -1,7 +1,7 @@
-import 'package:bandeja/src/main/presentation/search/widget/search.item.group.card.dart';
+import 'package:feekpadel/src/main/presentation/search/widget/search.item.group.card.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/padels/entities/padel.group.dart';
+import '../../../domain/padels/entities/padel.group.dart';
 
 class LookingForSearchCard extends StatefulWidget {
   const LookingForSearchCard(

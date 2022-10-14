@@ -1,16 +1,15 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:feekpadel/main/injection/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import '../src/flavors.dart' as f_f;
 
 import '../src/app.dart';
-import '../src/flavors.dart' as f_f;
-import 'injection/injector.dart';
 
 Future<void> mainCommon() async {
   await preRunApp();
-  runApp(App());
+  runApp(const App());
   return FlutterNativeSplash.remove();
 }
 
@@ -52,8 +51,8 @@ Future<void> preRunApp() async {
   //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   // });
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
   //injections and firebase config ....
   await configureDependencies(f_f.FF.env);
 }

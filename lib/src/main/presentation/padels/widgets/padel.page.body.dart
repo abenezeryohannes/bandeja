@@ -1,13 +1,12 @@
+import 'package:feekpadel/src/main/core/presentations/widgets/feature.card.dart';
+import 'package:feekpadel/src/main/core/presentations/widgets/schedules.card.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.dart';
+import 'package:feekpadel/src/main/presentation/padels/controllers/padel.page.controller.dart';
+import 'package:feekpadel/src/main/presentation/padels/pages/checkout.page.dart';
+import 'package:feekpadel/src/main/presentation/padels/widgets/padel.date.picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../core/presentations/widgets/feature.card.dart';
-import '../../../core/presentations/widgets/schedules.card.dart';
-import '../controllers/padel.page.controller.dart';
-import '../pages/checkout.page.dart';
-import 'padel.date.picker.dart';
 
 class PadelPageBody extends StatefulWidget {
   const PadelPageBody({Key? key, required this.padel}) : super(key: key);

@@ -1,12 +1,12 @@
+import 'package:feekpadel/main/injection/injector.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
 import 'package:get/get.dart';
 
-import '../../../../../main/injection/injector.dart';
-import '../../../../core/domain/padels/entities/padel.group.dart';
 import '../../../../core/dto/wrapper.dto.dart';
 import '../../../../core/error/failure.dart';
-import '../../../domain/core/entities/address.dart';
 import '../../../domain/core/repositories/i.address.repository.dart';
-import '../../../../core/domain/padels/repositories/i.padel.group.repository.dart';
+import '../../../domain/padels/entities/padel.group.dart';
+import '../../../domain/padels/repositories/i.padel.group.repository.dart';
 
 enum ActiveSearchFilter { address, time, groupType }
 

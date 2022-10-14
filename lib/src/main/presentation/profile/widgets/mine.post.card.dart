@@ -1,6 +1,5 @@
+import 'package:feekpadel/src/core/widgets/cached.image.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/presentation/widgets/cached.image.dart';
 
 class MinePostCard extends StatefulWidget {
   const MinePostCard({Key? key}) : super(key: key);

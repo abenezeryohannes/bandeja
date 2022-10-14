@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/fixtures/fixture.reader.dart';
-import '../../../domain/core/entities/address.dart';
 
 @singleton
 class AddressRemoteDataSource {

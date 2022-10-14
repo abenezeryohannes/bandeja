@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
+import '../pages/posts.page.dart';
 import '../pages/boookmark.page.dart';
 import '../pages/home.page.dart';
-import '../pages/posts.page.dart';
 import '../pages/profile.page.dart';
 
 class MainController extends GetxController with GetTickerProviderStateMixin {

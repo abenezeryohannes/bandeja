@@ -1,14 +1,16 @@
+import 'package:feekpadel/src/core/widgets/tab.bar.dart';
+import 'package:feekpadel/src/core/widgets/toggle.form.dart';
+import 'package:feekpadel/src/main/core/presentations/controllers/posts.controller.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.group.dart';
+import 'package:feekpadel/src/main/presentation/posts/pages/add.post.page.dart';
+import 'package:feekpadel/src/main/presentation/posts/pages/my.posts.page.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/domain/posts/entities/post.group.dart';
-import '../../../../core/presentation/widgets/show.error.dart';
-import '../../../../core/presentation/widgets/tab.bar.dart';
-import '../../../presentation/posts/pages/my.posts.page.dart';
-import '../../../presentation/posts/widget/post.card.dart';
-import '../controllers/posts.controller.dart';
+import '../../../../core/widgets/show.error.dart';
 
 class PostsPage extends StatefulWidget {
   const PostsPage({Key? key}) : super(key: key);

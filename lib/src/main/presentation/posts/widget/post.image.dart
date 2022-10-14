@@ -1,6 +1,6 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/posts/entities/post.dart';
 import '../../../../core/network/api.dart';
 import '../../../../core/utils/util.dart';
 

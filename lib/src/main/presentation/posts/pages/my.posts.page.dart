@@ -1,11 +1,11 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/posts/pages/add.post.page.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/my.post.card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../../core/domain/posts/entities/post.dart';
 import '../controllers/my.posts.controller.dart';
-import '../widget/my.post.card.dart';
-import 'add.post.page.dart';
 
 class MyPostPage extends StatefulWidget {
   const MyPostPage({Key? key}) : super(key: key);

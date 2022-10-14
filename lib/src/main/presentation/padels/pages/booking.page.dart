@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../../../core/domain/booking/entities/padel.order.dart';
-import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../domain/booking/entities/padel.order.dart';
+import '../../../domain/padels/entities/padel.dart';
 import '../../home/widget/padel.avatar.dart';
 import '../widgets/triangle.painter.dart';
 

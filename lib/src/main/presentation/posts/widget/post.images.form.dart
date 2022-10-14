@@ -1,7 +1,6 @@
+import 'package:feekpadel/src/core/widgets/image.form.dart';
+import 'package:feekpadel/src/main/data/posts/dto/post.image.dto.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/data/posts/dto/post.image.dto.dart';
-import '../../../../core/presentation/widgets/image.form.dart';
 
 class PostImagesFrom extends StatefulWidget {
   const PostImagesFrom(

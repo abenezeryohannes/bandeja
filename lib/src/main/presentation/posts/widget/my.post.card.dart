@@ -1,7 +1,6 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.card.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/domain/posts/entities/post.dart';
-import 'post.card.dart';
 
 class MyPostCard extends StatefulWidget {
   const MyPostCard({Key? key, required this.post, required this.onDelete})

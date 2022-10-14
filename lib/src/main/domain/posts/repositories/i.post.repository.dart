@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/data/posts/dto/post.dto.dart';
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/domain/posts/entities/post.group.dart';
 import '../../../../core/error/failure.dart';
+import '../../../data/posts/dto/post.dto.dart';
 import '../../core/entities/address.dart';
 import '../../core/entities/location.dart';
+import '../entities/post.dart';
+import '../entities/post.group.dart';
 
 abstract class IPostRepository {
   Future<Either<Failure, List<PostModel>>?>? getMyPosts(

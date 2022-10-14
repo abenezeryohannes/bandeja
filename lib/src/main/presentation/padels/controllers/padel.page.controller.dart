@@ -1,6 +1,5 @@
+import 'package:feekpadel/src/main/domain/padels/entities/padel.dart';
 import 'package:get/get.dart';
-
-import '../../../../core/domain/padels/entities/padel.dart';
 
 class PadelPageController extends GetxController {
   PadelPageController({required this.initPadel});

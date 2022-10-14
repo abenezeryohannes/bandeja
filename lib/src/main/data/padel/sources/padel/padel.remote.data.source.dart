@@ -1,19 +1,19 @@
 import 'dart:convert';
-
+import 'package:feekpadel/src/core/dto/response.dto.dart';
+import 'package:feekpadel/src/core/error/failure.dart';
+import 'package:feekpadel/src/core/network/api.dart';
+import 'package:feekpadel/src/main/domain/authentication/entities/user.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/bookmark.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.group.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../../core/domain/authentication/entities/user.dart';
-import '../../../../../core/domain/padels/entities/bookmark.dart';
-import '../../../../../core/domain/padels/entities/padel.dart';
-import '../../../../../core/domain/padels/entities/padel.group.dart';
-import '../../../../../core/dto/response.dto.dart';
-import '../../../../../core/error/failure.dart';
 import '../../../../../core/fixtures/fixture.reader.dart';
-import '../../../../../core/network/api.dart';
-import '../../../../domain/core/entities/address.dart';
+import '../../../../../core/utils/util.dart';
 import '../../../../domain/core/entities/location.dart';
+import '../../../../domain/padels/entities/padel.dart';
 
 @singleton
 class PadelRemoteDataSource {

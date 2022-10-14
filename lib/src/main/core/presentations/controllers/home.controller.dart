@@ -1,14 +1,14 @@
+import 'package:feekpadel/src/core/dto/wrapper.dto.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
 import 'package:get/get.dart';
 
 import '../../../../../main/injection/injector.dart';
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/domain/padels/entities/padel.group.dart';
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/dto/wrapper.dto.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../core/domain/padels/repositories/i.padel.group.repository.dart';
-import '../../../domain/padels/repositories/i.padel.repository.dart';
+import '../../../domain/padels/entities/padel.dart';
+import '../../../domain/padels/entities/padel.group.dart';
+import '../../../domain/padels/repositories/i.padel.group.repository.dart';
 import '../../../domain/posts/repositories/i.post.repository.dart';
+import '../../../domain/padels/repositories/i.padel.repository.dart';
 
 class HomeController extends GetxController {
   final itemGroupRepository = getIt<IPadelGroupRepository>();

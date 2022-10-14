@@ -1,9 +1,9 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../main/injection/injector.dart';
-import '../../../../core/domain/posts/entities/post.dart';
 import '../../../../core/dto/wrapper.dto.dart';
 import '../../../../core/error/failure.dart';
 import '../../../domain/posts/repositories/i.post.repository.dart';

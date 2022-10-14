@@ -1,20 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
-
-import '../../../../../core/data/posts/dto/post.dto.dart';
-import '../../../../../core/domain/posts/entities/post.dart';
-import '../../../../../core/domain/posts/entities/post.group.dart';
+import 'package:feekpadel/src/core/fixtures/fixture.reader.dart';
+import 'package:feekpadel/src/main/domain/core/entities/location.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
+import 'package:http_parser/http_parser.dart';
 import '../../../../../core/dto/response.dto.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../core/fixtures/fixture.reader.dart';
 import '../../../../../core/network/api.dart';
-import '../../../../domain/core/entities/address.dart';
-import '../../../../domain/core/entities/location.dart';
+import '../../../../domain/posts/entities/post.dart';
+import '../../../../domain/posts/entities/post.group.dart';
+import '../../dto/post.dto.dart';
 
 @singleton
 class PostRemoteDataSource {
@@ -103,30 +101,17 @@ class PostRemoteDataSource {
     required List<String> imageFilePaths,
     PostDto? post,
   }) async {
+    if (imageFilePaths.isEmpty) return null;
+    File file = File(imageFilePaths[0]);
+
     try {
-      var request = http.MultipartRequest('POST', Api.request('posts/add'));
-
-      if (imageFilePaths.isNotEmpty) {
-        File file = File(imageFilePaths[0]);
-        if (!(await file.exists())) {
-          throw Failure.unExpectedFailure(message: "File not found");
-        }
-        String fileName = file.path.split('/').last;
-        for (int i = 0; i < imageFilePaths.length; i++) {
-          String? memeTD =
-              lookupMimeType(imageFilePaths[i], headerBytes: [0xFF, 0xD8]);
-
-          List<String> memes =
-              memeTD == null ? ['image', 'jpg'] : memeTD.split('/');
-
-          request.files.add(http.MultipartFile(
-              'files',
-              File(imageFilePaths[i]).readAsBytes().asStream(),
-              File(imageFilePaths[i]).lengthSync(),
-              filename: imageFilePaths[i].split("/").last,
-              contentType: MediaType(memes[0], memes[1])));
-        }
+      if (!(await file.exists())) {
+        throw Failure.unExpectedFailure(message: "File not found");
       }
+
+      String fileName = file.path.split('/').last;
+
+      var request = http.MultipartRequest('POST', Api.request('posts/add'));
 
       Map<String, dynamic> jsonMap = post!.toJson();
       jsonMap.forEach((key, value) {
@@ -138,6 +123,20 @@ class PostRemoteDataSource {
         }
       });
 
+      for (int i = 0; i < imageFilePaths.length; i++) {
+        String? memeTD =
+            lookupMimeType(imageFilePaths[i], headerBytes: [0xFF, 0xD8]);
+
+        List<String> memes =
+            memeTD == null ? ['image', 'jpg'] : memeTD.split('/');
+
+        request.files.add(http.MultipartFile(
+            'files',
+            File(imageFilePaths[i]).readAsBytes().asStream(),
+            File(imageFilePaths[i]).lengthSync(),
+            filename: imageFilePaths[i].split("/").last,
+            contentType: MediaType(memes[0], memes[1])));
+      }
       request.headers.addAll(Api.multipartHeader("user")!);
       final streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);

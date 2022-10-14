@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../domain/padels/entities/padel.dart';
 import '../../../presentation/padels/pages/padel.page.dart';
 import '../controllers/bookmark.controller.dart';
 import '../widgets/padel.card.dart';

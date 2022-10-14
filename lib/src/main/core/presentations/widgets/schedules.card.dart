@@ -1,8 +1,7 @@
+import 'package:feekpadel/src/main/domain/padels/entities/padel.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/domain/padels/entities/padel.schedule.dart';
 
 class SchedulesCard extends StatefulWidget {
   const SchedulesCard(

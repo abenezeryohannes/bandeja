@@ -1,19 +1,18 @@
+import 'package:feekpadel/src/main/core/presentations/pages/main.page.dart';
+import 'package:feekpadel/src/main/presentation/authentication/page/signup.page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import 'admin/core/presentations/pages/home.page.admin.dart';
-import 'app.controller.dart';
 import 'core/langs/locals.dart';
-import 'core/presentation/widgets/show.error.dart';
 import 'flavors.dart';
-import 'main/core/presentations/pages/main.page.dart';
 import 'owner/core/presentation/pages/home.page.owner.dart';
 
 class App extends StatelessWidget {
-  App({Key? key}) : super(key: key);
-  final AppController controller = Get.put(AppController());
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -27,11 +26,7 @@ class App extends StatelessWidget {
           colorScheme: const ColorScheme.light(
               background: Colors.white, onBackground: Colors.black)),
       themeMode: ThemeMode.light,
-      home: Obx(() => controller.user.value.when(
-          emptyState: () => const MainPage(),
-          loadingState: (_) => const MainPage(),
-          loadedState: (_) => const MainPage(),
-          errorState: (failure) => ShowError(failure: failure))),
+      home: SignupPage(),
     );
   }
 

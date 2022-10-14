@@ -1,8 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.image.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/domain/posts/entities/post.dart';
-import 'post.image.dart';
 
 class PostImages extends StatefulWidget {
   const PostImages({Key? key, required this.post, required this.height})

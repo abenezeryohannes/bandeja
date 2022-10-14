@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../main/injection/injector.dart';
-import '../../../../core/domain/posts/entities/post.dart';
-import '../../../../core/domain/posts/entities/post.group.dart';
 import '../../../../core/dto/wrapper.dto.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../core/domain/posts/repositories/i.post.group.repository.dart';
+import '../../../domain/posts/entities/post.dart';
+import '../../../domain/posts/entities/post.group.dart';
+import '../../../domain/posts/repositories/i.post.group.repository.dart';
 import '../../../domain/posts/repositories/i.post.repository.dart';
 
 class PostsController extends GetxController {

@@ -55,7 +55,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "args": ["--flavor", "owner"],
-      "program": "lib/main/main.owner.dart"
+      "program": "lib/main.owner.dart"
     },
     {
       "name": "owner Profile",
@@ -63,7 +63,7 @@
       "type": "dart",
       "flutterMode": "profile",
       "args": ["--flavor", "owner"],
-      "program": "lib/main/main.owner.dart"
+      "program": "lib/main.owner.dart"
     },
     {
       "name": "owner Release",
@@ -71,7 +71,7 @@
       "type": "dart",
       "flutterMode": "release",
       "args": ["--flavor", "owner"],
-      "program": "lib/main/main.owner.dart"
+      "program": "lib/main.owner.dart"
     }
   ]
 }

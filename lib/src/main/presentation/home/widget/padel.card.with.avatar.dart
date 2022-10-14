@@ -1,17 +1,16 @@
 import 'dart:ui';
 
+import 'package:feekpadel/src/main/presentation/home/widget/padel.avatar.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/network/api.dart';
-import '../../../../core/presentation/widgets/cached.image.provider.dart';
-import '../../../../core/presentation/widgets/custom.shimmer.dart';
-import 'padel.avatar.dart';
+import '../../../../core/widgets/cached.image.provider.dart';
+import '../../../domain/padels/entities/padel.dart';
 
 class PadelCardWithAvatar extends StatefulWidget {
   const PadelCardWithAvatar(
       {Key? key,
-      this.item,
+      required this.item,
       required this.avatarBorderColor,
       required this.avatarRadius,
       this.scrollAmount = 1,
@@ -26,7 +25,7 @@ class PadelCardWithAvatar extends StatefulWidget {
       required this.cardHeroTag})
       : super(key: key);
 
-  final PadelModel? item;
+  final PadelModel item;
   final Color avatarBorderColor;
   final double avatarRadius;
   final double cornerRadius;
@@ -71,56 +70,42 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                CustomShimmer(
-                  show: widget.item == null,
-                  child: CachedImageProvider(
-                      borderRadius: widget.cornerRadius,
-                      image: Api.getMedia(widget.item == null
-                          ? '/img/placeholder.jpg'
-                          : widget.item!.banner)),
-                ),
+                CachedImageProvider(
+                    borderRadius: widget.cornerRadius,
+                    image: Api.getMedia(widget.item.banner)),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       gradient: LinearGradient(
                         begin: Alignment.center,
                         end: Alignment.bottomCenter,
-                        colors: widget.item == null
-                            ? [Colors.grey.shade200, Colors.grey.shade300]
-                            : [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.8),
-                              ],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.8),
+                        ],
                       )),
                 ),
                 Align(
                   alignment: const Alignment(0.9, -0.9),
-                  child: CustomShimmer(
-                    show: widget.item == null,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.85)),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Text(
-                          widget.item == null
-                              ? ''
-                              : widget.item!.Address == null
-                                  ? ''
-                                  : widget.item!.Address!.name,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(
-                          Icons.location_on,
-                          size: 20,
-                        )
-                      ]),
-                    ),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(0.85)),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text(
+                        widget.item.Address!.name,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(
+                        Icons.location_on,
+                        size: 20,
+                      )
+                    ]),
                   ),
                 ),
                 Align(
@@ -148,7 +133,7 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
                           children: [
                             if (widget.showCourtNo)
                               Text(
-                                widget.item == null ? '' : widget.item!.name,
+                                "Court No. ${widget.item.name}",
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w300,
@@ -159,9 +144,7 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
                             ),
                             if (widget.showName)
                               Text(
-                                widget.item == null
-                                    ? ''
-                                    : widget.item!.getUser().fullName,
+                                widget.item.name,
                                 textDirection: TextDirection.rtl,
                                 style: TextStyle(
                                     color: Theme.of(context).cardColor,

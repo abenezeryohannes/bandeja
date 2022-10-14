@@ -1,10 +1,9 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:feekpadel/src/main/core/presentations/controllers/main.controller.dart';
+import 'package:feekpadel/src/main/core/presentations/pages/search.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../controllers/main.controller.dart';
-import 'search.page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -55,7 +54,7 @@ class _MainPageState extends State<MainPage> {
                     );
                   },
                 )
-              : const SizedBox()),
+              : SizedBox()),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: Obx(() => AnimatedBottomNavigationBar.builder(

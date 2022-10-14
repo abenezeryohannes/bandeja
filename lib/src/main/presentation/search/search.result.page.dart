@@ -1,17 +1,17 @@
-import 'package:bandeja/src/main/core/presentations/widgets/padel.search.result.card..dart';
-import 'package:bandeja/src/main/domain/core/entities/address.dart';
-import 'package:bandeja/src/main/presentation/search/search.result.controller.dart';
+import 'package:feekpadel/src/core/widgets/toggle.form.dart';
+import 'package:feekpadel/src/main/core/presentations/widgets/padel.search.result.card..dart';
+import 'package:feekpadel/src/main/domain/authentication/entities/user.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.group.dart';
+import 'package:feekpadel/src/main/presentation/search/search.result.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/domain/authentication/entities/user.dart';
-import '../../../core/domain/padels/entities/padel.group.dart';
-import '../../../core/presentation/widgets/show.error.dart';
-import '../../../core/presentation/widgets/tab.bar.dart';
-import '../../../core/presentation/widgets/toggle.form.dart';
 import '../../../core/utils/util.dart';
+import '../../../core/widgets/show.error.dart';
+import '../../../core/widgets/tab.bar.dart';
 
 class SearchResultPage extends StatefulWidget {
   const SearchResultPage(

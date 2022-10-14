@@ -1,7 +1,6 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.images.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/domain/posts/entities/post.dart';
-import 'post.images.dart';
 
 class PostBottomSheet extends StatefulWidget {
   const PostBottomSheet({Key? key, required this.post}) : super(key: key);

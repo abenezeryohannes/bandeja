@@ -1,9 +1,8 @@
+import 'package:feekpadel/src/main/domain/posts/entities/post.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.bottom.sheet.dart';
+import 'package:feekpadel/src/main/presentation/posts/widget/post.image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../core/domain/posts/entities/post.dart';
-import 'post.bottom.sheet.dart';
-import 'post.image.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard({Key? key, required this.post}) : super(key: key);

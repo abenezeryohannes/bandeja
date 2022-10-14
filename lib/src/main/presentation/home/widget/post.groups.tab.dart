@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/posts/entities/post.group.dart';
+import '../../../domain/posts/entities/post.group.dart';
 
 class ItemGroupsTab extends StatefulWidget {
   const ItemGroupsTab(

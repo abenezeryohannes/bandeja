@@ -1,9 +1,11 @@
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+
+import 'package:feekpadel/src/core/error/failure.dart';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/error/failure.dart';
 import '../../../../core/network/network.info.dart';
-import '../../../domain/core/entities/address.dart';
 import '../../../domain/core/repositories/i.address.repository.dart';
 import '../source/address.local.data.source.dart';
 import '../source/address.remote.data.source.dart';

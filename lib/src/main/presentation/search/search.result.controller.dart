@@ -1,13 +1,13 @@
-import 'package:bandeja/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.group.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../main/injection/injector.dart';
-import '../../../core/domain/authentication/entities/user.dart';
-import '../../../core/domain/padels/entities/padel.group.dart';
 import '../../../core/dto/wrapper.dto.dart';
 import '../../../core/error/failure.dart';
+import '../../domain/authentication/entities/user.dart';
 import '../../domain/padels/repositories/i.padel.repository.dart';
 
 class SearchResultController extends GetxController {

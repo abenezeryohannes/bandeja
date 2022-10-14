@@ -1,8 +1,8 @@
+import 'package:feekpadel/src/main/presentation/padels/widgets/padel.page.body.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../domain/padels/entities/padel.dart';
 import '../../home/widget/padel.avatar.dart';
-import '../widgets/padel.page.body.dart';
 
 class PadelPage extends StatefulWidget {
   const PadelPage({Key? key, required this.padel}) : super(key: key);

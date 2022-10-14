@@ -1,8 +1,9 @@
+import 'package:feekpadel/src/main/domain/padels/entities/padel.dart';
+import 'package:feekpadel/src/main/presentation/home/widget/padel.avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../home/widget/padel.avatar.dart';
+import '../../search/widget/when.search.card.dart';
 
 class PadelDatePicker extends StatefulWidget {
   const PadelDatePicker(

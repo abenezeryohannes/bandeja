@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
-
-import '../../../../core/domain/authentication/entities/user.dart';
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/domain/padels/entities/padel.group.dart';
+import 'package:feekpadel/src/main/domain/core/entities/address.dart';
+import 'package:feekpadel/src/main/domain/core/entities/location.dart';
 import '../../../../core/error/failure.dart';
-import '../../core/entities/address.dart';
-import '../../core/entities/location.dart';
+import '../../authentication/entities/user.dart';
+import '../entities/padel.dart';
+import '../entities/padel.group.dart';
 
 abstract class IPadelRepository {
   Future<Either<Failure, PadelModel>?>? getPadel(int id);

@@ -27,17 +27,4 @@ class Util {
     buffer.write(hexString.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
-
-  //
-  // This class accepts nullable objects and check if they are null
-  // if they are null it will return empty string or random number
-  // if they are not null returns the property
-  //
-  static dynamic NullSafe(dynamic? object, String property) {
-    if (object == null) {
-      return '';
-    } else {
-      return object['property'];
-    }
-  }
 }

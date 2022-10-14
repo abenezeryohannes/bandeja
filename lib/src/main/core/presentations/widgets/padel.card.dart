@@ -1,13 +1,13 @@
+import 'package:feekpadel/src/main/core/presentations/widgets/feature.card.dart';
+import 'package:feekpadel/src/main/presentation/home/widget/padel.avatar.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/presentation/widgets/cached.image.dart';
-import '../../../presentation/home/widget/padel.avatar.dart';
-import 'feature.card.dart';
+import '../../../../core/widgets/cached.image.dart';
+import '../../../domain/padels/entities/padel.dart';
 
 class PadelCard extends StatefulWidget {
-  const PadelCard({Key? key, this.item}) : super(key: key);
-  final PadelModel? item;
+  const PadelCard({Key? key, required this.item}) : super(key: key);
+  final PadelModel item;
   @override
   State<PadelCard> createState() => _PadelCardState();
 }
@@ -52,9 +52,7 @@ class _PadelCardState extends State<PadelCard> {
                         color: Colors.white.withOpacity(0.85)),
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                       Text(
-                        widget.item == null
-                            ? " "
-                            : widget.item!.getAddress().name,
+                        widget.item.getAddress().name,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       const SizedBox(
@@ -105,9 +103,8 @@ class _PadelCardState extends State<PadelCard> {
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: Row(
-                  children: (widget.item == null
-                          ? [null, null, null]
-                          : widget.item!.getFeatures())
+                  children: widget.item
+                      .getFeatures()
                       .map((f) => Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: FeatureCard(feature: f),
@@ -118,14 +115,14 @@ class _PadelCardState extends State<PadelCard> {
           Padding(
             padding: const EdgeInsets.only(top: 0, left: 10),
             child: Text(
-              widget.item == null ? '' : widget.item!.getUser().fullName,
+              widget.item.User!.fullName,
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
           Padding(
               padding: const EdgeInsets.only(top: 5, left: 10),
               child: Text(
-                widget.item == null ? '' : widget.item!.name,
+                widget.item.name,
                 style: Theme.of(context).textTheme.bodyText2,
               )),
         ],

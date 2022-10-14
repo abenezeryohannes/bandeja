@@ -1,14 +1,14 @@
+import 'package:feekpadel/src/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
+import 'package:feekpadel/src/main/domain/padels/entities/padel.group.dart';
+import 'package:feekpadel/src/main/domain/authentication/entities/user.dart';
+import 'package:feekpadel/src/main/domain/padels/repositories/i.padel.repository.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/domain/authentication/entities/user.dart';
-import '../../../../core/error/failure.dart';
 import '../../../../core/network/network.info.dart';
-import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/domain/padels/entities/padel.group.dart';
 import '../../../domain/core/entities/address.dart';
 import '../../../domain/core/entities/location.dart';
-import '../../../domain/padels/repositories/i.padel.repository.dart';
+import '../../../domain/padels/entities/padel.dart';
 import '../sources/padel/padel.local.data.source.dart';
 import '../sources/padel/padel.remote.data.source.dart';
 

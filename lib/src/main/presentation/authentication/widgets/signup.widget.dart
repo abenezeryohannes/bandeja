@@ -9,17 +9,13 @@ class SignupSlide extends StatefulWidget {
       required this.onChanged,
       required this.value,
       required this.hint,
-      this.error,
       required this.countries,
       required this.country,
-      required this.onCountryChange,
-      required this.onFocustChange})
+      required this.onCountryChange})
       : super(key: key);
   final Function(String val) onChanged;
   final Function(Country val) onCountryChange;
   final String value;
-  final String? error;
-  final Function(bool) onFocustChange;
   final String hint;
   final List<Country> countries;
   final Country country;
@@ -28,19 +24,8 @@ class SignupSlide extends StatefulWidget {
 }
 
 class _SignupSlideState extends State<SignupSlide> {
-  final _focusNode = FocusNode();
-
-  @override
-  void initState() {
-    _focusNode.addListener(() {
-      widget.onFocustChange(_focusNode.hasFocus);
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    _focusNode.requestFocus();
     return Column(children: [
       const SizedBox(
         height: 20,
@@ -76,7 +61,6 @@ class _SignupSlideState extends State<SignupSlide> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0),
         child: TextFormField(
-          focusNode: _focusNode,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -116,25 +100,7 @@ class _SignupSlideState extends State<SignupSlide> {
             widget.onChanged(val);
           },
         ),
-      ),
-      if (widget.error != null)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 42.0, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  widget.error!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2!
-                      .copyWith(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
-        )
+      )
     ]);
   }
 
