@@ -1,0 +1,171 @@
+name: feekpadel
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+
+
+dependencies:
+  flutter:
+    sdk: flutter 
+  get: ^4.6.5
+  dartz: ^0.10.1
+  http: ^0.13.5
+  firebase_core: ^1.22.0
+  animated_bottom_navigation_bar: ^1.1.0
+  internet_connection_checker: ^0.0.1+4
+  flutter_bloc: ^8.1.1
+  shared_preferences: ^2.0.15
+  dots_indicator: ^2.0.0
+  flutter_native_splash: ^2.2.9
+  shimmer: ^2.0.0
+  cached_network_image: any
+  firebase_messaging: ^13.0.2
+  # timeago: ^3.3.0
+  responsive_sizer: ^3.1.1
+  infinite_scroll_pagination: ^3.2.0
+  injectable: ^1.5.3
+  get_it: ^7.2.0
+  flutter_dotenv: ^5.0.2 
+  freezed_annotation: ^2.1.0
+  json_annotation: any
+  equatable: ^2.0.5
+  image_picker: ^0.8.5+3
+  syncfusion_flutter_datepicker: ^20.2.50
+  flutter_date_pickers: ^0.4.0
+  # flutter_upayments: ^1.0.2 
+  expandable_page_view: ^1.0.17
+  intl: ^0.17.0
+  flutter_switch: ^0.3.2
+  qr_flutter: ^4.0.0
+  mime: ^1.0.2
+  virtual_keyboard_multi_language: ^1.0.3
+
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  injectable_generator: ^1.5.4
+  change_app_package_name: ^1.1.0
+  flutter_launcher_icons: ^0.10.0
+  freezed: ^2.1.0+1
+  build_runner: any
+  json_serializable: any
+  flutter_flavorizr: ^2.1.4
+  
+
+  flutter_lints: ^2.0.0
+
+flutter:
+ 
+  uses-material-design: true
+
+  assets:
+    - assets/img/
+    - assets/fixtures/
+    - assets/icons/
+    - .env
+
+
+flavorizr:
+  app:
+    android:
+      flavorDimensions: "flavor-type"
+    ios: null
+  ide: "vscode"
+  
+  flavors:
+    main: 
+      app:
+        name: "feekpadel"
+
+      android:
+        applicationId: "com.konrad.padel"
+
+      ios:
+        bundleId: "com.konrad.padel"
+
+    admin:
+      app:
+        name: "feekpadel Admin"
+
+      android:
+        applicationId: "com.konrad.padel_admin"
+      ios:
+        bundleId: "com.konrad.padel_admin"
+
+    owner:
+        app:
+          name: "feekpadel Owner"
+
+        android:
+          applicationId: "com.konrad.padel_owner"
+        ios:
+          bundleId: "com.konrad.padel_owner"
+
+# flutter_icons:
+#   android: "launcher_icon"
+#   ios: true
+#   image_path: "assets/img/app.png"
+#   min_sdk_android: 21 # android min sdk min:16, default 21
+#   web:
+#     generate: true
+#     image_path: "assets/img/app.png"
+#     background_color: "#f4f4f4"
+#     theme_color: "#ffffff"
+#   windows:
+#     generate: true
+#     image_path: "assets/img/app.png"
+
+# flutter_native_splash:
+#   color: "#fafafa"
+#   color_dark: "#fafafa"
+#   image: assets/img/app_avatar.png
+#   image_dark: assets/img/app_avatar.png
+#   android_gravity: center
+#   os_content_mode: center
+#   fullscreen: true
+#   android_12:
+#     image: assets/img/app_avatar_android_12.png
+#     image_dark: assets/img/app_avatar_android_12.png
+#     color: "#fafafa"
+#     color_dark: "#fafafa"
+
+
+  # fonts:
+  #   - family: VEXA
+  #     fonts:
+  #       - asset: fonts/VEXA.ttf
+  #       - asset: fonts/VEXA ITALIC.ttf
+  #         style: italic
+  #   - family: VEXA_LIGHT
+  #     fonts:
+  #       - asset: fonts/VEXA light.ttf
+  #       - asset: fonts/VEXA light italic.ttf
+  #         style: italic
+  #   - family: VEXA_THIN
+  #     fonts:
+  #       - asset: fonts/VEXA thin.ttf
+  #       - asset: fonts/VEXA thin italic.ttf
+  #         style: italic
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
