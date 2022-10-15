@@ -7,7 +7,7 @@ export class Util {
       : Number.parseInt(query.limit);
   }
   static getOffset(query: any): number {
-    return query.page == null || query.page == ''
+    return query.page == null || query.page == '' || query.page == '0'
       ? 0
       : (Number.parseInt(query.page) - 1) * Util.getLimit(query);
   }

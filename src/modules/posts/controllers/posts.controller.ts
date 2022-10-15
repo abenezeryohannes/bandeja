@@ -6,6 +6,7 @@ import {
   Post,
   UseInterceptors,
   Param,
+  Body,
 } from '@nestjs/common';
 import { WrapperDto } from 'src/core/dto/wrapper.dto';
 import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
@@ -77,11 +78,11 @@ export class PostsController {
     }
   }
   @Roles(ROLE.ADMIN, ROLE.USER)
-  @Get('delete/:id')
-  async delete(@Param('id') id: number, @Request() request) {
+  @Post('delete')
+  async delete(@Body() body, @Request() request) {
     try {
-      const result = await this.postsService.destroy(id, request);
-      return WrapperDto.paginate(result, result);
+      const result = await this.postsService.destroy(body.postId, request);
+      return WrapperDto.successfull(result >= 1);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }

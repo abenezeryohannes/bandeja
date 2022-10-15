@@ -4,5 +4,5 @@ export class BookmarkDto {
   @IsNotEmpty({
     message: 'No padel identifier presented to perform this task.',
   })
-  readonly id: number;
+  readonly padelId: number;
 }

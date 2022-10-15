@@ -27,20 +27,23 @@ export class PostsService {
       include: [PostImage, User, PostGroup],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
+      order: [['id', 'DESC']],
     });
   }
 
   async findAll(query: any): Promise<Post[]> {
-    const condition =
-      query.addressId == null || query.addressId == ''
-        ? {}
-        : { addressId: Number.parseInt(query.addressId) };
+    const condition = {};
+    if (query.addressId != null && query.addressId != '')
+      condition['addressId'] = Number.parseInt(query.addressId);
+    if (query.postGroupId != null && query.postGroupId != '')
+      condition['postGroupId'] = Number.parseInt(query.postGroupId);
 
     return this.postRepository.findAll({
       where: condition,
       include: [PostImage, User, PostGroup],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
+      order: [['id', 'DESC']],
     });
   }
 

@@ -1,5 +1,5 @@
 {
-  "name": "padel-backend",
+  "name": "bandeja-server",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -29,6 +29,7 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "9.1.2",
+    "@nestjs/platform-fastify": "^9.1.4",
     "@nestjs/sequelize": "^9.0.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",

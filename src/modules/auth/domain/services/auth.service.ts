@@ -6,7 +6,6 @@ import { UsersService } from 'src/modules/users/domain/services/users.service';
 import { Token } from '../entities/token.entity';
 import * as Moment from 'moment';
 import { ROLE, UserDto } from 'src/modules/users/infrastructure/dto/user.dto';
-import { request } from 'http';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +14,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject(TOKEN_REPOSITORY) private readonly tokenRepository: typeof Token,
   ) {}
+
   public async login(requestBody: any) {
     if (requestBody.phoneNumber == null || requestBody.UID == null)
       return WrapperDto.error(

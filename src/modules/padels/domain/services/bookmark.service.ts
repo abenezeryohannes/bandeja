@@ -19,30 +19,42 @@ export class BookmarkService {
     throw new Error('Method not implemented.');
   }
   async findAll(user: User, query: any): Promise<Bookmark[]> {
-    return await this.bookmarkRepository.findAll({
+    const bookmarks = await this.bookmarkRepository.findAll({
       where: { userId: user.id },
-      include: [{ model: Padel, include: [User, Location, Address, Feature] }],
+      include: {
+        model: Padel,
+        include: [
+          { model: User },
+          { model: Location },
+          { model: Address },
+          { model: Feature },
+          { model: Bookmark, where: { userId: user.id }, required: true },
+        ],
+      },
+
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
     });
+    return bookmarks.map((e) => e.getDataValue('Padel'));
     //return await this.userService.bookmarks(user, query);
   }
 
-  async set(user: User, bookmarkDto: BookmarkDto): Promise<Bookmark> {
+  async set(user: User, bookmarkDto: BookmarkDto): Promise<boolean> {
     const bookmark = await this.bookmarkRepository.findOne({
       where: {
         userId: user.id,
-        padelId: bookmarkDto.id,
+        padelId: bookmarkDto.padelId,
       },
     });
     if (bookmark == null) {
-      return await this.bookmarkRepository.create({
+      await this.bookmarkRepository.create({
         userId: user.id,
-        padelId: bookmarkDto.id,
+        padelId: bookmarkDto.padelId,
       });
+      return true;
     } else {
       await bookmark.destroy();
-      return bookmark;
+      return true;
     }
   }
 }
