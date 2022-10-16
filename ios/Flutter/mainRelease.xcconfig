@@ -1,0 +1,6 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_main.dart
+ASSET_PREFIX=main
+BUNDLE_NAME=bandeja
+BUNDLE_DISPLAY_NAME=bandeja

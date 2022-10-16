@@ -1,0 +1,6 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_admin.dart
+ASSET_PREFIX=admin
+BUNDLE_NAME=bandeja Admin
+BUNDLE_DISPLAY_NAME=bandeja Admin
