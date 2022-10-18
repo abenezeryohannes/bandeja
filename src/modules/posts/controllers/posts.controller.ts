@@ -17,6 +17,7 @@ import { diskStorage } from 'multer';
 import { FastifyFilesInterceptor } from 'src/fastify.multiple.file.interceptor';
 import { editFileName, imageFileFilter } from 'src/core/dto/file.upload.util';
 import { join } from 'path';
+import { TransactionInterceptor } from 'src/core/database/decorators/transaction.interceptor';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -56,7 +57,7 @@ export class PostsController {
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('add')
-  // @UseInterceptors(TransactionInterceptor)
+  @UseInterceptors(TransactionInterceptor)
   @UseInterceptors(
     FastifyFilesInterceptor('files', 5, {
       storage: diskStorage({
@@ -77,7 +78,9 @@ export class PostsController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+
   @Roles(ROLE.ADMIN, ROLE.USER)
+  @UseInterceptors(TransactionInterceptor)
   @Post('delete')
   async delete(@Body() body, @Request() request) {
     try {

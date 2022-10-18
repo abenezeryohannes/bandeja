@@ -4,9 +4,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { GuardsProvider } from './auth.providers';
 import { AuthService } from './domain/services/auth.service';
 import { AuthController } from './controllers/auth.controller';
+import { DatabaseModule } from 'src/core/database/database.module';
 @Module({
   imports: [
     UsersModule,
+    DatabaseModule,
     JwtModule.register({
       secret: process.env.JWTKEY,
       signOptions: { expiresIn: process.env.TOKEN_EXPIRATION },

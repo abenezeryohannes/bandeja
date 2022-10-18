@@ -29,4 +29,11 @@ export class UserDto {
   readonly enabled: boolean;
 
   readonly Token: TokenDto;
+
+  constructor(data: any) {
+    this.phoneNumber = data['phoneNumber'];
+    this.fullName = data['fullName'] == null ? '' : data['fullName'];
+    this.UID = data['UID'];
+    this.role = data['role'];
+  }
 }

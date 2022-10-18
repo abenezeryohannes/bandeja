@@ -43,8 +43,15 @@ export class UsersService {
     return await user.save();
   }
 
-  async create(user: UserDto): Promise<User> {
-    return await this.userRepository.create<User>({ ...user });
+  async create(user: UserDto, transaction: any): Promise<User> {
+    const userExist = await this.userRepository.findOne({
+      where: { phoneNumber: user.phoneNumber, UID: user.UID },
+    });
+    if (userExist != null) return userExist;
+    return await this.userRepository.create<User>(
+      { ...user },
+      { transaction: transaction },
+    );
   }
 
   async findOneByPhoneNumber(phoneNumber: string): Promise<User> {

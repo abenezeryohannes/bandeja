@@ -10,6 +10,7 @@ import { BookingModule } from './modules/booking/booking.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { AppProviders } from './app.providers';
+import 'reflect-metadata';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

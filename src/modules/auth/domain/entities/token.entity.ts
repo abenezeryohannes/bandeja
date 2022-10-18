@@ -20,6 +20,9 @@ export class Token extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   token: string;
 
+  @Column({ type: DataType.STRING, allowNull: true })
+  fcmTOken: string;
+
   @Is(function roleType(value: string): void {
     if (!['user', 'admin', 'owner'].includes(value)) {
       throw new Error(`"${value}" is not one of user or admin or owner.`);

@@ -11,6 +11,8 @@ import { Util } from 'src/core/utils/util';
 import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
 import { PromoCode } from 'src/modules/padels/domain/entities/promo.code.entity';
 import { PadelsService } from 'src/modules/padels/domain/services/padels.service';
+import { Address } from 'src/modules/users/domain/entities/address.entity';
+import { Location } from 'src/modules/users/domain/entities/location.entity';
 import { User } from 'src/modules/users/domain/entities/user.entity';
 import { OrderDto } from '../../infrastructure/dto/order.dto';
 import { PadelOrder } from '../entities/padel.order.entity';
@@ -27,7 +29,12 @@ export class BookingService {
   async findAll(user: User, query: any): Promise<PadelOrder[]> {
     return await this.padelOrderRepository.findAll({
       where: { id: user.id },
-      include: [Padel, PromoCode, Payment, User],
+      include: [
+        { model: Padel, include: [Location, Address] },
+        { model: PromoCode },
+        { model: Payment },
+        { model: User },
+      ],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
     });

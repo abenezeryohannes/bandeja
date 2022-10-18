@@ -8,6 +8,9 @@ import { Bookmark } from '../../../padels/domain/entities/bookmark.entity';
 import { Feature } from '../entities/feature.entity';
 import { Padel } from '../entities/padel.entity';
 import { BookmarkDto } from '../../infrastructure/dto/bookmark.dto';
+import { PadelSchedule } from '../entities/padel.schedule.entity';
+import { Op } from 'sequelize';
+import * as moment from 'moment';
 
 @Injectable()
 export class BookmarkService {
@@ -15,10 +18,14 @@ export class BookmarkService {
     @Inject(BOOKMARK_REPOSITORY)
     private readonly bookmarkRepository: typeof Bookmark,
   ) {}
+
   findOne(id: number) {
     throw new Error('Method not implemented.');
   }
   async findAll(user: User, query: any): Promise<Bookmark[]> {
+    const startTime = moment().startOf('day').toDate();
+    const endTime = moment().endOf('day').toDate();
+
     const bookmarks = await this.bookmarkRepository.findAll({
       where: { userId: user.id },
       include: {
@@ -26,6 +33,15 @@ export class BookmarkService {
         include: [
           { model: User },
           { model: Location },
+          {
+            model: PadelSchedule,
+            required: true,
+            where: {
+              startTime: { [Op.gte]: startTime },
+              endTime: { [Op.lte]: endTime },
+              // booked: false,
+            },
+          },
           { model: Address },
           { model: Feature },
           { model: Bookmark, where: { userId: user.id }, required: true },
