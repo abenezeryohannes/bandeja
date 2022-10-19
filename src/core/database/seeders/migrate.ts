@@ -1,7 +1,7 @@
-import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
 import { Payment } from 'src/modules/booking/domain/entities/payment.entity';
 import { PadelFeature } from 'src/modules/padels/domain/entities/padel.feature';
 import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
+import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
 import { Post } from 'src/modules/posts/domain/entities/post.entity';
 import { Bookmark } from 'src/modules/padels/domain/entities/bookmark.entity';
 import { Feature } from 'src/modules/padels/domain/entities/feature.entity';
