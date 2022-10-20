@@ -14,8 +14,8 @@ import 'reflect-metadata';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    DatabaseModule,
     UsersModule,
+    DatabaseModule,
     AuthModule,
     PadelsModule,
     BookingModule,
