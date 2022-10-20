@@ -22,10 +22,6 @@ import { PadelSchedule } from 'src/modules/padels/domain/entities/padel.schedule
 import { PadelPrices } from 'src/modules/padels/domain/entities/podel.pricess.entity';
 import { PromoCode } from 'src/modules/padels/domain/entities/promo.code.entity';
 import { Setting } from 'src/modules/users/domain/entities/setting.entity';
-import { TransactionInterceptor } from './decorators/transaction.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { Scope } from '@nestjs/common';
-
 export const databaseProviders = [
   {
     provide: SEQUELIZE,
