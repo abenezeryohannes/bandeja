@@ -3,8 +3,8 @@ import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { GuardsProvider } from './auth.providers';
 import { AuthService } from './domain/services/auth.service';
-import { AuthController } from './controllers/auth.controller';
-import { DatabaseModule } from 'src/core/database/database.module';
+import { AuthController } from './controllers/auth.controller'; 
+import { DatabaseModule } from '../../core/database/database.module';
 @Module({
   imports: [
     UsersModule,

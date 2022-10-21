@@ -1,4 +1,4 @@
-import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
+import { Notification } from '../../../../modules/notifications/domain/entities/notification.entity';
 
 export class SeedNotification {
   async run(): Promise<boolean> {

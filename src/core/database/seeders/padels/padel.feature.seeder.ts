@@ -1,4 +1,4 @@
-import { PadelFeature } from 'src/modules/padels/domain/entities/padel.feature';
+import { PadelFeature } from "../../../../modules/padels/domain/entities/padel.feature";
 
 export class SeedPadelFeature {
   async run(): Promise<boolean> {

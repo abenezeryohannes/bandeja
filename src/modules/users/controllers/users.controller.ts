@@ -7,10 +7,13 @@ import {
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { join } from 'path';
-import { editFileName, imageFileFilter } from 'src/core/dto/file.upload.util';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { FastifyFileInterceptor } from 'src/fastify.file.interceptor';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
+import {
+  editFileName,
+  imageFileFilter,
+} from '../../../core/dto/file.upload.util';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { FastifyFileInterceptor } from '../../../fastify.file.interceptor';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
 import { UsersService } from '../domain/services/users.service';
 import { ROLE } from '../infrastructure/dto/user.dto';
 

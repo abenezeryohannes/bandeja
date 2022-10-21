@@ -1,6 +1,5 @@
-import { MomentModule } from '@ccmos/nestjs-moment';
-import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/core/database/database.module';
+import { Module } from '@nestjs/common'; 
+import { DatabaseModule } from '../../core/database/database.module';
 import { UsersModule } from '../users/users.module';
 import { BookmarkController } from './controllers/bookmark.controller';
 import { InstumentController } from './controllers/instument.controller';

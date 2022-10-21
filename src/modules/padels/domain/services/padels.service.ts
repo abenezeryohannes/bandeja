@@ -1,6 +1,14 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
 import { Op } from 'sequelize';
+import { Padel } from '../entities/padel.entity';
+import { PadelFeature } from '../entities/padel.feature';
+import { Feature } from '../entities/feature.entity';
+import { PadelSchedule } from '../entities/padel.schedule.entity';
+import { PromoCode } from '../entities/promo.code.entity';
+import { Duration } from '../entities/duration.entity';
+import * as moment from 'moment';
+import { FilterPadelDto } from '../../infrastructure/dto/filter.padel.dto';
 import {
   BOOKING_DURATION_REPOSITORY,
   PADEL_FEATURE_REPOSITORY,
@@ -8,21 +16,12 @@ import {
   PADEL_SCHEDULE_REPOSITORY,
   PROMO_CODE_REPOSITORY,
   SEQUELIZE,
-  USER_REPOSITORY,
-} from 'src/core/constants';
-import { User } from 'src/modules/users/domain/entities/user.entity';
-import { Location } from 'src/modules/users/domain/entities/location.entity';
-import { Padel } from '../entities/padel.entity';
-import { PadelFeature } from '../entities/padel.feature';
-import { Address } from 'src/modules/users/domain/entities/address.entity';
-import { Util } from 'src/core/utils/util';
-import { Feature } from '../entities/feature.entity';
-import { PadelSchedule } from '../entities/padel.schedule.entity';
-import { PromoCode } from '../entities/promo.code.entity';
-import { Duration } from '../entities/duration.entity';
-import * as moment from 'moment';
-import { FilterPadelDto } from '../../infrastructure/dto/filter.padel.dto';
-import { UsersService } from 'src/modules/users/domain/services/users.service';
+} from '../../../../core/constants';
+import { UsersService } from '../../../users/domain/services/users.service';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Location } from '../../../users/domain/entities/location.entity';
+import { Address } from '../../../users/domain/entities/address.entity';
+import { Util } from '../../../../core/utils/util';
 
 @Injectable()
 export class PadelsService {

@@ -1,6 +1,6 @@
 import { Controller, Body, Post, Request, UseGuards } from '@nestjs/common';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { DoesUserExist } from '../domain/guards/does.user.exist.guard';
 import { Roles } from '../domain/guards/roles.decorator';
 import { AuthService } from '../domain/services/auth.service';

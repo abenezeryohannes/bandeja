@@ -1,27 +1,28 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Post } from 'src/modules/posts/domain/entities/post.entity';
-import { PostGroup } from 'src/modules/posts/domain/entities/post.group.entity';
-import { Token } from 'src/modules/auth/domain/entities/token.entity';
-import { Payment } from 'src/modules/booking/domain/entities/payment.entity';
-import { Bookmark } from 'src/modules/padels/domain/entities/bookmark.entity';
-import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
-import { Feature } from 'src/modules/padels/domain/entities/feature.entity';
-import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
-import { PadelGroup } from 'src/modules/padels/domain/entities/padel.group.entity';
-import { PadelFeature } from 'src/modules/padels/domain/entities/padel.feature';
-import { Address } from 'src/modules/users/domain/entities/address.entity';
-import { Location } from 'src/modules/users/domain/entities/location.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { Token } from '../../modules/auth/domain/entities/token.entity';
+import { PadelOrder } from '../../modules/booking/domain/entities/padel.order.entity';
+import { Payment } from '../../modules/booking/domain/entities/payment.entity';
+import { AllowedBookingHour } from '../../modules/padels/domain/entities/allowed.booking.hour.entity';
+import { Bookmark } from '../../modules/padels/domain/entities/bookmark.entity';
+import { Duration } from '../../modules/padels/domain/entities/duration.entity';
+import { Feature } from '../../modules/padels/domain/entities/feature.entity';
+import { Padel } from '../../modules/padels/domain/entities/padel.entity';
+import { PadelFeature } from '../../modules/padels/domain/entities/padel.feature';
+import { PadelGroup } from '../../modules/padels/domain/entities/padel.group.entity';
+import { PadelSchedule } from '../../modules/padels/domain/entities/padel.schedule.entity';
+import { PadelPrices } from '../../modules/padels/domain/entities/podel.pricess.entity';
+import { PromoCode } from '../../modules/padels/domain/entities/promo.code.entity';
+import { Post } from '../../modules/posts/domain/entities/post.entity';
+import { PostGroup } from '../../modules/posts/domain/entities/post.group.entity';
+import { PostImage } from '../../modules/posts/domain/entities/post.image.entity';
+import { Address } from '../../modules/users/domain/entities/address.entity';
+import { Setting } from '../../modules/users/domain/entities/setting.entity';
+import { Location } from '../../modules/users/domain/entities/location.entity';
+import { User } from '../../modules/users/domain/entities/user.entity';
+import { Notification } from '../../modules/notifications/domain/entities/notification.entity';
+
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
-import { databaseConfig } from './database.config';
-import { PostImage } from 'src/modules/posts/domain/entities/post.image.entity';
-import { PadelOrder } from 'src/modules/booking/domain/entities/padel.order.entity';
-import { AllowedBookingHour } from 'src/modules/padels/domain/entities/allowed.booking.hour.entity';
-import { Duration } from 'src/modules/padels/domain/entities/duration.entity';
-import { PadelSchedule } from 'src/modules/padels/domain/entities/padel.schedule.entity';
-import { PadelPrices } from 'src/modules/padels/domain/entities/podel.pricess.entity';
-import { PromoCode } from 'src/modules/padels/domain/entities/promo.code.entity';
-import { Setting } from 'src/modules/users/domain/entities/setting.entity';
+import { databaseConfig } from './database.config'; 
 export const databaseProviders = [
   {
     provide: SEQUELIZE,

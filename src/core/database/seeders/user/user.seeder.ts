@@ -1,4 +1,4 @@
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { User } from "../../../../modules/users/domain/entities/user.entity";
 
 export class SeedUser {
   async run(): Promise<boolean> {

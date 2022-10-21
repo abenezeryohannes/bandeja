@@ -2,7 +2,7 @@ import {
   POST_GROUP_REPOSITORY,
   POST_IMAGE_REPOSITORY,
   POST_REPOSITORY,
-} from 'src/core/constants';
+} from '../../core/constants';
 import { Post } from './domain/entities/post.entity';
 import { PostGroup } from './domain/entities/post.group.entity';
 import { PostImage } from './domain/entities/post.image.entity';

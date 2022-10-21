@@ -1,4 +1,4 @@
-import { Feature } from 'src/modules/padels/domain/entities/feature.entity';
+import { Feature } from "../../../../modules/padels/domain/entities/feature.entity";
 
 export class SeedFeature {
   async run(): Promise<boolean> {

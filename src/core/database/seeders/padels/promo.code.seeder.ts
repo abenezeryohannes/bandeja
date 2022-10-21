@@ -1,4 +1,4 @@
-import { PromoCode } from 'src/modules/padels/domain/entities/promo.code.entity';
+import { PromoCode } from "../../../../modules/padels/domain/entities/promo.code.entity";
 
 export class SeedPromoCode {
   async run(): Promise<boolean> {

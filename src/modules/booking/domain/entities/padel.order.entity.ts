@@ -7,10 +7,10 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
-import { PadelSchedule } from 'src/modules/padels/domain/entities/padel.schedule.entity';
-import { PromoCode } from 'src/modules/padels/domain/entities/promo.code.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { Padel } from '../../../padels/domain/entities/padel.entity';
+import { PadelSchedule } from '../../../padels/domain/entities/padel.schedule.entity';
+import { PromoCode } from '../../../padels/domain/entities/promo.code.entity';
+import { User } from '../../../users/domain/entities/user.entity';
 import { Payment } from './payment.entity';
 
 @Table

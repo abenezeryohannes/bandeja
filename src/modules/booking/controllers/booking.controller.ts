@@ -7,10 +7,10 @@ import {
   Body,
   UseInterceptors,
 } from '@nestjs/common';
-import { TransactionInterceptor } from 'src/core/database/decorators/transaction.interceptor';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
+import { TransactionInterceptor } from '../../../core/database/decorators/transaction.interceptor';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
+import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { BookingService } from '../domain/services/booking.service';
 import { OrderDto } from '../infrastructure/dto/order.dto';
 

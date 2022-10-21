@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { FEATURE_REPOSITORY } from 'src/core/constants';
+import { Inject, Injectable } from '@nestjs/common'; 
+import { FEATURE_REPOSITORY } from '../../../../core/constants';
 import { Feature } from '../entities/feature.entity';
 
 @Injectable()

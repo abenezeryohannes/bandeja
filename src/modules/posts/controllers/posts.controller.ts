@@ -8,16 +8,19 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
 import { PostsService } from '../domain/services/posts.service';
 import { diskStorage } from 'multer';
 
-import { FastifyFilesInterceptor } from 'src/fastify.multiple.file.interceptor';
-import { editFileName, imageFileFilter } from 'src/core/dto/file.upload.util';
 import { join } from 'path';
-import { TransactionInterceptor } from 'src/core/database/decorators/transaction.interceptor';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
+import { ROLE } from '../../users/infrastructure/dto/user.dto';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { TransactionInterceptor } from '../../../core/database/decorators/transaction.interceptor';
+import { FastifyFilesInterceptor } from '../../../fastify.multiple.file.interceptor';
+import {
+  editFileName,
+  imageFileFilter,
+} from '../../../core/dto/file.upload.util';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}

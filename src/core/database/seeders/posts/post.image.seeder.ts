@@ -1,4 +1,4 @@
-import { PostImage } from 'src/modules/posts/domain/entities/post.image.entity';
+import { PostImage } from "../../../../modules/posts/domain/entities/post.image.entity";
 
 export class SeedPostImage {
   async run(): Promise<boolean> {

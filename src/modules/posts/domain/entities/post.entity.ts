@@ -9,7 +9,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { PostGroup } from './post.group.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { User } from '../../../../modules/users/domain/entities/user.entity';
 import { PostImage } from './post.image.entity';
 
 @Table

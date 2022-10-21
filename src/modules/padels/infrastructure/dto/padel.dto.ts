@@ -1,5 +1,5 @@
-import { IsNotEmpty } from 'class-validator';
-import { PostDto } from 'src/modules/posts/infrastructure/dto/post.dto';
+import { IsNotEmpty } from 'class-validator'; 
+import { PostDto } from '../../../posts/infrastructure/dto/post.dto';
 import { PadelGroupDto } from './padel.group';
 
 export class PadelDto {

@@ -7,9 +7,9 @@ import {
   Query,
   Request,
 } from '@nestjs/common';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
+import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { BookmarkService } from '../domain/services/bookmark.service';
 import { BookmarkDto } from '../infrastructure/dto/bookmark.dto';
 

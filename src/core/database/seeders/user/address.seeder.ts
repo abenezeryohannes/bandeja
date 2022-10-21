@@ -1,4 +1,4 @@
-import { Address } from 'src/modules/users/domain/entities/address.entity';
+import { Address } from "../../../../modules/users/domain/entities/address.entity";
 
 export class SeedAddress {
   async run(): Promise<boolean> {

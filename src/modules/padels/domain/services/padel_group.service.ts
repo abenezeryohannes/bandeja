@@ -1,6 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PADEL_GROUP_REPOSITORY } from 'src/core/constants';
-import { Util } from 'src/core/utils/util';
+import { Inject, Injectable } from '@nestjs/common'; 
+import { PADEL_GROUP_REPOSITORY } from '../../../../core/constants';
+import { Util } from '../../../../core/utils/util';
 import { PadelGroup } from '../entities/padel.group.entity';
 
 @Injectable()

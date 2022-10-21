@@ -3,20 +3,20 @@ import {
   ADDRESS_REPOSITORY,
   LOCATION_REPOSITORY,
   USER_REPOSITORY,
-} from 'src/core/constants';
-import { Util } from 'src/core/utils/util';
-import { Token } from 'src/modules/auth/domain/entities/token.entity';
-import { Feature } from 'src/modules/padels/domain/entities/feature.entity';
-import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
+} from '../../../../core/constants'; 
 import { ROLE, UserDto } from '../../infrastructure/dto/user.dto';
 import { Address } from '../entities/address.entity';
 import { User } from '../entities/user.entity';
-import { Location } from '../entities/location.entity';
-import { PadelSchedule } from 'src/modules/padels/domain/entities/padel.schedule.entity';
-import { Op } from 'sequelize';
-import { FilterPadelDto } from 'src/modules/padels/infrastructure/dto/filter.padel.dto';
-import { Duration } from 'src/modules/padels/domain/entities/duration.entity';
+import { Location } from '../entities/location.entity'; 
+import { Op } from 'sequelize'; 
 import { join } from 'path';
+import { Token } from '../../../auth/domain/entities/token.entity';
+import { Util } from '../../../../core/utils/util';
+import { Padel } from '../../../padels/domain/entities/padel.entity';
+import { Feature } from '../../../padels/domain/entities/feature.entity';
+import { Duration } from '../../../padels/domain/entities/duration.entity';
+import { PadelSchedule } from '../../../padels/domain/entities/padel.schedule.entity';
+import { FilterPadelDto } from '../../../padels/infrastructure/dto/filter.padel.dto';
 
 @Injectable()
 export class UsersService {

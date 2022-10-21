@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, Request } from '@nestjs/common';
 import { query } from 'express';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
+import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { PadelsService } from '../domain/services/padels.service';
 import { FilterPadelDto } from '../infrastructure/dto/filter.padel.dto';
 

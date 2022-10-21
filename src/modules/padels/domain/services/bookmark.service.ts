@@ -1,9 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { BOOKMARK_REPOSITORY } from 'src/core/constants';
-import { Util } from 'src/core/utils/util';
-import { Address } from 'src/modules/users/domain/entities/address.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
-import { Location } from 'src/modules/users/domain/entities/location.entity';
 import { Bookmark } from '../../../padels/domain/entities/bookmark.entity';
 import { Feature } from '../entities/feature.entity';
 import { Padel } from '../entities/padel.entity';
@@ -11,6 +6,11 @@ import { BookmarkDto } from '../../infrastructure/dto/bookmark.dto';
 import { PadelSchedule } from '../entities/padel.schedule.entity';
 import { Op } from 'sequelize';
 import * as moment from 'moment';
+import { BOOKMARK_REPOSITORY } from '../../../../core/constants';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Location } from '../../../users/domain/entities/location.entity';
+import { Address } from '../../../users/domain/entities/address.entity';
+import { Util } from '../../../../core/utils/util';
 
 @Injectable()
 export class BookmarkService {

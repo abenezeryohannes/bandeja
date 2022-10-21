@@ -7,7 +7,6 @@ import {
   Table,
   Unique,
 } from 'sequelize-typescript';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import { Padel } from './padel.entity';
 
 @Table

@@ -9,7 +9,7 @@ import {
   PADEL_PRICESS_REPOSITORY,
   PADEL_SCHEDULE_REPOSITORY,
   BOOKING_DURATION_REPOSITORY,
-} from 'src/core/constants';
+} from '../../core/constants';
 import { Bookmark } from './domain/entities/bookmark.entity';
 import { Feature } from './domain/entities/feature.entity';
 import { Padel } from './domain/entities/padel.entity';

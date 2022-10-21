@@ -6,8 +6,8 @@ import {
   HasOne,
   Model,
   Table,
-} from 'sequelize-typescript';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+} from 'sequelize-typescript'; 
+import { User } from '../../../users/domain/entities/user.entity';
 import { PadelOrder } from './padel.order.entity';
 
 @Table

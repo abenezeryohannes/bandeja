@@ -6,11 +6,11 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { TOKEN_REPOSITORY } from 'src/core/constants';
-import { User } from 'src/modules/users/domain/entities/user.entity';
-import { UsersService } from 'src/modules/users/domain/services/users.service';
 import { Token } from '../entities/token.entity';
 import { Location } from '../../../users/domain/entities/location.entity';
+import { TOKEN_REPOSITORY } from '../../../../core/constants';
+import { UsersService } from '../../../users/domain/services/users.service';
+import { User } from '../../../users/domain/entities/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

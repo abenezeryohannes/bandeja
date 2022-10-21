@@ -1,4 +1,4 @@
-import { AllowedBookingHour } from 'src/modules/padels/domain/entities/allowed.booking.hour.entity';
+import { AllowedBookingHour } from "../../../../modules/padels/domain/entities/allowed.booking.hour.entity";
 
 export class SeedAllowedBookingHour {
   async run(): Promise<boolean> {

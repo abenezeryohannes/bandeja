@@ -1,4 +1,5 @@
-import { Payment } from 'src/modules/booking/domain/entities/payment.entity';
+import { Payment } from "../../../../modules/booking/domain/entities/payment.entity";
+
 export class SeedPayment {
   async run(): Promise<boolean> {
     const count = Number.parseInt(process.env.SEED_MULTIPLIER);

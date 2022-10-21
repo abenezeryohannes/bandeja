@@ -1,4 +1,4 @@
-import { Location } from 'src/modules/users/domain/entities/location.entity';
+import { Location } from '../../../../modules/users/domain/entities/location.entity';
 
 export class SeedLocation {
   async run(): Promise<boolean> {

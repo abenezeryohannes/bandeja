@@ -1,4 +1,4 @@
-import { PostGroup } from 'src/modules/posts/domain/entities/post.group.entity';
+import { PostGroup } from "../../../../modules/posts/domain/entities/post.group.entity";
 
 export class SeedPostGroup {
   async run(): Promise<boolean> {

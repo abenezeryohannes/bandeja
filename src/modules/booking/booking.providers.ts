@@ -1,6 +1,9 @@
-import { PAYMENT_REPOSITORY, PADEL_ORDER_REPOSITORY } from 'src/core/constants';
 import { Payment } from './domain/entities/payment.entity';
 import { PadelOrder } from './domain/entities/padel.order.entity';
+import {
+  PADEL_ORDER_REPOSITORY,
+  PAYMENT_REPOSITORY,
+} from '../../core/constants';
 
 export const BookingProvider = [
   {

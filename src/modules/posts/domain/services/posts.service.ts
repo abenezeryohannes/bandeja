@@ -1,13 +1,16 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
-import { POST_IMAGE_REPOSITORY, POST_REPOSITORY } from 'src/core/constants';
-import { Util } from 'src/core/utils/util';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import { PostDto } from '../../infrastructure/dto/post.dto';
 import { Post } from '../entities/post.entity';
 import { join } from 'path';
 import { PostGroup } from '../entities/post.group.entity';
 import { PostImage } from '../entities/post.image.entity';
-import { ROLE } from 'src/modules/users/infrastructure/dto/user.dto';
+import {
+  POST_IMAGE_REPOSITORY,
+  POST_REPOSITORY,
+} from '../../../../core/constants';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Util } from '../../../../core/utils/util';
+import { ROLE } from '../../../users/infrastructure/dto/user.dto';
 
 @Injectable()
 export class PostsService {

@@ -1,5 +1,5 @@
-import { UserDto } from 'src/modules/users/infrastructure/dto/user.dto';
 import { IsNotEmpty } from 'class-validator';
+import { UserDto } from '../../../users/infrastructure/dto/user.dto';
 
 export class NotificationDto {
   userId: number;

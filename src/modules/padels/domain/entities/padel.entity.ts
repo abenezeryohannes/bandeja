@@ -9,9 +9,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Address } from 'src/modules/users/domain/entities/address.entity';
-import { Location } from 'src/modules/users/domain/entities/location.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { Address } from '../../../../modules/users/domain/entities/address.entity';
+import { Location } from '../../../../modules/users/domain/entities/location.entity';
+import { User } from '../../../../modules/users/domain/entities/user.entity';
 import { Bookmark } from './bookmark.entity';
 import { Duration } from './duration.entity';
 import { Feature } from './feature.entity';

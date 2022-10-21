@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Token } from 'src/modules/auth/domain/entities/token.entity';
+import { Token } from '../../../../modules/auth/domain/entities/token.entity';
 
 export class SeedToken {
   async run(): Promise<boolean> {

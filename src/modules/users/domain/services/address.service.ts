@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ADDRESS_REPOSITORY } from 'src/core/constants';
-import { Util } from 'src/core/utils/util';
+import { ADDRESS_REPOSITORY } from '../../../../core/constants';
+import { Util } from '../../../../core/utils/util';
 import { Address } from '../entities/address.entity';
 
 @Injectable()

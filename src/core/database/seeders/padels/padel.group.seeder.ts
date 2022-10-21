@@ -1,4 +1,4 @@
-import { PadelGroup } from 'src/modules/padels/domain/entities/padel.group.entity';
+import { PadelGroup } from "../../../../modules/padels/domain/entities/padel.group.entity";
 
 export class SeedPadelGroup {
   async run(): Promise<boolean> {

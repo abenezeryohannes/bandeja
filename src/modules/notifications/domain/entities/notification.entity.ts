@@ -6,8 +6,8 @@ import {
   ForeignKey,
   Model,
   Table,
-} from 'sequelize-typescript';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+} from 'sequelize-typescript'; 
+import { User } from '../../../users/domain/entities/user.entity';
 
 @Table
 export class Notification extends Model {

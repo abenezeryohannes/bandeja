@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NOTIFICATION_REPOSITORY } from 'src/core/constants';
-import { User } from 'src/modules/users/domain/entities/user.entity';
-import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
-import { Util } from 'src/core/utils/util';
+import { NOTIFICATION_REPOSITORY } from '../../../../core/constants';
+import { Util } from '../../../../core/utils/util';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Notification } from '../../../notifications/domain/entities/notification.entity';
 import { seenDto } from '../../infrastructure/dto/seen.dto';
 
 @Injectable()

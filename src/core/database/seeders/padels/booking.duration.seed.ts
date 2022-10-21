@@ -1,4 +1,4 @@
-import { Duration } from 'src/modules/padels/domain/entities/duration.entity';
+import { Duration } from "../../../../modules/padels/domain/entities/duration.entity";
 
 export class SeedDuration {
   async run(): Promise<boolean> {

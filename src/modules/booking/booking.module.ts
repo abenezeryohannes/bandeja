@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/core/database/database.module';
+import { DatabaseModule } from '../../core/database/database.module';
 import { PadelsModule } from '../padels/padels.module';
 import { BookingProvider } from './booking.providers';
 import { BookingController } from './controllers/booking.controller';

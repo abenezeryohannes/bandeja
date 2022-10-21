@@ -1,4 +1,4 @@
-import { Bookmark } from 'src/modules/padels/domain/entities/bookmark.entity';
+import { Bookmark } from "../../../../modules/padels/domain/entities/bookmark.entity";
 
 export class SeedBookmark {
   async run(): Promise<boolean> {

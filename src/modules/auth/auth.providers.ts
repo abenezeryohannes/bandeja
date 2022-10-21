@@ -1,8 +1,8 @@
-import { APP_GUARD } from '@nestjs/core';
-import { DOES_USER_EXIST_GUARD, TOKEN_REPOSITORY } from 'src/core/constants';
+import { APP_GUARD } from '@nestjs/core'; 
 import { RolesGuard } from './domain/guards/roles.guard';
 import { Token } from './domain/entities/token.entity';
 import { DoesUserExist } from './domain/guards/does.user.exist.guard';
+import { DOES_USER_EXIST_GUARD, TOKEN_REPOSITORY } from '../../core/constants';
 
 export const GuardsProvider = [
   {

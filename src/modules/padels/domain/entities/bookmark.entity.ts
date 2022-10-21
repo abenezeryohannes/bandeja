@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { User } from '../../../users/domain/entities/user.entity';
 import { Padel } from './padel.entity';
 
 @Table

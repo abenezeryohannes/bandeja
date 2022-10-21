@@ -11,10 +11,10 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Notification } from 'src/modules/notifications/domain/entities/notification.entity';
-import { Bookmark } from 'src/modules/padels/domain/entities/bookmark.entity';
-import { Padel } from 'src/modules/padels/domain/entities/padel.entity';
 import { Token } from '../../../auth/domain/entities/token.entity';
+import { Bookmark } from '../../../padels/domain/entities/bookmark.entity';
+import { Padel } from '../../../padels/domain/entities/padel.entity';
+import { Notification } from '../../../notifications/domain/entities/notification.entity';
 import { Location } from './location.entity';
 
 @Table

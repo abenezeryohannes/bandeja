@@ -1,5 +1,5 @@
-import { PadelOrder } from 'src/modules/booking/domain/entities/padel.order.entity';
 import * as moment from 'moment';
+import { PadelOrder } from '../../../../modules/booking/domain/entities/padel.order.entity';
 
 export class SeedPadelOrder {
   async run(): Promise<boolean> {

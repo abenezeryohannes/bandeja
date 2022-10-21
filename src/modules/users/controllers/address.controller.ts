@@ -1,6 +1,6 @@
 import { Controller, Query, Get, Param } from '@nestjs/common';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { Roles } from 'src/modules/auth/domain/guards/roles.decorator';
+import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { Roles } from '../../auth/domain/guards/roles.decorator';
 import { AddressService } from '../domain/services/address.service';
 import { ROLE } from '../infrastructure/dto/user.dto';
 

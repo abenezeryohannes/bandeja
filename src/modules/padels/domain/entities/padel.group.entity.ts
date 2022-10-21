@@ -7,7 +7,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { HEX_REGEX } from 'src/core/constants';
+import { HEX_REGEX } from '../../../../core/constants';
 import { Padel } from './padel.entity';
 
 @Table

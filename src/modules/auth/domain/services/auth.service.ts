@@ -1,13 +1,12 @@
 import { Inject, Injectable, UseInterceptors } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt/dist/jwt.service';
-import { TOKEN_REPOSITORY } from 'src/core/constants';
-import { WrapperDto } from 'src/core/dto/wrapper.dto';
-import { UsersService } from 'src/modules/users/domain/services/users.service';
+import { JwtService } from '@nestjs/jwt/dist/jwt.service';  
 import { Token } from '../entities/token.entity';
-import * as Moment from 'moment';
-import { ROLE, UserDto } from 'src/modules/users/infrastructure/dto/user.dto';
-import { TransactionInterceptor } from 'src/core/database/decorators/transaction.interceptor';
-import { request } from 'http';
+import * as Moment from 'moment'; 
+import { TOKEN_REPOSITORY } from '../../../../core/constants';
+import { UsersService } from '../../../users/domain/services/users.service';
+import { WrapperDto } from '../../../../core/dto/wrapper.dto';
+import { TransactionInterceptor } from '../../../../core/database/decorators/transaction.interceptor';
+import { ROLE, UserDto } from '../../../users/infrastructure/dto/user.dto';
 
 @Injectable()
 export class AuthService {
