@@ -21,7 +21,7 @@ export class Token extends Model {
   token: string;
 
   @Column({ type: DataType.STRING, allowNull: true })
-  fcmTOken: string;
+  fcmToken: string;
 
   @Is(function roleType(value: string): void {
     if (!['user', 'admin', 'owner'].includes(value)) {

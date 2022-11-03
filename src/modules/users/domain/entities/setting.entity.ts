@@ -6,18 +6,19 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { User } from './user.entity';
 
 @Table
 export class Setting extends Model {
-  @ForeignKey(() => Setting)
+  @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
 
-  @Default(true)
+  @Default(false)
   @Column({ type: DataType.BOOLEAN })
   bookingNotification: boolean;
 
-  @Default(true)
+  @Default(false)
   @Column({ type: DataType.BOOLEAN })
   faceId: boolean;
 }

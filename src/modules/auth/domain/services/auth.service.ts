@@ -1,12 +1,14 @@
 import { Inject, Injectable, UseInterceptors } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt/dist/jwt.service';  
+import { JwtService } from '@nestjs/jwt/dist/jwt.service';
 import { Token } from '../entities/token.entity';
-import * as Moment from 'moment'; 
+import * as Moment from 'moment';
 import { TOKEN_REPOSITORY } from '../../../../core/constants';
 import { UsersService } from '../../../users/domain/services/users.service';
 import { WrapperDto } from '../../../../core/dto/wrapper.dto';
 import { TransactionInterceptor } from '../../../../core/database/decorators/transaction.interceptor';
 import { ROLE, UserDto } from '../../../users/infrastructure/dto/user.dto';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class AuthService {
@@ -16,35 +18,42 @@ export class AuthService {
     @Inject(TOKEN_REPOSITORY) private readonly tokenRepository: typeof Token,
   ) {}
 
-  @UseInterceptors(TransactionInterceptor)
   public async login(request: any, requestBody: any) {
-    if (requestBody.phoneNumber == null || requestBody.UID == null)
+    if (
+      !(requestBody.phoneNumber != null && requestBody.UID != null) &&
+      !(requestBody.emailAddress != null && requestBody.password != null)
+    )
       return WrapperDto.error(
         422,
         'UID and Phone Number is required to login!',
       );
-
-    let user = await this.userService.findOneByPhoneNumber(
-      requestBody.phoneNumber,
-    );
-    if (user == null)
-      user = await this.userService.create(
-        new UserDto({
-          phoneNumber: requestBody.phoneNumber,
-          UID: requestBody.UID,
-          role: requestBody.role,
-        }),
-        request.transaction,
+    let user = null;
+    if (requestBody.phoneNumber != null && requestBody.UID != null) {
+      user = await this.userService.findOneByPhoneNumber(
+        requestBody.phoneNumber,
       );
-    // return WrapperDto.error(
-    //   404,
-    //   'No user registered with this phone number, please try to sign up.',
-    // );
-    if (user.getDataValue('UID') != requestBody.UID)
-      return WrapperDto.error(
-        422,
-        'Incorrect UID, please confirm your phone number first!',
-      );
+      if (user == null)
+        user = await this.userService.create(
+          new UserDto({
+            phoneNumber: requestBody.phoneNumber,
+            UID: requestBody.UID,
+            role: requestBody.role,
+          }),
+          request.transaction,
+        );
+      if (user.getDataValue('UID') != requestBody.UID)
+        return WrapperDto.error(
+          422,
+          'Incorrect UID, please confirm your phone number first!',
+        );
+    } else {
+      user = await this.userService.findOneByEmail(requestBody.emailAddress);
+      if (user == null || user.getDataValue('password') != requestBody.password)
+        return WrapperDto.error(
+          422,
+          'Sorry, No user found with this credential!',
+        );
+    }
 
     if (requestBody.role == null) {
       return WrapperDto.error(422, 'Role is not provided');
@@ -81,7 +90,6 @@ export class AuthService {
     return userWithToken;
   }
 
-  @UseInterceptors(TransactionInterceptor)
   public async logout(token: Token) {
     if (token != null) {
       await this.tokenRepository.destroy({
@@ -95,7 +103,7 @@ export class AuthService {
   public async signUp(request: any, user: UserDto) {
     // create the user
     const newUser = await this.userService.create(
-      { ...user },
+      { ...user, enabled: user.role == ROLE.OWNER ? false : true },
       request.transaction,
     );
 
@@ -109,22 +117,62 @@ export class AuthService {
     return newUserWIthToken;
   }
 
-  private async generateToken(user, role: string, transaction: any) {
+  private async generateToken(user: any, role: string, transaction: any) {
     const code = await this.jwtService.signAsync(user);
     const token = await this.tokenRepository.create<Token>(
       {
         userId: user.id,
-        token: code,
+        token: code.substring(0, 254),
         until: Moment().add(Moment.duration(12, 'months')).toDate(),
         role: role,
       },
       { transaction: transaction },
     );
-    const result = await this.userService.findUserWithToken(
-      token.getDataValue('userId'),
-      token.getDataValue('token'),
-    );
-    return result;
+    // const result = await this.userService.findUserWithToken(
+    //   token.getDataValue('userId'),
+    //   token.getDataValue('token'),
+    // );
+    user.Token = token;
+    return user;
+  }
+
+  async updateFCM(request: any): Promise<User> {
+    if (request.body.fcm == null || request.body.fcm == undefined)
+      throw Error('No FCM provided!');
+    // await this.tokenRepository.update<Token>(
+    //   {
+    //     fcmToken: request.body.fcmToken,
+    //   },
+    //   {
+    //     where: {
+    //       id: request.token.id,
+    //     },
+    //     transaction: request.transaction,
+    //   },
+    // );
+    request.token.fcmToken = request.body.fcmToken;
+    request.token = await request.token.save();
+    request.user.Token = request.token;
+    return request.user;
+  }
+
+  async findTokens(userId: number) {
+    const tokens = await this.tokenRepository.findAll({
+      attributes: [['fcmToken', 'fcmToken']],
+      where: { userId: userId, fcmToken: { [Op.ne]: null } },
+    });
+    return tokens;
+  }
+
+  async findTokensByRole(role: string) {
+    const tokens = await this.tokenRepository.findAll({
+      attributes: [['fcmToken', 'fcmToken']],
+      where: {
+        role: role == null || role == undefined ? { [Op.ne]: null } : role,
+        fcmToken: { [Op.ne]: null },
+      },
+    });
+    return tokens;
   }
 
   async findUser(body: any) {

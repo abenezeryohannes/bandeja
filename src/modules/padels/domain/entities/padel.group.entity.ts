@@ -1,4 +1,5 @@
 import {
+  BelongsToMany,
   Column,
   DataType,
   Default,
@@ -9,6 +10,7 @@ import {
 } from 'sequelize-typescript';
 import { HEX_REGEX } from '../../../../core/constants';
 import { Padel } from './padel.entity';
+import { PadelPadelGroup } from './padel.padel.group';
 
 @Table
 export class PadelGroup extends Model {
@@ -35,6 +37,6 @@ export class PadelGroup extends Model {
   @Column({ type: DataType.BOOLEAN })
   enabled: boolean;
 
-  @HasMany(() => Padel)
+  @BelongsToMany(() => Padel, () => PadelPadelGroup)
   Padel: Padel[];
 }

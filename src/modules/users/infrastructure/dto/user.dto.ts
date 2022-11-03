@@ -1,5 +1,6 @@
 import { TokenDto } from '../../../auth/infrastructure/dto/token.dto';
 import { IsNotEmpty, IsPhoneNumber, IsEnum } from 'class-validator';
+import { LocationDto } from './location.dto';
 export enum ROLE {
   USER = 'user',
   ADMIN = 'admin',
@@ -30,10 +31,13 @@ export class UserDto {
 
   readonly Token: TokenDto;
 
+  readonly Location: LocationDto;
+
   constructor(data: any) {
     this.phoneNumber = data['phoneNumber'];
     this.fullName = data['fullName'] == null ? '' : data['fullName'];
     this.UID = data['UID'];
     this.role = data['role'];
+    this.Location = data['location'];
   }
 }

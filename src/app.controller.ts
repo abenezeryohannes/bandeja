@@ -2,7 +2,7 @@ import { Controller, Get, Query, Res, StreamableFile } from '@nestjs/common';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
-// import { Migrate } from './core/database/seeders/migrate';
+import { Migrate } from './core/database/seeders/migrate';
 import { WrapperDto } from './core/dto/wrapper.dto';
 import { Util } from './core/utils/util';
 
@@ -13,9 +13,9 @@ export class AppController {
   @Get('seed')
   async seed() {
     try {
-      // await new Migrate().rollback();
-      // await new Migrate().run();
-      // return new Migrate().seed();
+      await new Migrate().rollback();
+      await new Migrate().run();
+      return new Migrate().seed();
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }

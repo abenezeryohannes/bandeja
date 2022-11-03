@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'; 
+import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../../core/database/database.module';
 import { UsersModule } from '../users/users.module';
 import { BookmarkController } from './controllers/bookmark.controller';

@@ -17,6 +17,7 @@ import { Duration } from './duration.entity';
 import { Feature } from './feature.entity';
 import { PadelFeature } from './padel.feature';
 import { PadelGroup } from './padel.group.entity';
+import { PadelPadelGroup } from './padel.padel.group';
 import { PadelSchedule } from './padel.schedule.entity';
 
 @Table
@@ -52,6 +53,7 @@ export class Padel extends Model {
   @Column({ type: DataType.INTEGER })
   durationId: number;
 
+  @Default(0)
   @Column({ type: DataType.DECIMAL(10, 2), allowNull: false })
   price: number;
 
@@ -61,16 +63,17 @@ export class Padel extends Model {
 
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
+  approved: boolean;
+
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
   onlyLadies: boolean;
 
-  @ForeignKey(() => PadelGroup)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  padelGroupId: number;
-
-  @Column({ type: DataType.BOOLEAN, defaultValue: true })
+  @Default(true)
+  @Column({ type: DataType.BOOLEAN })
   enabled: boolean;
 
-  @BelongsTo(() => PadelGroup)
+  @BelongsToMany(() => PadelGroup, () => PadelPadelGroup)
   PadelGroup: PadelGroup;
 
   @BelongsToMany(() => Feature, () => PadelFeature)

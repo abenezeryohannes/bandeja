@@ -6,7 +6,7 @@ import {
   ForeignKey,
   Model,
   Table,
-} from 'sequelize-typescript'; 
+} from 'sequelize-typescript';
 import { User } from '../../../users/domain/entities/user.entity';
 
 @Table

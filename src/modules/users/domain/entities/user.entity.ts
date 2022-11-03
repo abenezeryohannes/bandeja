@@ -6,6 +6,7 @@ import {
   Default,
   ForeignKey,
   HasMany,
+  HasOne,
   Index,
   Is,
   Model,
@@ -16,6 +17,7 @@ import { Bookmark } from '../../../padels/domain/entities/bookmark.entity';
 import { Padel } from '../../../padels/domain/entities/padel.entity';
 import { Notification } from '../../../notifications/domain/entities/notification.entity';
 import { Location } from './location.entity';
+import { Setting } from './setting.entity';
 
 @Table
 export class User extends Model {
@@ -84,6 +86,9 @@ export class User extends Model {
 
   @HasMany(() => Token)
   Tokens: Token[];
+
+  @HasOne(() => Setting)
+  Setting: Setting;
 
   Token: Token;
 

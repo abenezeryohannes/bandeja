@@ -1,4 +1,4 @@
-import { Post } from "../../../../modules/posts/domain/entities/post.entity";
+import { Post } from '../../../../modules/posts/domain/entities/post.entity';
 
 export class SeedPost {
   async run(): Promise<boolean> {

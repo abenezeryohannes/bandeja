@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -6,7 +7,7 @@ import {
   Model,
   Table,
   Unique,
-} from 'sequelize-typescript'; 
+} from 'sequelize-typescript';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Padel } from './padel.entity';
 
@@ -20,6 +21,10 @@ export class PromoCode extends Model {
   @Column({ type: DataType.INTEGER, allowNull: false })
   padelId: number;
 
+  @ForeignKey(() => Padel)
+  @Column({ type: DataType.DECIMAL(20, 2), allowNull: false })
+  discount: number;
+
   @Unique
   @Column({ type: DataType.STRING, allowNull: false })
   code: string;
@@ -31,4 +36,7 @@ export class PromoCode extends Model {
   @Default(0)
   @Column({ type: DataType.INTEGER })
   leftForBooking: number;
+
+  @BelongsTo(() => Padel)
+  Padels: Padel[];
 }

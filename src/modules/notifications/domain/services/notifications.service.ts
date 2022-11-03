@@ -4,13 +4,36 @@ import { Util } from '../../../../core/utils/util';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Notification } from '../../../notifications/domain/entities/notification.entity';
 import { seenDto } from '../../infrastructure/dto/seen.dto';
+import { NotificationDto } from '../../infrastructure/dto/notification.dto';
+import { UsersService } from '../../../users/domain/services/users.service';
+import * as firebase from 'firebase-admin';
+import { BatchResponse } from 'firebase-admin/lib/messaging/messaging-api';
+import { chunk } from 'lodash';
+import * as shell from 'shelljs';
+import { mapLimit } from 'async';
+import { AuthService } from '../../../auth/domain/services/auth.service';
+import { ServiceAccount } from 'firebase-admin';
 
 @Injectable()
 export class NotificationsService {
   constructor(
     @Inject(NOTIFICATION_REPOSITORY)
     private readonly notificationRepository: typeof Notification,
-  ) {}
+    private readonly userService: UsersService,
+    private readonly authService: AuthService,
+  ) {
+    // Set the config options
+    const adminConfig: ServiceAccount = {
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    };
+    //
+    firebase.initializeApp({
+      credential: firebase.credential.cert(adminConfig),
+      // databaseURL: process.env.FIREBASE_DATABASE_URL,
+    });
+  }
 
   async findAll(user: User, query: any): Promise<Notification[]> {
     return await this.notificationRepository.findAll({
@@ -19,6 +42,14 @@ export class NotificationsService {
       offset: Util.getOffset(query),
     });
   }
+
+  async unseenCount(request: any): Promise<number> {
+    const counted = await this.notificationRepository.count({
+      where: { seen: false, userId: request.user.id },
+    });
+    return counted;
+  }
+
   async seen(request: any, seen: seenDto): Promise<Notification> {
     const notification = await this.notificationRepository.findByPk(
       seen.notificationId,
@@ -34,5 +65,141 @@ export class NotificationsService {
     return await this.notificationRepository.findAll({
       where: { userId: request.user.id },
     });
+  }
+
+  async add(
+    request: any,
+    notificationDto: NotificationDto,
+  ): Promise<Notification> {
+    return await this.notificationRepository.create(
+      {
+        userID: notificationDto.userId,
+        title: notificationDto.title,
+        desc: notificationDto.desc,
+        seen: notificationDto.seen,
+      },
+      { transaction: request.transaction },
+    );
+  }
+
+  async addAll(
+    request: any,
+    notificationDto: NotificationDto,
+  ): Promise<boolean> {
+    if (notificationDto.role == null) return null;
+    const usersIds = await this.userService.findAllUserIds(
+      notificationDto.role,
+    );
+    const data = [];
+    usersIds.forEach((id) => {
+      data.push({
+        userID: id,
+        title: notificationDto.title,
+        desc: notificationDto.desc,
+        seen: notificationDto.seen,
+      });
+    });
+    await this.notificationRepository.bulkCreate(data, {
+      transaction: request.transaction,
+    });
+    return true;
+  }
+
+  public async SendMessage(
+    request: any,
+    notificationDto: NotificationDto,
+    save: boolean,
+  ): Promise<boolean> {
+    const tokens =
+      notificationDto.userId != null
+        ? await this.authService.findTokens(notificationDto.userId)
+        : await this.authService.findTokensByRole(notificationDto.role);
+
+    const messages = tokens.map(
+      (t) =>
+        new NotificationDto({
+          fcmToken: t.fcmToken,
+          title: notificationDto.title,
+          desc: notificationDto.desc,
+        }),
+    );
+    await this.sendFirebaseMessages(messages, true);
+
+    if (save || save == null) {
+      await this.addAll(request, notificationDto);
+    }
+    return true;
+  }
+
+  public async sendFirebaseMessages(
+    firebaseMessages: NotificationDto[],
+    dryRun?: boolean,
+  ): Promise<BatchResponse> {
+    const batchedFirebaseMessages = chunk(firebaseMessages, 500);
+
+    const batchResponses = await mapLimit<NotificationDto[], BatchResponse>(
+      batchedFirebaseMessages,
+      process.env.FIREBASE_PARALLEL_LIMIT || 3, // 3 is a good place to start
+      async (
+        groupedFirebaseMessages: NotificationDto[],
+      ): Promise<BatchResponse> => {
+        try {
+          const tokenMessages: firebase.messaging.TokenMessage[] =
+            groupedFirebaseMessages.map(({ desc, title, token }) => ({
+              notification: { body: desc, title },
+              token,
+              apns: {
+                payload: {
+                  aps: {
+                    'content-available': 1,
+                  },
+                },
+              },
+            }));
+
+          return await this.sendAll(tokenMessages, dryRun);
+        } catch (error) {
+          return {
+            responses: groupedFirebaseMessages.map(() => ({
+              success: false,
+              error,
+            })),
+            successCount: 0,
+            failureCount: groupedFirebaseMessages.length,
+          };
+        }
+      },
+    );
+
+    return batchResponses.reduce(
+      ({ responses, successCount, failureCount }, currentResponse) => {
+        return {
+          responses: responses.concat(currentResponse.responses),
+          successCount: successCount + currentResponse.successCount,
+          failureCount: failureCount + currentResponse.failureCount,
+        };
+      },
+      {
+        responses: [],
+        successCount: 0,
+        failureCount: 0,
+      } as unknown as BatchResponse,
+    );
+  }
+
+  public async sendAll(
+    messages: firebase.messaging.TokenMessage[],
+    dryRun?: boolean,
+  ): Promise<BatchResponse> {
+    if (process.env.ENV === 'DEV') {
+      for (const { notification, token } of messages) {
+        shell.exec(
+          `echo '{ "aps": { "alert": ${JSON.stringify(
+            notification,
+          )}, "token": "${token}" } }' | xcrun simctl push booted com.konrad.bandeja -`,
+        );
+      }
+    }
+    return firebase.messaging().sendAll(messages, dryRun);
   }
 }

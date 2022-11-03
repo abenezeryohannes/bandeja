@@ -54,6 +54,21 @@ export class WrapperDto {
       } else return WrapperDto.error(422, error.message);
     } else if (error['message'] != null) {
       return WrapperDto.error(500, error['message']);
+    } else if (Array.isArray(error)) {
+      const wrapper = new WrapperDto();
+      wrapper.success = false;
+      wrapper.statusCode = 422;
+      wrapper.message = '';
+      error.forEach((err) => {
+        const constraints = err['constraints'];
+        if (constraints != null) {
+          for (const key in constraints) {
+            if (constraints[key] != undefined || constraints[key] != null)
+              wrapper.message += constraints[key] + ' \n';
+          }
+        }
+      });
+      return wrapper;
     }
   }
 }

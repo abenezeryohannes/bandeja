@@ -31,13 +31,13 @@ import { PadelFeature } from '../../../modules/padels/domain/entities/padel.feat
 import { PostImage } from '../../../modules/posts/domain/entities/post.image.entity';
 import { Bookmark } from '../../../modules/padels/domain/entities/bookmark.entity';
 import { Padel } from '../../../modules/padels/domain/entities/padel.entity';
- 
+
 import { Duration } from '../../../modules/padels/domain/entities/duration.entity';
 import { PadelGroup } from '../../../modules/padels/domain/entities/padel.group.entity';
 import { PostGroup } from '../../../modules/posts/domain/entities/post.group.entity';
 import { Feature } from '../../../modules/padels/domain/entities/feature.entity';
 import { Post } from '../../../modules/posts/domain/entities/post.entity';
- 
+
 export class Migrate {
   async run(): Promise<boolean> {
     await Address.sync({ force: true });

@@ -8,6 +8,7 @@ export class SeedLocation {
       data.push({
         latitude: (Math.random() + 1) * 2000,
         longitude: (Math.random() + 1) * 2000,
+        address: 'Kuwati main road',
       });
     }
     await Location.bulkCreate(data);

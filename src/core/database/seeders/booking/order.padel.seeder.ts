@@ -6,7 +6,7 @@ export class SeedPadelOrder {
     const count = Number.parseInt(process.env.SEED_MULTIPLIER);
     const data = [];
     let padelId = 0;
-    let padelScheduleId = 0;
+    let padelScheduleId = 1;
 
     for (let i = count + 1; i <= 2 * count; i++) {
       for (let j = 1; j < 3; j++) {
@@ -30,10 +30,12 @@ export class SeedPadelOrder {
               data.push({
                 userId: i - count,
                 padelId: padelId,
-                padelScheduleId: ++padelScheduleId,
+                amount: Math.random() * 10000 + 100,
+                padelScheduleId: padelScheduleId,
                 barCode: 'this is barcode ' + padelId,
               });
             }
+            padelScheduleId += 1;
           }
         }
       }

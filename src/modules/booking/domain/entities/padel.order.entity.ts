@@ -35,8 +35,15 @@ export class PadelOrder extends Model {
   @Column({ type: DataType.INTEGER, allowNull: true })
   promoCodeID: number;
 
+  @Default(0)
+  @Column({ type: DataType.DECIMAL(20, 2), allowNull: false })
+  amount: number;
+
   @Column({ type: DataType.STRING, allowNull: true })
   barCode: string;
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  paymentDate: Date;
 
   @Column({ type: DataType.STRING, allowNull: false })
   status: string;

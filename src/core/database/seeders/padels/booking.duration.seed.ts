@@ -1,4 +1,4 @@
-import { Duration } from "../../../../modules/padels/domain/entities/duration.entity";
+import { Duration } from '../../../../modules/padels/domain/entities/duration.entity';
 
 export class SeedDuration {
   async run(): Promise<boolean> {
@@ -6,7 +6,7 @@ export class SeedDuration {
     const data = [];
     for (let i = 1; i <= 2; i++) {
       data.push({
-        minute: 60,
+        minute: i == 1 ? 60 : 90,
       });
     }
     await Duration.bulkCreate(data);

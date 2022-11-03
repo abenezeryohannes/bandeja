@@ -1,4 +1,11 @@
-import { Controller, Body, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  Request,
+  UseGuards,
+  Get,
+} from '@nestjs/common';
 import { WrapperDto } from '../../../core/dto/wrapper.dto';
 import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { DoesUserExist } from '../domain/guards/does.user.exist.guard';
@@ -12,11 +19,7 @@ export class AuthController {
   @Post('login')
   async login(@Request() request, @Body() body: any) {
     try {
-      let response = await this.authService.login(request, body);
-      if (response == null) {
-        // await request.transaction.commit();
-        response = await this.authService.findUser(body);
-      }
+      const response = await this.authService.login(request, body);
       return WrapperDto.successfullCreated(response);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
@@ -39,6 +42,17 @@ export class AuthController {
   async logOut(@Request() request) {
     try {
       return await this.authService.logout(request.Token);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Post('updateFCM')
+  async updateFCM(@Request() request) {
+    try {
+      const result = await this.authService.updateFCM(request);
+      return WrapperDto.successfullCreated(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }

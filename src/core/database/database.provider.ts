@@ -10,7 +10,6 @@ import { Padel } from '../../modules/padels/domain/entities/padel.entity';
 import { PadelFeature } from '../../modules/padels/domain/entities/padel.feature';
 import { PadelGroup } from '../../modules/padels/domain/entities/padel.group.entity';
 import { PadelSchedule } from '../../modules/padels/domain/entities/padel.schedule.entity';
-import { PadelPrices } from '../../modules/padels/domain/entities/podel.pricess.entity';
 import { PromoCode } from '../../modules/padels/domain/entities/promo.code.entity';
 import { Post } from '../../modules/posts/domain/entities/post.entity';
 import { PostGroup } from '../../modules/posts/domain/entities/post.group.entity';
@@ -22,7 +21,9 @@ import { User } from '../../modules/users/domain/entities/user.entity';
 import { Notification } from '../../modules/notifications/domain/entities/notification.entity';
 
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
-import { databaseConfig } from './database.config'; 
+import { databaseConfig } from './database.config';
+import { PadelPadelGroup } from '../../modules/padels/domain/entities/padel.padel.group';
+import { AppVisit } from '../../modules/users/domain/entities/app.visit.entity';
 export const databaseProviders = [
   {
     provide: SEQUELIZE,
@@ -56,12 +57,13 @@ export const databaseProviders = [
         PadelGroup,
         Padel,
         PadelFeature,
+        PadelPadelGroup,
+        AppVisit,
         Payment,
         PadelOrder,
         AllowedBookingHour,
         Duration,
         PadelSchedule,
-        PadelPrices,
         PromoCode,
         Setting,
       ]);

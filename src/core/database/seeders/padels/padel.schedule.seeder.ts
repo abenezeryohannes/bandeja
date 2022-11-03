@@ -26,12 +26,15 @@ export class SeedSchedule {
                 padelId: padelId,
                 status: 'booked',
                 booked: true,
+                price: 20,
                 startTime: index.toDate(),
                 endTime: index.add(1, 'hours').toDate(),
               });
             } else {
               data.push({
                 padelId: padelId,
+                status: 'free',
+                price: 20,
                 booked: false,
                 startTime: index.toDate(),
                 endTime: index.add(1, 'hours').toDate(),

@@ -11,7 +11,9 @@ import * as moment from 'moment';
 import { FilterPadelDto } from '../../infrastructure/dto/filter.padel.dto';
 import {
   BOOKING_DURATION_REPOSITORY,
+  FEATURE_REPOSITORY,
   PADEL_FEATURE_REPOSITORY,
+  PADEL_PADEL_GROUP_REPOSITORY,
   PADEL_REPOSITORY,
   PADEL_SCHEDULE_REPOSITORY,
   PROMO_CODE_REPOSITORY,
@@ -22,10 +24,23 @@ import { User } from '../../../users/domain/entities/user.entity';
 import { Location } from '../../../users/domain/entities/location.entity';
 import { Address } from '../../../users/domain/entities/address.entity';
 import { Util } from '../../../../core/utils/util';
+import { PromoCodeDto } from '../../infrastructure/dto/promo.code.dto';
+import { PadelAddDto } from '../../infrastructure/dto/padel.add.dto';
+import { join } from 'path';
+import { PadelScheduleDto } from '../../infrastructure/dto/padel.schedule.dto';
+import { PadelEditDto } from '../../infrastructure/dto/padel.edit.dto';
+import { PadelPadelGroup } from '../entities/padel.padel.group';
+import { PadelGroupService } from './padel_group.service';
+import { PadelGroup } from '../entities/padel.group.entity';
 
 @Injectable()
 export class PadelsService {
   constructor(
+    private readonly padelGroupService: PadelGroupService,
+
+    @Inject(FEATURE_REPOSITORY)
+    private readonly featuresRepository: typeof Feature,
+
     @Inject(PADEL_FEATURE_REPOSITORY)
     private readonly padelFeaturesRepository: typeof PadelFeature,
 
@@ -40,35 +55,77 @@ export class PadelsService {
     @Inject(PROMO_CODE_REPOSITORY)
     private readonly promoCodeRepository: typeof PromoCode,
 
+    @Inject(PADEL_PADEL_GROUP_REPOSITORY)
+    private readonly padelPadelGroupRepository: typeof PadelPadelGroup,
+
     private readonly userService: UsersService,
 
     @Inject(SEQUELIZE) private readonly sequelize: typeof Sequelize,
   ) {}
 
   async featured(user: User, query: any): Promise<Padel[]> {
-    const latitude = user['Location']['latitude'];
-    const longitude = user['Location']['longitude'];
-    return await this.padelsRepository.findAll({
-      attributes: {
-        include: [
-          [
-            this.sequelize.literal(
-              `SQRT( ((${latitude}-latitude)*(${latitude}-latitude)) +  ((${longitude}-longitude)*(${longitude}-longitude)) )`,
-            ),
-            'distance',
-          ],
+    const latitude = user.Location != null ? user.Location.latitude : 0;
+    const longitude = user.Location != null ? user.Location.longitude : 0;
+
+    const startDate = moment(query.date == null ? Date() : query.date)
+      .startOf('day')
+      .toDate();
+    const endDate = moment(query.date == null ? Date() : query.date)
+      .endOf('day')
+      .toDate();
+
+    let condition = null;
+    if (query.padelGroupId != null) condition = { id: query.padelGroupId };
+
+    const addressCondition = [];
+    if (query.addressId != null) addressCondition.push({ id: query.addressId });
+
+    const filteredPadelIds = await this.padelsRepository.findAll({
+      attributes: [
+        ['id', 'id'],
+        [
+          this.sequelize.literal(
+            `SQRT( ((${latitude}-latitude)*(${latitude}-latitude)) +  ((${longitude}-longitude)*(${longitude}-longitude)) )`,
+          ),
+          'distance',
         ],
-      },
-      where: { enabled: true },
+      ],
+      where: { enabled: true, approved: true },
       include: [
-        { model: User, include: [] },
-        { model: Location },
-        { model: Duration },
-        { model: Address },
+        {
+          model: User,
+          where: { enabled: true },
+          attributes: [],
+        },
+        { model: Location, attributes: [] },
+        { model: Address, include: addressCondition, attributes: [] },
       ],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
       order: [['distance', 'asc']],
+    });
+
+    return await this.padelsRepository.findAll({
+      where: { id: { [Op.in]: filteredPadelIds.map((e) => e.id) } },
+      include: [
+        { model: User, include: [] },
+        { model: Location },
+        { model: Feature },
+        { model: Duration },
+        { model: Address },
+        { model: PadelGroup, where: condition },
+        {
+          model: PadelSchedule,
+          required: false,
+          where: {
+            startTime: { [Op.gte]: startDate },
+            endTime: { [Op.lte]: endDate },
+          },
+        },
+      ],
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+      // order: [['distance', 'asc']],
     });
   }
 
@@ -149,10 +206,692 @@ export class PadelsService {
       ? moment(filterPadelsDto.date).endOf('day').toDate()
       : moment(filterPadelsDto.date).toDate();
 
-    return await this.userService.filterOwnersPadel(
+    return await this.userService.filterPadels(
       startTime,
       endTime,
       filterPadelsDto,
     );
+  }
+
+  async findAllOwnerPadelsWithSchedules(
+    user: User,
+    filterPadelsDto: FilterPadelDto,
+  ): Promise<Padel[]> {
+    const isFullDay = filterPadelsDto.date.length <= 12;
+
+    const startTime = moment(filterPadelsDto.date).toDate();
+
+    const endTime = isFullDay
+      ? moment(filterPadelsDto.date).endOf('day').toDate()
+      : moment(filterPadelsDto.date).toDate();
+
+    const conditions = { enabled: true };
+    if (filterPadelsDto.addressId != null) {
+      conditions['addressId'] = filterPadelsDto.addressId;
+    }
+    if (filterPadelsDto.padelGroupId != null) {
+      conditions['padelGroupId'] = filterPadelsDto.padelGroupId;
+    }
+    return await this.padelsRepository.findAll({
+      where: { userId: user.id, ...conditions },
+      include: [
+        { model: Location },
+        { model: Address },
+        { model: Duration },
+        { model: Feature },
+        { model: User },
+        {
+          model: PadelSchedule,
+          required: false,
+          where: {
+            startTime: { [Op.gte]: startTime },
+            endTime: { [Op.lte]: endTime },
+          },
+        },
+      ],
+    });
+  }
+
+  async addPadel(request: any, padelDto: PadelAddDto): Promise<Padel> {
+    let padel = this.padelsRepository.build({
+      userId: request.user.id,
+      name: padelDto.name,
+      addressId: padelDto.addressId,
+      durationId: padelDto.durationId,
+      onlyLadies: padelDto.onlyLadies,
+      indoor: padelDto.indoor,
+      price: Number.parseFloat(padelDto.price.toString()),
+    });
+
+    //PADEL GROUP
+    if (padelDto.padelGroupIds != null && padelDto.padelGroupIds.length >= 0) {
+      const ops = [];
+      padelDto.padelGroupIds.forEach((groupId) => {
+        ops.push(
+          this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: groupId,
+          }),
+        );
+      });
+      await Promise.all(ops);
+    }
+
+    if (padelDto.onlyLadies != null) {
+      const ladies = await this.padelGroupService.findOneByName('Ladies');
+      if (padel.indoor && ladies != null) {
+        await this.padelPadelGroupRepository.create({
+          padelId: padel.id,
+          padelGroupId: ladies.id,
+        });
+      }
+    }
+
+    if (padelDto.indoor != null) {
+      const outdoor = await this.padelGroupService.findOneByName('Outdoor');
+      const indoor = await this.padelGroupService.findOneByName('Indoor');
+      if (padel.indoor) {
+        if (indoor != null)
+          await this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: indoor.id,
+          });
+      } else {
+        if (outdoor != null)
+          await this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: outdoor.id,
+          });
+      }
+    }
+
+    //START TIME
+    if (padelDto.startTime != null) {
+      padel.startTime = moment(padelDto.startTime).toDate();
+    } else padel.startTime = moment().startOf('day').add(2, 'hours').toDate();
+
+    //END TIME
+    if (padelDto.endTime != null) {
+      padel.endTime = moment(padelDto.endTime).toDate();
+    } else padel.endTime = moment().startOf('day').add(14, 'hours').toDate();
+
+    //AVATAR
+    if (
+      request.files != null &&
+      request.files.avatar != null &&
+      request.files.avatar.length > 0
+    )
+      padel.avatar = join('public', request.files.avatar[0].filename);
+
+    //BANNER
+    if (
+      request.files != null &&
+      request.files.banner != null &&
+      request.files.banner.length > 0
+    )
+      padel.banner = join('public', request.files.banner[0].filename);
+
+    //PADEL Location
+    if (padelDto.locationDto != null) {
+      const location = await this.userService.addLocation(padelDto.locationDto);
+      padel.locationId = location.id;
+    }
+
+    padel = await padel.save({ transaction: request.transaction });
+
+    //FEATURES
+    if (
+      padelDto.padelFeatureDto != null &&
+      padelDto.padelFeatureDto.length > 0
+    ) {
+      const ops = [];
+      padelDto.padelFeatureDto.forEach((padelFeatureDto) => {
+        ops.push(
+          // this.padelFeaturesRepository.create(
+          {
+            padelId: padel.id,
+            featureId: padelFeatureDto.featureId,
+            quantity: 1,
+            free: padelFeatureDto.free == null ? true : padelFeatureDto.free,
+          },
+          //,{ transaction: request.transaction },
+          //),
+        );
+      });
+      // await Promise.all(ops);
+      await this.featuresRepository.bulkCreate(ops, {
+        transaction: request.transaction,
+      });
+    }
+    //SCHEDULES
+    if (padelDto.padelSchedules != null && padelDto.padelSchedules.length > 0) {
+      const ops2 = [];
+      padelDto.padelSchedules.forEach((schedule) => {
+        for (let i = 0; i < 100; i++) {
+          ops2.push(
+            // this.padelScheduleRepository.create(
+            {
+              padelId: padel.id,
+              status:
+                (schedule.applyForAllDays || i == 0) && schedule.status != null
+                  ? schedule.status
+                  : 'free',
+              booked:
+                schedule.applyForAllDays || i == 0 ? schedule.booked : false,
+              price:
+                isNaN(schedule.price) && (schedule.applyForAllDays || i == 0)
+                  ? padel.price
+                  : schedule.price,
+              startTime: moment(schedule.startTime).add(i, 'days').toDate(),
+              endTime: moment(schedule.endTime).add(i, 'days').toDate(),
+            },
+            //, { transaction: request.transaction },
+            // ),
+          );
+        }
+      });
+      await this.padelScheduleRepository.bulkCreate(ops2, {
+        transaction: request.transaction,
+      });
+      // await Promise.all(ops2);
+    }
+
+    //groups
+
+    return padel;
+  }
+
+  async editPadel(request: any, padelDto: PadelEditDto): Promise<Padel> {
+    let padel = await this.padelsRepository.findByPk(padelDto.id);
+    if (padel == null) {
+      throw Error('Court not found!');
+    }
+
+    if (padelDto.approved != null) {
+      padel.approved = padelDto.approved;
+    }
+
+    if (
+      padelDto.addressId != null &&
+      !isNaN(padelDto.addressId) &&
+      padelDto.addressId > 0
+    ) {
+      padel.addressId = padelDto.addressId;
+    }
+
+    if (
+      padelDto.durationId != null &&
+      !isNaN(padelDto.durationId) &&
+      padelDto.durationId > 0
+    ) {
+      padel.durationId = padelDto.durationId;
+    }
+
+    //PADEL GROUP
+    if (padelDto.padelGroupIds != null && padelDto.padelGroupIds.length >= 0) {
+      await this.padelPadelGroupRepository.destroy({
+        where: { padelId: padel.id },
+      });
+      const ops = [];
+      padelDto.padelGroupIds.forEach((groupId) => {
+        ops.push(
+          this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: groupId,
+          }),
+        );
+      });
+      await Promise.all(ops);
+    }
+
+    if (padelDto.onlyLadies != null) {
+      padel.onlyLadies = padelDto.onlyLadies;
+
+      const ladies = await this.padelGroupService.findOneByName('Ladies');
+      if (ladies != null)
+        await this.padelPadelGroupRepository.destroy({
+          where: {
+            padelId: padel.id,
+            padelGroupId: ladies.id,
+          },
+        });
+      if (padel.indoor && ladies != null) {
+        await this.padelPadelGroupRepository.create({
+          padelId: padel.id,
+          padelGroupId: ladies.id,
+        });
+      }
+    }
+    if (padelDto.indoor != null) {
+      padel.indoor = padelDto.indoor;
+
+      const outdoor = await this.padelGroupService.findOneByName('Outdoor');
+      const indoor = await this.padelGroupService.findOneByName('Indoor');
+      if (indoor != null)
+        await this.padelPadelGroupRepository.destroy({
+          where: {
+            padelId: padel.id,
+            padelGroupId: indoor.id,
+          },
+        });
+      if (outdoor != null)
+        await this.padelPadelGroupRepository.destroy({
+          where: {
+            padelId: padel.id,
+            padelGroupId: outdoor.id,
+          },
+        });
+      if (padel.indoor) {
+        if (indoor != null)
+          await this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: indoor.id,
+          });
+      } else {
+        if (outdoor != null)
+          await this.padelPadelGroupRepository.create({
+            padelId: padel.id,
+            padelGroupId: outdoor.id,
+          });
+      }
+    }
+    if (
+      padelDto.price != null &&
+      !isNaN(padelDto.price) &&
+      padelDto.price > 0
+    ) {
+      padel.price = padelDto.price;
+    }
+
+    //START TIME
+    if (padelDto.startTime != null) {
+      padel.startTime = moment(padelDto.startTime).toDate();
+    }
+    //END TIME
+    if (padelDto.endTime != null) {
+      padel.endTime = moment(padelDto.endTime).toDate();
+    }
+    //PADEL Location
+    if (padelDto.locationDto != null) {
+      await this.userService.editLocation(padelDto.locationDto);
+    }
+
+    //AVATAR
+    if (
+      request.files != null &&
+      request.files.avatar != null &&
+      request.files.avatar.length > 0
+    )
+      padel.avatar = join('public', request.files.avatar[0].filename);
+
+    //BANNER
+    if (
+      request.files != null &&
+      request.files.banner != null &&
+      request.files.banner.length > 0
+    )
+      padel.banner = join('public', request.files.banner[0].filename);
+
+    padel = await padel.save({ transaction: request.transaction });
+
+    //FEATURES
+    if (
+      padelDto.padelFeatureDto != null &&
+      padelDto.padelFeatureDto.length >= 0
+    ) {
+      await this.padelFeaturesRepository.destroy({
+        where: { padelId: padel.id },
+      });
+      const ops = [];
+      padelDto.padelFeatureDto.forEach((padelFeatureDto) => {
+        ops.push({
+          padelId: padel.id,
+          featureId: padelFeatureDto.featureId,
+          quantity: 1,
+          free: padelFeatureDto.free == null ? true : padelFeatureDto.free,
+        });
+      });
+      await this.padelFeaturesRepository.bulkCreate(ops, {
+        transaction: request.transaction,
+      });
+    }
+
+    //SCHEDULES
+    if (
+      padelDto.padelSchedules != null &&
+      padelDto.padelSchedules.length >= 0
+    ) {
+      const firstPossibleOrderForEdit =
+        await this.padelScheduleRepository.findAll({
+          where: {
+            padelId: padel.id,
+            status: { [Op.ne]: 'free' },
+          },
+          order: [['id', 'desc']],
+        });
+      let dayDif = 0;
+      if (firstPossibleOrderForEdit.length > 0) {
+        const possibleToStart = firstPossibleOrderForEdit[0].startTime;
+        await this.padelScheduleRepository.destroy({
+          where: {
+            padelId: padel.id,
+            status: { [Op.eq]: 'free' },
+            startTime: { [Op.gt]: possibleToStart },
+          },
+        });
+        if (padelDto.padelSchedules.length == 0) return padel;
+        dayDif =
+          moment(possibleToStart).diff(
+            moment(padelDto.padelSchedules[0].startTime),
+            'days',
+          ) + 1;
+      } else {
+        await this.padelScheduleRepository.destroy({
+          where: {
+            padelId: padel.id,
+            status: { [Op.eq]: 'free' },
+          },
+        });
+        if (padelDto.padelSchedules.length == 0) return padel;
+      }
+      const ops2 = [];
+      padelDto.padelSchedules.forEach((schedule) => {
+        for (let i = dayDif; i < 100 + dayDif; i++) {
+          ops2.push({
+            padelId: padel.id,
+            status:
+              (schedule.applyForAllDays || i == 0) && schedule.status != null
+                ? schedule.status
+                : 'free',
+            booked:
+              schedule.applyForAllDays || i == 0 ? schedule.booked : false,
+            price:
+              isNaN(schedule.price) && (schedule.applyForAllDays || i == 0)
+                ? padel.price
+                : schedule.price,
+            startTime: moment(schedule.startTime).add(i, 'days').toDate(),
+            endTime: moment(schedule.endTime).add(i, 'days').toDate(),
+          });
+        }
+      });
+      await this.padelScheduleRepository.bulkCreate(ops2, {
+        transaction: request.transaction,
+      });
+      // await Promise.all(ops2);
+    }
+    return padel;
+  }
+
+  async findAllOwnersPadels(user: User, query: any): Promise<Padel[]> {
+    let startTime = moment().startOf('day').toDate();
+    let endTime = moment().endOf('day').toDate();
+    if (query.startTime != null && query.startTime != undefined) {
+      startTime = moment(query.startTime).startOf('d').toDate();
+    }
+    if (query.endTime != null && query.endTime != undefined) {
+      endTime = moment(query.endTime).endOf('d').toDate();
+    }
+    return await this.padelsRepository.findAll({
+      where: { userId: user.id },
+      include: [
+        { model: Location },
+        { model: Address },
+        { model: Duration },
+        { model: Feature },
+        { model: User },
+        {
+          model: PadelSchedule,
+          required: false,
+          where: {
+            startTime: { [Op.gte]: startTime },
+            endTime: { [Op.lte]: endTime },
+          },
+        },
+      ],
+    });
+  }
+
+  async findAllPromoCodes(user: User): Promise<PromoCode[]> {
+    return await this.promoCodeRepository.findAll({
+      attributes: { include: [[Sequelize.col('name'), 'PadelName']] },
+      include: { model: Padel, required: true, where: { userId: user.id } },
+    });
+  }
+
+  async findAllFeatures(query: any): Promise<Feature[]> {
+    return await this.featuresRepository.findAll({
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+    });
+  }
+
+  async findAllDurations(query: any): Promise<Duration[]> {
+    return await this.durationsRepository.findAll({
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+    });
+  }
+
+  async addPromoCode(
+    request: any,
+    promoCodeDto: PromoCodeDto,
+  ): Promise<PromoCode> {
+    return await this.promoCodeRepository.create(
+      {
+        userId: request.user.id,
+        padelId: promoCodeDto.padelId,
+        code: promoCodeDto.code,
+        discount: promoCodeDto.discount,
+        maxBooking: promoCodeDto.maxBooking,
+        leftForBooking: promoCodeDto.maxBooking,
+      },
+      { transaction: request.transaction },
+    );
+  }
+  async getPromoCode(request: any): Promise<PromoCode> {
+    if (request.query.padelId == undefined || request.query.code == undefined)
+      throw Error('Invalid Promo Code');
+    const result = await this.promoCodeRepository.findOne({
+      where: {
+        code: request.query.code,
+        padelId: request.query.padelId,
+      },
+    });
+    if (result == null) throw Error('Invalid Promo Code!');
+    return result;
+  }
+
+  async editPromoCode(
+    request: any,
+    promoCodeDto: PromoCodeDto,
+  ): Promise<PromoCode> {
+    const promo = await this.promoCodeRepository.findByPk(promoCodeDto.id, {
+      include: { model: Padel, where: { userId: request.user.id } },
+    });
+    if (promo == null) {
+      throw Error(
+        'No promo code with id ' +
+          promoCodeDto.id +
+          ' information found to edit.',
+      );
+    }
+    if (
+      (promoCodeDto.maxBooking != null ||
+        promoCodeDto.maxBooking != undefined) &&
+      promoCodeDto.maxBooking > promo.leftForBooking
+    ) {
+      if (promoCodeDto.maxBooking <= promo.maxBooking) {
+        promo.leftForBooking =
+          promo.leftForBooking - (promo.maxBooking - promoCodeDto.maxBooking);
+      } else {
+        promo.leftForBooking =
+          promo.leftForBooking + (promoCodeDto.maxBooking - promo.maxBooking);
+      }
+      promo.maxBooking = promoCodeDto.maxBooking;
+    }
+    if (promoCodeDto.code != null && promoCodeDto.code != undefined) {
+      promo.code = promoCodeDto.code;
+    }
+    if (
+      promoCodeDto.discount != null &&
+      promoCodeDto.discount != undefined &&
+      promo.leftForBooking == promo.maxBooking
+    ) {
+      promo.discount = promoCodeDto.discount;
+    }
+    return await promo.save({ transaction: request.transaction });
+  }
+
+  async editSchedule(
+    request: any,
+    padelScheduleDto: PadelScheduleDto,
+  ): Promise<PadelSchedule> {
+    let schedule = await this.padelScheduleRepository.findByPk(
+      padelScheduleDto.id,
+      { include: Padel },
+    );
+    if (schedule == null) throw Error('No schedule found with this id!');
+    if (schedule.Padel.userId != request.user.id)
+      throw Error(
+        'Sorry, you are not allowed to change the schedule since your not the owner of this court.',
+      );
+
+    if (
+      padelScheduleDto.price != null &&
+      padelScheduleDto.price != schedule.price &&
+      !schedule.booked
+    )
+      schedule.price = padelScheduleDto.price;
+
+    if (padelScheduleDto.booked != null && padelScheduleDto.booked) {
+      schedule.status = 'booked';
+      schedule.booked = padelScheduleDto.booked;
+    }
+
+    if (padelScheduleDto.status != null)
+      schedule.status = padelScheduleDto.status;
+
+    schedule = await schedule.save({ transaction: request.transaction });
+
+    if (
+      padelScheduleDto.applyForAllDays != null &&
+      padelScheduleDto.applyForAllDays
+    ) {
+      const result = await this.padelScheduleRepository.update(
+        {
+          price: schedule.price,
+          booked: schedule.booked,
+        },
+        {
+          where: {
+            [Op.and]: [
+              this.sequelize.where(
+                this.sequelize.literal('HOUR(startTime)'),
+                '=',
+                schedule.startTime.getHours(),
+              ),
+              this.sequelize.where(
+                this.sequelize.literal('MINUTE(startTime)'),
+                '=',
+                schedule.startTime.getMinutes(),
+              ),
+              this.sequelize.where(
+                this.sequelize.literal('padelId'),
+                '=',
+                schedule.padelId,
+              ),
+              this.sequelize.where(this.sequelize.literal('booked'), '!=', 1),
+            ],
+          },
+        },
+      );
+      console.log(result);
+    }
+
+    return schedule;
+  }
+
+  async countPadels(startTime: Date, endTime: Date): Promise<number> {
+    return await this.padelsRepository.count({
+      where: {
+        createdAt: {
+          [Op.and]: [{ [Op.gte]: startTime }, { [Op.lte]: endTime }],
+        },
+      },
+    });
+  }
+
+  async getAllHours(startTime: Date, endTime: Date): Promise<number> {
+    const result = await this.padelScheduleRepository.findAll({
+      attributes: [
+        [
+          Sequelize.fn(
+            'sum',
+            Sequelize.fn(
+              'TIMESTAMPDIFF',
+              Sequelize.literal('minute'),
+              Sequelize.col('PadelSchedule.startTime'),
+              Sequelize.col('PadelSchedule.endTime'),
+            ),
+          ),
+          'AllHours',
+        ],
+      ],
+      where: {
+        startTime: { [Op.gte]: startTime },
+        endTime: { [Op.lte]: endTime },
+      },
+      raw: true,
+    });
+
+    return result[0]['AllHours'] || 0;
+  }
+
+  async findAllAdminPadels(query: any): Promise<Padel[]> {
+    return await this.padelsRepository.findAll({
+      where: {
+        name: {
+          [Op.iLike]:
+            query.search != undefined && query.search != null
+              ? query.search
+              : '',
+        },
+        enabled:
+          query.enabled != undefined && query.enabled != null
+            ? query.enabled == 'true' || query.enabled == true
+            : { [Op.or]: [true, false] },
+      },
+      include: [Location, Address, Duration],
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+    });
+  }
+
+  async findAllPadelsForApproval(query: any): Promise<Padel[]> {
+    return await this.padelsRepository.findAll({
+      where: {
+        name: {
+          [Op.iLike]:
+            query.search != undefined && query.search != null
+              ? query.search
+              : '',
+        },
+        enabled:
+          query.approved != undefined && query.approved != null
+            ? query.approved == 'true' || query.approved == true
+            : { [Op.or]: [true, false] },
+      },
+      include: [Location, Address, Duration],
+      order: [['id', 'desc']],
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+    });
+  }
+
+  async countAllPadels(): Promise<number> {
+    const result = await this.padelsRepository.findAll({
+      attributes: [[Sequelize.fn('count', Sequelize.col('Padel.id')), 'total']],
+    });
+    return result[0]['total'];
   }
 }

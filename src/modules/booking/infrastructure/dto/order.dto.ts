@@ -1,8 +1,8 @@
-import { IsDate, IsDateString, IsNotEmpty, IS_DATE } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class OrderDto {
   @IsNotEmpty({
-    message: 'No padel identifier presented to perform this task!',
+    message: 'Booking id is required!',
   })
   padelId: number;
 

@@ -19,9 +19,10 @@ export class NotificationsController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('seen')
-  seeb(@Request() request, @Body() seen: seenDto) {
+  seen(@Request() request, @Body() seen: seenDto) {
     try {
       const result = this.notificationService.seen(request, seen);
       return WrapperDto.successfull(result);
@@ -29,11 +30,37 @@ export class NotificationsController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Get('unSeenCount')
+  unseenCount(@Request() request) {
+    try {
+      const result = this.notificationService.unseenCount(request);
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('clear')
   clear(@Request() request) {
     try {
       const result = this.notificationService.clear(request);
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+  @Roles(ROLE.ADMIN)
+  @Post('send')
+  send(@Request() request) {
+    try {
+      const result = this.notificationService.SendMessage(
+        request,
+        request.body,
+        true,
+      );
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

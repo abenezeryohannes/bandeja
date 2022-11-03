@@ -1,4 +1,4 @@
-import { PromoCode } from "../../../../modules/padels/domain/entities/promo.code.entity";
+import { PromoCode } from '../../../../modules/padels/domain/entities/promo.code.entity';
 
 export class SeedPromoCode {
   async run(): Promise<boolean> {
@@ -6,13 +6,14 @@ export class SeedPromoCode {
     const data = [];
     let attr = 1;
     for (let i = 1; i <= count; i++) {
-      for (let j = 1; j <= 3; j++) {
+      for (let j = 1; j <= 2; j++) {
         data.push({
           user_id: i + count,
           code: Math.round(Math.random() * 10000 + 1),
           padelId: attr++,
           maxBooking: 20,
           leftToBook: 20,
+          discount: 20,
         });
       }
     }

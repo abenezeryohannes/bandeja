@@ -1,4 +1,4 @@
-import { PadelDto } from './padel.dto';
+import { PadelAddDto } from './padel.add.dto';
 import { IsNotEmpty } from 'class-validator';
 
 export class PadelGroupDto {
@@ -15,5 +15,5 @@ export class PadelGroupDto {
 
   readonly enabled: boolean;
 
-  readonly Padel: PadelDto[];
+  readonly Padel: PadelAddDto[];
 }

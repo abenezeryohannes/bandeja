@@ -6,7 +6,7 @@ import {
   PADEL_REPOSITORY,
   ALLOWED_BOOKING_HOUR_REPOSITORY,
   PROMO_CODE_REPOSITORY,
-  PADEL_PRICESS_REPOSITORY,
+  PADEL_PADEL_GROUP_REPOSITORY,
   PADEL_SCHEDULE_REPOSITORY,
   BOOKING_DURATION_REPOSITORY,
 } from '../../core/constants';
@@ -16,10 +16,10 @@ import { Padel } from './domain/entities/padel.entity';
 import { PadelGroup } from './domain/entities/padel.group.entity';
 import { PadelFeature } from './domain/entities/padel.feature';
 import { PromoCode } from './domain/entities/promo.code.entity';
-import { PadelPrices } from './domain/entities/podel.pricess.entity';
 import { PadelSchedule } from './domain/entities/padel.schedule.entity';
 import { Duration } from './domain/entities/duration.entity';
 import { AllowedBookingHour } from './domain/entities/allowed.booking.hour.entity';
+import { PadelPadelGroup } from './domain/entities/padel.padel.group';
 
 export const PadelsProvider = [
   {
@@ -33,6 +33,10 @@ export const PadelsProvider = [
   {
     provide: BOOKMARK_REPOSITORY,
     useValue: Bookmark,
+  },
+  {
+    provide: PADEL_PADEL_GROUP_REPOSITORY,
+    useValue: PadelPadelGroup,
   },
   {
     provide: PADEL_REPOSITORY,
@@ -53,10 +57,6 @@ export const PadelsProvider = [
   {
     provide: PADEL_SCHEDULE_REPOSITORY,
     useValue: PadelSchedule,
-  },
-  {
-    provide: PADEL_PRICESS_REPOSITORY,
-    useValue: PadelPrices,
   },
   {
     provide: PROMO_CODE_REPOSITORY,
