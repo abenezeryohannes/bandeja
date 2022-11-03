@@ -19,6 +19,7 @@ export class SeedPadel {
           padelGroupId: Math.floor(Math.random() * (count * 3) + 1),
           durationId: Math.floor(Math.random() * 2 + 1) == 1 ? 1 : 2,
           onlyLadies: false,
+          approved: true,
           startTime: moment(new Date()).startOf('day').toDate(),
           endTime: moment(new Date()).startOf('day').add(12, 'hours').toDate(),
           indoor: true,

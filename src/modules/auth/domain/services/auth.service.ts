@@ -139,18 +139,7 @@ export class AuthService {
   async updateFCM(request: any): Promise<User> {
     if (request.body.fcm == null || request.body.fcm == undefined)
       throw Error('No FCM provided!');
-    // await this.tokenRepository.update<Token>(
-    //   {
-    //     fcmToken: request.body.fcmToken,
-    //   },
-    //   {
-    //     where: {
-    //       id: request.token.id,
-    //     },
-    //     transaction: request.transaction,
-    //   },
-    // );
-    request.token.fcmToken = request.body.fcmToken;
+    request.token.fcmToken = request.body.fcm;
     request.token = await request.token.save();
     request.user.Token = request.token;
     return request.user;

@@ -24,6 +24,7 @@ import { Setting } from '../entities/setting.entity';
 import { LocationDto } from '../../infrastructure/dto/location.dto';
 import { AppVisit } from '../entities/app.visit.entity';
 import * as moment from 'moment';
+import { isNumber } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -107,15 +108,21 @@ export class UsersService {
       { ...user },
       { transaction: transaction },
     );
-    const location = await this.locationRepository.create<Location>(
-      {
-        latitude: user.Location.latitude,
-        longitude: user.Location.longitude,
-        address: user.Location.address,
-      },
-      { transaction: transaction },
-    );
-    result.locationId = location.id;
+    if (
+      user.Location != null &&
+      isNumber(user.Location.latitude) &&
+      isNumber(user.Location.longitude)
+    ) {
+      const location = await this.locationRepository.create<Location>(
+        {
+          latitude: user.Location.latitude,
+          longitude: user.Location.longitude,
+          address: user.Location.address,
+        },
+        { transaction: transaction },
+      );
+      result.locationId = location.id;
+    }
     result = await result.save();
     const setting = await this.settingRepository.create<Setting>({
       userId: result.id,

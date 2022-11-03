@@ -37,6 +37,10 @@ import { PadelGroup } from '../../../modules/padels/domain/entities/padel.group.
 import { PostGroup } from '../../../modules/posts/domain/entities/post.group.entity';
 import { Feature } from '../../../modules/padels/domain/entities/feature.entity';
 import { Post } from '../../../modules/posts/domain/entities/post.entity';
+import { Setting } from '../../../modules/users/domain/entities/setting.entity';
+import { SeedPadelPadelGroup } from './padels/padel.padel.group.seeder';
+import { SeedSetting } from './user/setting.seeder';
+import { PadelPadelGroup } from '../../../modules/padels/domain/entities/padel.padel.group';
 
 export class Migrate {
   async run(): Promise<boolean> {
@@ -49,10 +53,12 @@ export class Migrate {
     await Feature.sync({ force: true });
     await PostGroup.sync({ force: true });
     await PadelGroup.sync({ force: true });
+    await Setting.sync({ force: true });
     await Duration.sync({ force: true });
 
     await Post.sync({ force: true });
     await Padel.sync({ force: true });
+    await PadelPadelGroup.sync({ force: true });
     await Bookmark.sync({ force: true });
     await PostImage.sync({ force: true });
     await PadelFeature.sync({ force: true });
@@ -71,12 +77,14 @@ export class Migrate {
     await new SeedAddress().run();
     await new SeedLocation().run();
     await new SeedUser().run();
+    await new SeedSetting().run();
     await new SeedToken().run();
     await new SeedPadelGroup().run();
     await new SeedFeature().run();
     await new SeedPostGroup().run();
     await new SeedDuration().run();
     await new SeedPadel().run();
+    await new SeedPadelPadelGroup().run();
     await new SeedAllowedBookingHour().run();
     await new SeedPadelFeature().run();
     await new SeedPost().run();
@@ -102,12 +110,14 @@ export class Migrate {
     await new SeedPromoCode().clean();
     await new SeedBookmark().clean();
     await new SeedSchedule().clean();
+    await new SeedPadelPadelGroup().clean();
     await new SeedPadel().clean();
     await new SeedDuration().clean();
     await new SeedPostGroup().clean();
     await new SeedFeature().clean();
     await new SeedPadelGroup().clean();
     await new SeedToken().clean();
+    await new SeedSetting().clean();
     await new SeedUser().clean();
     await new SeedLocation().clean();
     await new SeedAddress().clean();
