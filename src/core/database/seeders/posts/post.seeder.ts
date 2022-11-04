@@ -16,6 +16,8 @@ export class SeedPost {
           featured: true,
           offer: Math.floor(Math.random() * 2) + 1 == 1 ? true : false,
           price: 20,
+          phoneNumber: '+251910406268',
+          whatsApp: '+251910406268',
         });
       }
     }

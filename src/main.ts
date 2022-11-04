@@ -17,6 +17,6 @@ async function bootstrap() {
   app.register(contentParser);
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(new ValidateInputPipe());
-  await app.listen(process.env.PORT || 80);
+  await app.listen(process.env.PORT || 5000, '0.0.0.0');
 }
 bootstrap();

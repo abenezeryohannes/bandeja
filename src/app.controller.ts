@@ -41,4 +41,9 @@ export class AppController {
       return res.type('image/jpg').send(file);
     }
   }
+
+  @Get()
+  home(@Query() query: any, @Res() res) {
+    return res.send('Hello there !');
+  }
 }

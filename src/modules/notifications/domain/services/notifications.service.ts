@@ -12,6 +12,7 @@ import { chunk } from 'lodash';
 import * as shell from 'shelljs';
 import { mapLimit } from 'async';
 import { AuthService } from '../../../auth/domain/services/auth.service';
+import * as adminConfig from '../../../../flutter-push-notification-config.json';
 import { ServiceAccount } from 'firebase-admin';
 
 @Injectable()
@@ -23,14 +24,14 @@ export class NotificationsService {
     private readonly authService: AuthService,
   ) {
     // Set the config options
-    const adminConfig: ServiceAccount = {
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    };
+    // const adminConfig: ServiceAccount = {
+    //   projectId: process.env.FIREBASE_PROJECT_ID,
+    //   privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, '\n'),
+    //   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    // };
     //
     firebase.initializeApp({
-      credential: firebase.credential.cert(adminConfig),
+      credential: firebase.credential.cert(adminConfig as ServiceAccount),
       // databaseURL: process.env.FIREBASE_DATABASE_URL,
     });
   }
@@ -109,7 +110,7 @@ export class NotificationsService {
     request: any,
     notificationDto: NotificationDto,
     save: boolean,
-  ): Promise<boolean> {
+  ): Promise<any> {
     const tokens =
       notificationDto.userId != null
         ? await this.authService.findTokens(notificationDto.userId)
@@ -118,16 +119,22 @@ export class NotificationsService {
     const messages = tokens.map(
       (t) =>
         new NotificationDto({
-          fcmToken: t.fcmToken,
+          fcm: t.fcmToken,
           title: notificationDto.title,
           desc: notificationDto.desc,
         }),
     );
-    await this.sendFirebaseMessages(messages, true);
+    //const response: BatchResponse =
+    //const response =
+    await this.sendFirebaseMessages(messages, false);
 
     if (save || save == null) {
       await this.addAll(request, notificationDto);
     }
+    // return {
+    //   failureCount: response[0].failureCount,
+    //   successCount: response[0].successCount,
+    // };
     return true;
   }
 
@@ -146,8 +153,15 @@ export class NotificationsService {
         try {
           const tokenMessages: firebase.messaging.TokenMessage[] =
             groupedFirebaseMessages.map(({ desc, title, token }) => ({
-              notification: { body: desc, title },
-              token,
+              notification: { title: title, body: desc },
+              android: {
+                notification: {
+                  title: title,
+                  body: desc,
+                },
+                priority: 'high',
+              },
+              token: token,
               apns: {
                 payload: {
                   aps: {
