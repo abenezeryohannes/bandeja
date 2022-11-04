@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import * as moment from 'moment';
 import { Op, Sequelize } from 'sequelize';
-import { PADEL_ORDER_REPOSITORY } from '../../../../core/constants';
+import {
+  PADEL_ORDER_REPOSITORY,
+  PAYMENT_REPOSITORY,
+} from '../../../../core/constants';
 import { Util } from '../../../../core/utils/util';
 import { Address } from '../../../../modules/users/domain/entities/address.entity';
 import { Location } from '../../../../modules/users/domain/entities/location.entity';
@@ -28,17 +31,27 @@ export class BookingService {
   constructor(
     @Inject(PADEL_ORDER_REPOSITORY)
     private readonly padelOrderRepository: typeof PadelOrder,
+    @Inject(PAYMENT_REPOSITORY)
+    private readonly paymentRepository: typeof Payment,
     private readonly padelService: PadelsService,
     private readonly userService: UsersService,
   ) {}
 
   async findAll(user: User, query: any): Promise<PadelOrder[]> {
     return await this.padelOrderRepository.findAll({
-      where: { id: user.id },
+      where: { userId: user.id },
       include: [
-        { model: Padel, include: [Location, Address] },
-        { model: PromoCode },
-        { model: Payment },
+        {
+          model: Padel,
+          include: [
+            { model: Location, required: false },
+            { model: Address, required: false },
+            { model: User, required: false },
+          ],
+        },
+        { model: PromoCode, required: false },
+        { model: PadelSchedule, required: false },
+        { model: Payment, required: false },
         { model: User },
       ],
       limit: Util.getLimit(query),
@@ -48,14 +61,29 @@ export class BookingService {
 
   async book(request: any, orderDto: OrderDto): Promise<PadelOrder> {
     const user = request.user;
-    if (Date.parse(orderDto.startTime) < Date.now()) {
+    let schedule = await this.padelService.findSchedule(
+      orderDto.padelScheduleId,
+    );
+    const padel = await this.padelService.findOne(
+      request.user,
+      Date(),
+      orderDto.padelId,
+    );
+
+    if (
+      schedule.startTime.getMilliseconds < moment().toDate().getMilliseconds
+    ) {
       throw new BadRequestException('The time has passed pick another one.');
     }
-    const order = this.padelOrderRepository.build({
+
+    let order = this.padelOrderRepository.build({
       userId: user.id,
       padelId: orderDto.padelId,
+      padelScheduleId: orderDto.padelScheduleId,
+      amount: schedule.price == null ? padel.price : schedule.price,
       status: 'pending',
     });
+
     if (orderDto.promoCode != null) {
       const promoCode = await this.padelService.findOnePromoCode(
         orderDto.promoCode,
@@ -63,20 +91,29 @@ export class BookingService {
       );
       if (promoCode == null) {
         throw new NotFoundException('Invalid promo code!');
+      } else {
+        order.promoCodeID = promoCode.id;
+        order.amount = order.amount - order.amount * (promoCode.discount / 100);
       }
-      order.promoCodeID = promoCode.id;
     }
-    const padelSchedule = await this.padelService.createPadelSchedule(
-      orderDto.padelId,
-      'booked',
-      new Date(orderDto.startTime),
-      request.transaction,
-    );
-    if (padelSchedule == null) {
-      throw new NotAcceptableException("Sorry, couldn't set this schedule!");
+
+    // const padelSchedule = await this.padelService.createPadelSchedule(
+    //   orderDto.padelId,
+    //   'booked',
+    //   new Date(orderDto.startTime),
+    //   request.transaction,
+    // );
+    if (schedule.booked || schedule.status == 'booked') {
+      throw new NotAcceptableException(
+        'Sorry, court is not free at this time!',
+      );
     }
-    order.padelScheduleId = padelSchedule.id;
-    return await order.save({ transaction: request.transaction });
+    schedule.booked = true;
+    schedule.status = 'booked';
+    schedule = await schedule.save({ transaction: request.transaction });
+    order = await order.save({ transaction: request.transaction });
+    order.PadelSchedule = schedule;
+    return order;
   }
 
   async findAllOwnerBookings(user: User, query: any): Promise<PadelOrder[]> {

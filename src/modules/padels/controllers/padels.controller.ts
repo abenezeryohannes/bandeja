@@ -60,6 +60,7 @@ export class PadelsController {
   async findOne(@Request() request, @Query() query, @Param('id') id: number) {
     try {
       const result = await this.padelsService.findOne(
+        request.user,
         query.date == null || query.date == ''
           ? new Date().toISOString()
           : query.date,
@@ -98,6 +99,17 @@ export class PadelsController {
         request,
         scheduleDto,
       );
+      return WrapperDto.paginate(result, query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.OWNER, ROLE.ADMIN, ROLE.USER)
+  @Post('findOneWithPeriod')
+  async findOneWithPeriod(@Request() request: any) {
+    try {
+      const result = await this.padelsService.findOneWithPeriod(request);
       return WrapperDto.paginate(result, query);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

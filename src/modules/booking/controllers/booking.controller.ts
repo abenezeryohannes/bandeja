@@ -34,8 +34,11 @@ export class BookingController {
   @Roles(ROLE.USER)
   @Post('order')
   @UseInterceptors(TransactionInterceptor)
-  async book(@Request() request, @Body() orderDto: OrderDto) {
+  async book(@Request() request) {
     try {
+      const orderDto = new OrderDto(request.body);
+      await validateOrReject(orderDto);
+
       const result = await this.bookingService.book(request, orderDto);
       return WrapperDto.successfullCreated(result);
     } catch (error) {

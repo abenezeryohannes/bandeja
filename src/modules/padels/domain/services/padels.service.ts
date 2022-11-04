@@ -32,6 +32,7 @@ import { PadelEditDto } from '../../infrastructure/dto/padel.edit.dto';
 import { PadelPadelGroup } from '../entities/padel.padel.group';
 import { PadelGroupService } from './padel_group.service';
 import { PadelGroup } from '../entities/padel.group.entity';
+import { Bookmark } from '../entities/bookmark.entity';
 
 @Injectable()
 export class PadelsService {
@@ -63,6 +64,10 @@ export class PadelsService {
     @Inject(SEQUELIZE) private readonly sequelize: typeof Sequelize,
   ) {}
 
+  async findSchedule(padelScheduleId: number): Promise<PadelSchedule> {
+    return await this.padelScheduleRepository.findByPk(padelScheduleId);
+  }
+
   async featured(user: User, query: any): Promise<Padel[]> {
     const latitude = user.Location != null ? user.Location.latitude : 0;
     const longitude = user.Location != null ? user.Location.longitude : 0;
@@ -70,6 +75,7 @@ export class PadelsService {
     const startDate = moment(query.date == null ? Date() : query.date)
       .startOf('day')
       .toDate();
+
     const endDate = moment(query.date == null ? Date() : query.date)
       .endOf('day')
       .toDate();
@@ -114,6 +120,7 @@ export class PadelsService {
         { model: Duration },
         { model: Address },
         { model: PadelGroup, where: condition },
+        { model: Bookmark, where: { userId: user.id }, required: false },
         {
           model: PadelSchedule,
           required: false,
@@ -129,7 +136,7 @@ export class PadelsService {
     });
   }
 
-  async findOne(date: string, id: number): Promise<Padel> {
+  async findOne(user: User, date: string, id: number): Promise<Padel> {
     const startDate = moment(date).startOf('day').toDate();
     const endDate = moment(date).endOf('day').toDate();
     return await this.padelsRepository.findByPk(id, {
@@ -139,6 +146,7 @@ export class PadelsService {
         { model: Duration },
         { model: Address },
         { model: Feature },
+        { model: Bookmark, where: { userId: user.id }, required: false },
         {
           model: PadelSchedule,
           required: false,
@@ -240,6 +248,43 @@ export class PadelsService {
         { model: Duration },
         { model: Feature },
         { model: User },
+        { model: Bookmark, where: { userId: user.id }, required: false },
+        {
+          model: PadelSchedule,
+          required: false,
+          where: {
+            startTime: { [Op.gte]: startTime },
+            endTime: { [Op.lte]: endTime },
+          },
+        },
+      ],
+    });
+  }
+
+  async findOneWithPeriod(request: any): Promise<Padel> {
+    const startTime = moment(
+      request.query.startTime == null ? Date() : request.query.startTime,
+    )
+      .startOf('day')
+      .toDate();
+    const endTime = moment(
+      request.query.endTime == null ? Date() : request.query.endTime,
+    )
+      .endOf('day')
+      .toDate();
+
+    return await this.padelsRepository.findByPk(request.query.padelId, {
+      include: [
+        { model: Location },
+        { model: Address },
+        { model: Duration },
+        { model: Feature },
+        { model: User },
+        {
+          model: Bookmark,
+          where: { userId: request.user.id },
+          required: false,
+        },
         {
           model: PadelSchedule,
           required: false,

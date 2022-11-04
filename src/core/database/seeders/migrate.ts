@@ -76,25 +76,25 @@ export class Migrate {
   async seed(): Promise<boolean> {
     await new SeedAddress().run();
     await new SeedLocation().run();
-    await new SeedUser().run();
-    await new SeedSetting().run();
-    await new SeedToken().run();
+    if (process.env.ENV == 'DEV') await new SeedUser().run();
+    if (process.env.ENV == 'DEV') await new SeedSetting().run();
+    if (process.env.ENV == 'DEV') await new SeedToken().run();
     await new SeedPadelGroup().run();
     await new SeedFeature().run();
     await new SeedPostGroup().run();
     await new SeedDuration().run();
-    await new SeedPadel().run();
-    await new SeedPadelPadelGroup().run();
-    await new SeedAllowedBookingHour().run();
-    await new SeedPadelFeature().run();
-    await new SeedPost().run();
-    await new SeedPostImage().run();
-    await new SeedPayment().run();
-    await new SeedPromoCode().run();
-    await new SeedSchedule().run();
-    await new SeedPadelOrder().run();
-    await new SeedBookmark().run();
-    await new SeedNotification().run();
+    if (process.env.ENV == 'DEV') await new SeedPadel().run();
+    if (process.env.ENV == 'DEV') await new SeedPadelPadelGroup().run();
+    if (process.env.ENV == 'DEV') await new SeedAllowedBookingHour().run();
+    if (process.env.ENV == 'DEV') await new SeedPadelFeature().run();
+    if (process.env.ENV == 'DEV') await new SeedPost().run();
+    if (process.env.ENV == 'DEV') await new SeedPostImage().run();
+    if (process.env.ENV == 'DEV') await new SeedPayment().run();
+    if (process.env.ENV == 'DEV') await new SeedPromoCode().run();
+    if (process.env.ENV == 'DEV') await new SeedSchedule().run();
+    if (process.env.ENV == 'DEV') await new SeedPadelOrder().run();
+    if (process.env.ENV == 'DEV') await new SeedBookmark().run();
+    if (process.env.ENV == 'DEV') await new SeedNotification().run();
 
     return true;
   }
