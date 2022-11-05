@@ -90,11 +90,11 @@ export class Migrate {
     if (process.env.ENV == 'DEV') await new SeedPost().run();
     if (process.env.ENV == 'DEV') await new SeedPostImage().run();
     if (process.env.ENV == 'DEV') await new SeedPayment().run();
-    if (process.env.ENV == 'DEV') await new SeedPromoCode().run();
     if (process.env.ENV == 'DEV') await new SeedSchedule().run();
     if (process.env.ENV == 'DEV') await new SeedPadelOrder().run();
     if (process.env.ENV == 'DEV') await new SeedBookmark().run();
     if (process.env.ENV == 'DEV') await new SeedNotification().run();
+    if (process.env.ENV == 'DEV') await new SeedPromoCode().run();
 
     return true;
   }
