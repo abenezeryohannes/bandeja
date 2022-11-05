@@ -41,7 +41,7 @@ export class UsersService {
   ) {}
 
   async edit(request: any, userDto: UserEditDto): Promise<User> {
-    let user = await this.userRepository.findByPk(request.user.id);
+    const user = await this.userRepository.findByPk(request.user.id);
     if (request.user.role != ROLE.ADMIN && request.user.id != user.id) {
       throw Error('Sorry, you are not authorized to make this change!');
     }
@@ -93,8 +93,8 @@ export class UsersService {
 
     if (userDto.faceId != null) setting.setDataValue('faceId', userDto.faceId);
 
-    setting = await setting.save({ transaction: request.transaction });
-    user = await user.save({ transaction: request.transaction });
+    await setting.save({ transaction: request.transaction });
+    await user.save({ transaction: request.transaction });
     user.Setting = setting;
     return user;
   }
@@ -123,10 +123,13 @@ export class UsersService {
       );
       result.locationId = location.id;
     }
-    result = await result.save();
-    const setting = await this.settingRepository.create<Setting>({
-      userId: result.id,
-    });
+    result = await result.save({ transaction: transaction });
+    const setting = await this.settingRepository.create<Setting>(
+      {
+        userId: result.id,
+      },
+      { transaction: transaction },
+    );
     result.Setting = setting;
     return result;
   }
@@ -163,7 +166,7 @@ export class UsersService {
 
   async findOneById(id: number): Promise<User> {
     return await this.userRepository.findByPk<User>(id, {
-      include: [Token, Address, Location, { model: Setting }],
+      include: [Token, Address, Location, Setting],
     });
   }
 
@@ -250,6 +253,22 @@ export class UsersService {
     if (filterPadelDto.padelGroupId != null) {
       conditions['padelGroupId'] = filterPadelDto.padelGroupId;
     }
+    const scheduleCondition = moment(startTime).isSame(endTime)
+      ? {
+          [Op.or]: [
+            { startTime: { [Op.eq]: startTime } },
+            {
+              startTime: { [Op.gte]: startTime },
+              endTime: { [Op.lte]: endTime },
+            },
+          ],
+          booked: false,
+        }
+      : {
+          startTime: { [Op.gte]: startTime },
+          endTime: { [Op.lte]: endTime },
+          booked: false,
+        };
     return await this.userRepository.findAll({
       where: { role: ROLE.OWNER, enabled: true },
       include: {
@@ -266,11 +285,7 @@ export class UsersService {
           {
             model: PadelSchedule,
             required: true,
-            where: {
-              startTime: { [Op.gte]: startTime },
-              endTime: { [Op.lte]: endTime },
-              booked: false,
-            },
+            where: scheduleCondition,
           },
         ],
       },

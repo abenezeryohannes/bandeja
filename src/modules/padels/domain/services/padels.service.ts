@@ -456,6 +456,10 @@ export class PadelsService {
       padel.approved = padelDto.approved;
     }
 
+    if (padelDto.enabled != null) {
+      padel.enabled = padelDto.enabled;
+    }
+
     if (
       padelDto.addressId != null &&
       !isNaN(padelDto.addressId) &&
@@ -557,7 +561,11 @@ export class PadelsService {
       padel.endTime = moment(padelDto.endTime).toDate();
     }
     //PADEL Location
-    if (padelDto.locationDto != null) {
+    if (
+      padelDto.locationDto != null &&
+      padelDto.locationDto.latitude != null &&
+      padelDto.locationDto.longitude != null
+    ) {
       await this.userService.editLocation(padelDto.locationDto);
     }
 

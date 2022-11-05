@@ -45,6 +45,7 @@ export class PadelOrder extends Model {
   @Column({ type: DataType.DATE, allowNull: true })
   paymentDate: Date;
 
+  @Default('waiting-payment')
   @Column({ type: DataType.STRING, allowNull: false })
   status: string;
 

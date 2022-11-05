@@ -28,11 +28,11 @@ export class BookmarkController {
     }
   }
 
-  @Roles(ROLE.USER)
-  @Get(':id')
-  async findOne(@Param() id: number) {
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Get('isBookmark')
+  async isBookmark(@Request() request) {
     try {
-      const result = await this.bookmarkService.findOne(id);
+      const result = await this.bookmarkService.isBookmark(request);
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

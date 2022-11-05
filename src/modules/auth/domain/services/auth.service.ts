@@ -23,10 +23,7 @@ export class AuthService {
       !(requestBody.phoneNumber != null && requestBody.UID != null) &&
       !(requestBody.emailAddress != null && requestBody.password != null)
     )
-      return WrapperDto.error(
-        422,
-        'UID and Phone Number is required to login!',
-      );
+      throw Error('UID and Phone Number is required to login!');
     let user = null;
     if (requestBody.phoneNumber != null && requestBody.UID != null) {
       user = await this.userService.findOneByPhoneNumber(
@@ -42,21 +39,15 @@ export class AuthService {
           request.transaction,
         );
       if (user.getDataValue('UID') != requestBody.UID)
-        return WrapperDto.error(
-          422,
-          'Incorrect UID, please confirm your phone number first!',
-        );
+        throw Error('Incorrect UID, please confirm your phone number first!');
     } else {
       user = await this.userService.findOneByEmail(requestBody.emailAddress);
       if (user == null || user.getDataValue('password') != requestBody.password)
-        return WrapperDto.error(
-          422,
-          'Sorry, No user found with this credential!',
-        );
+        throw Error('Sorry, No user found with this credential!');
     }
 
     if (requestBody.role == null) {
-      return WrapperDto.error(422, 'Role is not provided');
+      throw Error('Role is not provided');
     }
     if (
       (user.getDataValue('role') != ROLE.ADMIN &&
@@ -65,8 +56,7 @@ export class AuthService {
         user.getDataValue('role') != ROLE.ADMIN &&
         requestBody.role == ROLE.OWNER)
     ) {
-      return WrapperDto.error(
-        403,
+      throw Error(
         'Sorry you can\'t sign up as "' +
           requestBody.role +
           '",Please try to use ' +

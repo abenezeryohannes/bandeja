@@ -33,6 +33,7 @@ export class AuthController {
       const response = await this.authService.signUp(request, request.body);
       return WrapperDto.successfullCreated(response);
     } catch (error) {
+      await request.transaction.rollback();
       return WrapperDto.figureOutTheError(error);
     }
   }
@@ -43,6 +44,7 @@ export class AuthController {
     try {
       return await this.authService.logout(request.Token);
     } catch (error) {
+      await request.transaction.rollback();
       return WrapperDto.figureOutTheError(error);
     }
   }

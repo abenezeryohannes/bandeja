@@ -30,10 +30,14 @@ export class TransactionInterceptor implements NestInterceptor {
     req.transaction = transaction;
     return next.handle().pipe(
       tap(async () => {
-        await transaction.commit();
+        try {
+          await transaction.commit();
+        } catch (e) {}
       }),
       catchError(async (err) => {
-        await transaction.rollback();
+        try {
+          await transaction.rollback();
+        } catch (e) {}
         return throwError(err);
       }),
     );

@@ -11,6 +11,7 @@ import { User } from '../../../users/domain/entities/user.entity';
 import { Location } from '../../../users/domain/entities/location.entity';
 import { Address } from '../../../users/domain/entities/address.entity';
 import { Util } from '../../../../core/utils/util';
+import { request } from 'http';
 
 @Injectable()
 export class BookmarkService {
@@ -19,9 +20,6 @@ export class BookmarkService {
     private readonly bookmarkRepository: typeof Bookmark,
   ) {}
 
-  findOne(id: number) {
-    throw new Error('Method not implemented.');
-  }
   async findAll(user: User, query: any): Promise<Bookmark[]> {
     const startTime = moment().startOf('day').toDate();
     const endTime = moment().endOf('day').toDate();
@@ -72,5 +70,12 @@ export class BookmarkService {
       await bookmark.destroy();
       return true;
     }
+  }
+
+  async isBookmark(request: any): Promise<boolean> {
+    const result = await this.bookmarkRepository.findOne({
+      where: { padelId: request.body.padelId, userId: request.user.id },
+    });
+    return result != null;
   }
 }

@@ -156,7 +156,7 @@ export class BookingService {
         {
           model: Padel,
           where: { userId: user.id },
-          include: [Location, Address],
+          include: [Location, Address, User],
         },
         { model: PromoCode },
         { model: Payment },
