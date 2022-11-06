@@ -146,7 +146,7 @@ export class PadelsController {
     }
   }
 
-  @Roles(ROLE.OWNER)
+  @Roles(ROLE.OWNER, ROLE.ADMIN)
   @Post('edit')
   @UseInterceptors(TransactionInterceptor)
   @UseInterceptors(

@@ -193,6 +193,21 @@ export class UsersService {
     });
   }
 
+  async findAllUsers(request: any): Promise<User[]> {
+    return await this.userRepository.findAll({
+      where: {
+        fullName: {
+          [Op.like]:
+            request.query.search != undefined && request.query.search != null
+              ? '%' + request.query.search + '%%'
+              : '%%',
+        },
+      },
+      limit: Util.getLimit(request.query),
+      offset: Util.getOffset(request.query),
+    });
+  }
+
   async visitStart(request: any): Promise<AppVisit> {
     return await AppVisit.create({
       userId: request.user.id,

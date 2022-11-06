@@ -19,9 +19,21 @@ export class DoesUserExist implements CanActivate {
   }
 
   async validateRequest(request) {
-    const userExist = await this.userService.findOneByPhoneNumber(
-      request.body.phoneNumber,
-    );
+    let userExist = null;
+    if (
+      request.body.phoneNumber != undefined &&
+      request.body.phoneNumber != null
+    )
+      userExist = await this.userService.findOneByPhoneNumber(
+        request.body.phoneNumber,
+      );
+    if (
+      request.body.emailAddress != undefined &&
+      request.body.emailAddress != null
+    )
+      userExist = await this.userService.findOneByEmail(
+        request.body.emailAddress,
+      );
     if (userExist) {
       throw new ForbiddenException(
         'This user is already registered, Please try to login instead!',

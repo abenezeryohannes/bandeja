@@ -66,6 +66,16 @@ export class UsersController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+  @Roles(ROLE.ADMIN)
+  @Get('findAllUsers')
+  async findAllUsers(@Request() request) {
+    try {
+      const result = await this.userService.findAllUsers(request);
+      return WrapperDto.paginate(result, request.query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Get('visitStart')

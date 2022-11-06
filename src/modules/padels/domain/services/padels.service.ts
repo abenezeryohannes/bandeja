@@ -447,7 +447,9 @@ export class PadelsService {
   }
 
   async editPadel(request: any, padelDto: PadelEditDto): Promise<Padel> {
-    let padel = await this.padelsRepository.findByPk(padelDto.id);
+    let padel = await this.padelsRepository.findByPk(padelDto.id, {
+      include: [Address],
+    });
     if (padel == null) {
       throw Error('Court not found!');
     }
@@ -904,10 +906,10 @@ export class PadelsService {
     return await this.padelsRepository.findAll({
       where: {
         name: {
-          [Op.iLike]:
+          [Op.like]:
             query.search != undefined && query.search != null
-              ? query.search
-              : '',
+              ? '%' + query.search + '%'
+              : '%%',
         },
         enabled:
           query.enabled != undefined && query.enabled != null
@@ -924,17 +926,32 @@ export class PadelsService {
     return await this.padelsRepository.findAll({
       where: {
         name: {
-          [Op.iLike]:
+          [Op.like]:
             query.search != undefined && query.search != null
-              ? query.search
-              : '',
+              ? '%' + query.search + '%%'
+              : '%%',
         },
         enabled:
           query.approved != undefined && query.approved != null
             ? query.approved == 'true' || query.approved == true
             : { [Op.or]: [true, false] },
       },
-      include: [Location, Address, Duration],
+      include: [
+        { model: User, include: [] },
+        { model: Location },
+        { model: Feature },
+        { model: Duration },
+        { model: Address },
+        { model: PadelGroup },
+        {
+          model: PadelSchedule,
+          required: false,
+          where: {
+            startTime: { [Op.gte]: moment().startOf('day').toDate() },
+            endTime: { [Op.lte]: moment().endOf('day').toDate() },
+          },
+        },
+      ],
       order: [['id', 'desc']],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),

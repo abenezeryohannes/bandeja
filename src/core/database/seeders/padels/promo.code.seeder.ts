@@ -8,7 +8,7 @@ export class SeedPromoCode {
     for (let i = 1; i <= count; i++) {
       for (let j = 1; j <= 2; j++) {
         data.push({
-          user_id: i + count,
+          user_id: i,
           code: Math.round(Math.random() * 10000 + 1),
           padelId: attr++,
           maxBooking: 20,

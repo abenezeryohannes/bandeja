@@ -77,7 +77,7 @@ export class User extends Model {
     type: 'UNIQUE',
     unique: true,
   })
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: true })
   phoneNumber: string;
 
   @Default(true)

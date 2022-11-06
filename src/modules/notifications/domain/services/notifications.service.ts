@@ -122,6 +122,7 @@ export class NotificationsService {
           fcm: t.fcmToken,
           title: notificationDto.title,
           desc: notificationDto.desc,
+          seen: notificationDto.seen,
         }),
     );
     //const response: BatchResponse =
