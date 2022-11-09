@@ -44,6 +44,14 @@ export class NotificationsService {
     });
   }
 
+  async findAllUnseen(user: User, query: any): Promise<Notification[]> {
+    return await this.notificationRepository.findAll({
+      where: { userId: user.id, seen: false },
+      limit: Util.getLimit(query),
+      offset: Util.getOffset(query),
+    });
+  }
+
   async unseenCount(request: any): Promise<number> {
     const counted = await this.notificationRepository.count({
       where: { seen: false, userId: request.user.id },

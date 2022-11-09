@@ -16,6 +16,7 @@ import { WrapperDto } from '../../../core/dto/wrapper.dto';
 import { FastifyFileInterceptor } from '../../../fastify.file.interceptor';
 import { Roles } from '../../auth/domain/guards/roles.decorator';
 import { UsersService } from '../domain/services/users.service';
+import { LocationDto } from '../infrastructure/dto/location.dto';
 import { ROLE } from '../infrastructure/dto/user.dto';
 import { UserEditDto } from '../infrastructure/dto/user.edit.dto';
 
@@ -66,6 +67,7 @@ export class UsersController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+
   @Roles(ROLE.ADMIN)
   @Get('findAllUsers')
   async findAllUsers(@Request() request) {
@@ -78,7 +80,7 @@ export class UsersController {
   }
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
-  @Get('visitStart')
+  @Post('visitStart')
   async visitStart(@Request() request) {
     try {
       const result = await this.userService.visitStart(request);
@@ -89,10 +91,28 @@ export class UsersController {
   }
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
-  @Get('visitEnd')
+  @Post('visitEnd')
   async visitEnd(@Request() request) {
     try {
       const result = await this.userService.visitEnd(request);
+      return WrapperDto.successfullCreated(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Post('editLocation')
+  async editLocation(@Request() request) {
+    try {
+      const locationDto = new LocationDto(request.body);
+      await validateOrReject(locationDto);
+
+      const result = await this.userService.editUserLocation(
+        request,
+        locationDto,
+      );
+
       return WrapperDto.successfullCreated(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

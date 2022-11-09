@@ -53,9 +53,20 @@ export class UserEditDto {
     this.emailAddress = data['emailAddress'];
     this.fullName = data['fullName'];
     this.role = data['role'];
-    this.enabled = data['enabled'];
-    this.bookingNotification = data['bookingNotification'];
-    this.faceId = data['faceId'];
+
+    if (data['enabled'] != undefined && data['enabled'] != null)
+      this.enabled = data['enabled'] == 'true' ? true : false;
+
+    if (
+      data['bookingNotification'] != undefined &&
+      data['bookingNotification'] != null
+    )
+      this.bookingNotification =
+        data['bookingNotification'] == 'true' ? true : false;
+
+    if (data['faceId'] != undefined && data['faceId'] != null)
+      this.faceId = data['faceId'] == 'true' ? true : false;
+
     this.Location = data['location'];
   }
 }

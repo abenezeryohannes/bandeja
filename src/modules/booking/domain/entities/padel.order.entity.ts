@@ -33,7 +33,7 @@ export class PadelOrder extends Model {
 
   @ForeignKey(() => PromoCode)
   @Column({ type: DataType.INTEGER, allowNull: true })
-  promoCodeID: number;
+  promoCodeId: number;
 
   @Default(0)
   @Column({ type: DataType.DECIMAL(20, 2), allowNull: false })

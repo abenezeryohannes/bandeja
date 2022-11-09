@@ -11,10 +11,26 @@ export class NotificationsController {
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Get()
-  findAll(@Request() request, @Query() query) {
+  async findAll(@Request() request) {
     try {
-      const result = this.notificationService.findAll(request.user, query);
-      return WrapperDto.paginate(result, query);
+      const result = await this.notificationService.findAll(
+        request.user,
+        request.query,
+      );
+      return WrapperDto.paginate(result, request.query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Get('findAllUnSeen')
+  async findAllUnSeen(@Request() request) {
+    try {
+      const result = await this.notificationService.findAllUnseen(
+        request.user,
+        request.query,
+      );
+      return WrapperDto.paginate(result, request.query);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }
@@ -22,9 +38,9 @@ export class NotificationsController {
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('seen')
-  seen(@Request() request, @Body() seen: seenDto) {
+  async seen(@Request() request, @Body() seen: seenDto) {
     try {
-      const result = this.notificationService.seen(request, seen);
+      const result = await this.notificationService.seen(request, seen);
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
@@ -33,9 +49,9 @@ export class NotificationsController {
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Get('unSeenCount')
-  unseenCount(@Request() request) {
+  async unseenCount(@Request() request) {
     try {
-      const result = this.notificationService.unseenCount(request);
+      const result = await this.notificationService.unseenCount(request);
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
@@ -44,9 +60,9 @@ export class NotificationsController {
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('clear')
-  clear(@Request() request) {
+  async clear(@Request() request) {
     try {
-      const result = this.notificationService.clear(request);
+      const result = await this.notificationService.clear(request);
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
@@ -54,9 +70,9 @@ export class NotificationsController {
   }
   @Roles(ROLE.ADMIN)
   @Post('send')
-  send(@Request() request) {
+  async send(@Request() request) {
     try {
-      const result = this.notificationService.SendMessage(
+      const result = await this.notificationService.SendMessage(
         request,
         request.body,
         true,

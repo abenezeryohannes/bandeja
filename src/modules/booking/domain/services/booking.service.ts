@@ -61,6 +61,7 @@ export class BookingService {
 
   async book(request: any, orderDto: OrderDto): Promise<PadelOrder> {
     const user = request.user;
+
     let schedule = await this.padelService.findSchedule(
       orderDto.padelScheduleId,
     );
@@ -89,11 +90,13 @@ export class BookingService {
         orderDto.promoCode,
         orderDto.padelId,
       );
-      if (promoCode == null) {
+      if (promoCode == null || promoCode.leftForBooking <= 0) {
         throw new NotFoundException('Invalid promo code!');
       } else {
-        order.promoCodeID = promoCode.id;
+        order.promoCodeId = promoCode.id;
         order.amount = order.amount - order.amount * (promoCode.discount / 100);
+        promoCode.leftForBooking = promoCode.leftForBooking - 1;
+        await promoCode.save({ transaction: request.transaction });
       }
     }
 
@@ -113,7 +116,9 @@ export class BookingService {
     schedule = await schedule.save({ transaction: request.transaction });
     order = await order.save({ transaction: request.transaction });
     order.PadelSchedule = schedule;
-    return order;
+    const result = order['dataValues'];
+    result.PadelSchedule = schedule['dataValues'];
+    return result;
   }
 
   async findAllOwnerBookings(user: User, query: any): Promise<PadelOrder[]> {
@@ -355,7 +360,7 @@ export class BookingService {
     }
 
     if (orderEditDto.promoCodeID != null && orderEditDto.promoCodeID > 0) {
-      padelOrder.promoCodeID = orderEditDto.promoCodeID;
+      padelOrder.promoCodeId = orderEditDto.promoCodeID;
     }
 
     return await padelOrder.save({ transaction: request.transaction });

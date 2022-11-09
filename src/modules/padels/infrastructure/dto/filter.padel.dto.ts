@@ -12,9 +12,13 @@ export class FilterPadelDto {
   @Optional()
   readonly padelGroupId: number;
 
+  @Optional()
+  readonly indoor: string;
+
   constructor(data: any) {
     this.addressId = data['addressId'];
     this.date = data['date'];
     this.padelGroupId = data['padelGroupId'];
+    this.indoor = data['indoor'];
   }
 }

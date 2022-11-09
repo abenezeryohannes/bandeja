@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 export class PromoCodeDto {
   readonly id: number;
 
@@ -22,10 +22,11 @@ export class PromoCodeDto {
   readonly maxBooking: number;
 
   constructor(body: any) {
-    this.id = body['id'];
+    if (IsNumber(body['id'])) this.padelId = Number(body['id']);
     this.code = body['code'];
-    this.padelId = body['padelId'];
-    this.discount = body['discount'];
-    this.maxBooking = body['maxBooking'];
+    if (IsNumber(body['padelId'])) this.padelId = Number(body['padelId']);
+    if (IsNumber(body['discount'])) this.discount = Number(body['discount']);
+    if (IsNumber(body['maxBooking']))
+      this.maxBooking = Number(body['maxBooking']);
   }
 }

@@ -737,8 +737,8 @@ export class PadelsService {
         padelId: promoCodeDto.padelId,
         code: promoCodeDto.code,
         discount: promoCodeDto.discount,
-        maxBooking: promoCodeDto.maxBooking,
-        leftForBooking: promoCodeDto.maxBooking,
+        maxBooking: Number(promoCodeDto.maxBooking),
+        leftForBooking: Number(promoCodeDto.maxBooking),
       },
       { transaction: request.transaction },
     );
@@ -751,8 +751,10 @@ export class PadelsService {
         code: request.query.code,
         padelId: request.query.padelId,
       },
+      include: [Padel],
     });
-    if (result == null) throw Error('Invalid Promo Code!');
+    if (result == null || result.leftForBooking <= 0)
+      throw Error('Invalid Promo Code!');
     return result;
   }
 
@@ -771,18 +773,14 @@ export class PadelsService {
       );
     }
     if (
-      (promoCodeDto.maxBooking != null ||
-        promoCodeDto.maxBooking != undefined) &&
-      promoCodeDto.maxBooking > promo.leftForBooking
+      (Number(promoCodeDto.maxBooking) != null ||
+        Number(promoCodeDto.maxBooking) != undefined) &&
+      Number(promoCodeDto.maxBooking) <= promo.leftForBooking
     ) {
-      if (promoCodeDto.maxBooking <= promo.maxBooking) {
-        promo.leftForBooking =
-          promo.leftForBooking - (promo.maxBooking - promoCodeDto.maxBooking);
-      } else {
-        promo.leftForBooking =
-          promo.leftForBooking + (promoCodeDto.maxBooking - promo.maxBooking);
-      }
-      promo.maxBooking = promoCodeDto.maxBooking;
+      promo.maxBooking =
+        Number(promoCodeDto.maxBooking) +
+        (promo.maxBooking - promo.leftForBooking);
+      promo.leftForBooking = Number(promoCodeDto.maxBooking);
     }
     if (promoCodeDto.code != null && promoCodeDto.code != undefined) {
       promo.code = promoCodeDto.code;
@@ -931,10 +929,10 @@ export class PadelsService {
               ? '%' + query.search + '%%'
               : '%%',
         },
-        enabled:
-          query.approved != undefined && query.approved != null
-            ? query.approved == 'true' || query.approved == true
-            : { [Op.or]: [true, false] },
+        // approved:
+        //   query.approved != undefined && query.approved != null
+        //     ? query.approved == 'true'
+        //     : { [Op.or]: [true, false] },
       },
       include: [
         { model: User, include: [] },

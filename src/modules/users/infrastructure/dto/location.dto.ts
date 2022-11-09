@@ -16,10 +16,10 @@ export class LocationDto {
 
   readonly Users: UserDto[];
 
-  constructor(id, latitude, longitude, address) {
-    this.id = id;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.address = address;
+  constructor(data: any) {
+    this.id = data.id;
+    this.latitude = data.latitude;
+    this.longitude = data.longitude;
+    this.address = data.address;
   }
 }

@@ -88,15 +88,21 @@ export class UsersService {
     if (setting == null)
       setting = await this.settingRepository.build({ userId: user.id });
 
-    if (userDto.bookingNotification != null)
+    if (
+      userDto.bookingNotification != undefined &&
+      userDto.bookingNotification != null
+    )
       setting.setDataValue('bookingNotification', userDto.bookingNotification);
 
-    if (userDto.faceId != null) setting.setDataValue('faceId', userDto.faceId);
+    if (userDto.faceId != undefined && userDto.faceId != null)
+      setting.setDataValue('faceId', userDto.faceId);
 
     await setting.save({ transaction: request.transaction });
     await user.save({ transaction: request.transaction });
     user.Setting = setting;
-    return user;
+    const result = user['dataValues'];
+    result.Setting = setting['dataValues'];
+    return result;
   }
 
   async create(user: UserDto, transaction: any): Promise<User> {
@@ -135,7 +141,8 @@ export class UsersService {
   }
 
   async addLocation(dto: LocationDto): Promise<Location> {
-    if (dto == null) dto = new LocationDto(-1, 0, 0, '');
+    if (dto == null)
+      dto = new LocationDto({ id: -1, latitude: 0, longitude: 0, address: '' });
     return await this.locationRepository.create({
       latitude: dto.latitude,
       longitude: dto.longitude,
@@ -148,6 +155,24 @@ export class UsersService {
     location.longitude = dto.longitude;
     location.address = dto.address;
     return await location.save();
+  }
+
+  async editUserLocation(request: any, dto: LocationDto): Promise<boolean> {
+    let location =
+      request.user.locationId > 0
+        ? await this.locationRepository.findByPk(request.user.locationId)
+        : await this.locationRepository.build({});
+
+    location.latitude = dto.latitude;
+    location.longitude = dto.longitude;
+    if (dto.address != null) location.address = dto.address;
+
+    location = await location.save();
+    if (request.user.locationId == null) {
+      request.user.locationId = location.id;
+      await request.user.save();
+    }
+    return true;
   }
 
   async findOneByPhoneNumber(phoneNumber: string): Promise<User> {
@@ -271,10 +296,16 @@ export class UsersService {
     const scheduleCondition = moment(startTime).isSame(endTime)
       ? {
           [Op.or]: [
-            { startTime: { [Op.eq]: startTime } },
             {
-              startTime: { [Op.gte]: startTime },
-              endTime: { [Op.lte]: endTime },
+              startTime: {
+                [Op.eq]: moment(startTime).add(3, 'hours').toDate(),
+              },
+            },
+            {
+              startTime: {
+                [Op.gte]: moment(startTime).add(3, 'hours').toDate(),
+              },
+              endTime: { [Op.lte]: moment(endTime).add(3, 'hours').toDate() },
             },
           ],
           booked: false,
@@ -284,13 +315,21 @@ export class UsersService {
           endTime: { [Op.lte]: endTime },
           booked: false,
         };
+    const indoor: boolean =
+      filterPadelDto.indoor != undefined && filterPadelDto.indoor != null
+        ? filterPadelDto.indoor == 'true'
+          ? true
+          : false
+        : false;
     return await this.userRepository.findAll({
       where: { role: ROLE.OWNER, enabled: true },
       include: {
         model: Padel,
         as: 'Padels',
         required: true,
-        // where: conditions,
+        where: {
+          indoor: indoor,
+        },
         include: [
           { model: Location },
           { model: Address },
