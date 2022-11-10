@@ -126,7 +126,7 @@ class __$$_AddressModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_AddressModel with DiagnosticableTreeMixin implements _AddressModel {
+class _$_AddressModel implements _AddressModel {
   _$_AddressModel(
       {this.id = -1, this.name = '', this.createdAt, this.updatedAt});
 
@@ -145,19 +145,8 @@ class _$_AddressModel with DiagnosticableTreeMixin implements _AddressModel {
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'AddressModel(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'AddressModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

@@ -8,14 +8,14 @@ part of 'user.dart';
 
 _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       id: json['id'] as int? ?? -1,
-      fullName: json['fullName'] as String,
+      fullName: json['fullName'] as String? ?? '',
       avatar: json['avatar'] as String?,
       UID: json['UID'] as String?,
       emailAddress: json['emailAddress'] as String?,
       password: json['password'] as String?,
       role: json['role'] as String? ?? "user",
       locationId: json['locationId'] as int?,
-      phoneNumber: json['phoneNumber'] as String? ?? "00000000",
+      phoneNumber: json['phoneNumber'] as String? ?? "",
       enabled: json['enabled'] as bool? ?? true,
       createdAt: json['createdAt'] == null
           ? null
@@ -29,6 +29,9 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       Token: json['Token'] == null
           ? null
           : TokenModel.fromJson(json['Token'] as Map<String, dynamic>),
+      Setting: json['Setting'] == null
+          ? null
+          : SettingModel.fromJson(json['Setting'] as Map<String, dynamic>),
       Location: json['Location'] == null
           ? null
           : LocationModel.fromJson(json['Location'] as Map<String, dynamic>),
@@ -56,6 +59,7 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'Tokens': instance.Tokens,
       'Token': instance.Token,
+      'Setting': instance.Setting,
       'Location': instance.Location,
       'Bookmarks': instance.Bookmarks,
       'Padels': instance.Padels,

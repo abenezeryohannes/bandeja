@@ -26,6 +26,7 @@ mixin _$Failure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,6 +38,7 @@ mixin _$Failure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -48,6 +50,7 @@ mixin _$Failure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -60,6 +63,7 @@ mixin _$Failure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,6 +75,7 @@ mixin _$Failure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -82,6 +87,7 @@ mixin _$Failure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -193,6 +199,7 @@ class _$CacheFailure implements CacheFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return cacheFailure(message);
   }
@@ -207,6 +214,7 @@ class _$CacheFailure implements CacheFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return cacheFailure?.call(message);
   }
@@ -221,6 +229,7 @@ class _$CacheFailure implements CacheFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (cacheFailure != null) {
@@ -239,6 +248,7 @@ class _$CacheFailure implements CacheFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return cacheFailure(this);
   }
@@ -253,6 +263,7 @@ class _$CacheFailure implements CacheFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return cacheFailure?.call(this);
   }
@@ -267,6 +278,7 @@ class _$CacheFailure implements CacheFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (cacheFailure != null) {
@@ -363,6 +375,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return unExpectedFailure(message);
   }
@@ -377,6 +390,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return unExpectedFailure?.call(message);
   }
@@ -391,6 +405,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (unExpectedFailure != null) {
@@ -409,6 +424,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return unExpectedFailure(this);
   }
@@ -423,6 +439,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return unExpectedFailure?.call(this);
   }
@@ -437,6 +454,7 @@ class _$UnExpectedFailure implements UnExpectedFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (unExpectedFailure != null) {
@@ -529,6 +547,7 @@ class _$NotFound implements NotFound {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return notFound(message);
   }
@@ -543,6 +562,7 @@ class _$NotFound implements NotFound {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return notFound?.call(message);
   }
@@ -557,6 +577,7 @@ class _$NotFound implements NotFound {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (notFound != null) {
@@ -575,6 +596,7 @@ class _$NotFound implements NotFound {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return notFound(this);
   }
@@ -589,6 +611,7 @@ class _$NotFound implements NotFound {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return notFound?.call(this);
   }
@@ -603,6 +626,7 @@ class _$NotFound implements NotFound {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (notFound != null) {
@@ -710,6 +734,7 @@ class _$ValidationFailure implements ValidationFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return validationFailure(message, key);
   }
@@ -724,6 +749,7 @@ class _$ValidationFailure implements ValidationFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return validationFailure?.call(message, key);
   }
@@ -738,6 +764,7 @@ class _$ValidationFailure implements ValidationFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (validationFailure != null) {
@@ -756,6 +783,7 @@ class _$ValidationFailure implements ValidationFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return validationFailure(this);
   }
@@ -770,6 +798,7 @@ class _$ValidationFailure implements ValidationFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return validationFailure?.call(this);
   }
@@ -784,6 +813,7 @@ class _$ValidationFailure implements ValidationFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (validationFailure != null) {
@@ -880,6 +910,7 @@ class _$NoDataFailure implements NoDataFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return noDataFailure(message);
   }
@@ -894,6 +925,7 @@ class _$NoDataFailure implements NoDataFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return noDataFailure?.call(message);
   }
@@ -908,6 +940,7 @@ class _$NoDataFailure implements NoDataFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (noDataFailure != null) {
@@ -926,6 +959,7 @@ class _$NoDataFailure implements NoDataFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return noDataFailure(this);
   }
@@ -940,6 +974,7 @@ class _$NoDataFailure implements NoDataFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return noDataFailure?.call(this);
   }
@@ -954,6 +989,7 @@ class _$NoDataFailure implements NoDataFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (noDataFailure != null) {
@@ -1050,6 +1086,7 @@ class _$ServerFailure implements ServerFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return serverFailure(message);
   }
@@ -1064,6 +1101,7 @@ class _$ServerFailure implements ServerFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return serverFailure?.call(message);
   }
@@ -1078,6 +1116,7 @@ class _$ServerFailure implements ServerFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (serverFailure != null) {
@@ -1096,6 +1135,7 @@ class _$ServerFailure implements ServerFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return serverFailure(this);
   }
@@ -1110,6 +1150,7 @@ class _$ServerFailure implements ServerFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return serverFailure?.call(this);
   }
@@ -1124,6 +1165,7 @@ class _$ServerFailure implements ServerFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (serverFailure != null) {
@@ -1220,6 +1262,7 @@ class _$NetworkFailure implements NetworkFailure {
     required TResult Function(String? message) noDataFailure,
     required TResult Function(String? message) serverFailure,
     required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
   }) {
     return networkFailure(message);
   }
@@ -1234,6 +1277,7 @@ class _$NetworkFailure implements NetworkFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
   }) {
     return networkFailure?.call(message);
   }
@@ -1248,6 +1292,7 @@ class _$NetworkFailure implements NetworkFailure {
     TResult Function(String? message)? noDataFailure,
     TResult Function(String? message)? serverFailure,
     TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
     required TResult orElse(),
   }) {
     if (networkFailure != null) {
@@ -1266,6 +1311,7 @@ class _$NetworkFailure implements NetworkFailure {
     required TResult Function(NoDataFailure value) noDataFailure,
     required TResult Function(ServerFailure value) serverFailure,
     required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
   }) {
     return networkFailure(this);
   }
@@ -1280,6 +1326,7 @@ class _$NetworkFailure implements NetworkFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
   }) {
     return networkFailure?.call(this);
   }
@@ -1294,6 +1341,7 @@ class _$NetworkFailure implements NetworkFailure {
     TResult Function(NoDataFailure value)? noDataFailure,
     TResult Function(ServerFailure value)? serverFailure,
     TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
     required TResult orElse(),
   }) {
     if (networkFailure != null) {
@@ -1311,5 +1359,182 @@ abstract class NetworkFailure implements Failure {
   @override
   @JsonKey(ignore: true)
   _$$NetworkFailureCopyWith<_$NetworkFailure> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UnAuthorizedFailureCopyWith<$Res>
+    implements $FailureCopyWith<$Res> {
+  factory _$$UnAuthorizedFailureCopyWith(_$UnAuthorizedFailure value,
+          $Res Function(_$UnAuthorizedFailure) then) =
+      __$$UnAuthorizedFailureCopyWithImpl<$Res>;
+  @override
+  $Res call({String? message});
+}
+
+/// @nodoc
+class __$$UnAuthorizedFailureCopyWithImpl<$Res>
+    extends _$FailureCopyWithImpl<$Res>
+    implements _$$UnAuthorizedFailureCopyWith<$Res> {
+  __$$UnAuthorizedFailureCopyWithImpl(
+      _$UnAuthorizedFailure _value, $Res Function(_$UnAuthorizedFailure) _then)
+      : super(_value, (v) => _then(v as _$UnAuthorizedFailure));
+
+  @override
+  _$UnAuthorizedFailure get _value => super._value as _$UnAuthorizedFailure;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$UnAuthorizedFailure(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UnAuthorizedFailure implements UnAuthorizedFailure {
+  _$UnAuthorizedFailure(
+      {this.message = "Not authorized, please signup or login and try again."});
+
+  @override
+  @JsonKey()
+  final String? message;
+
+  @override
+  String toString() {
+    return 'Failure.unauthorized(message: $message)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UnAuthorizedFailure &&
+            const DeepCollectionEquality().equals(other.message, message));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$UnAuthorizedFailureCopyWith<_$UnAuthorizedFailure> get copyWith =>
+      __$$UnAuthorizedFailureCopyWithImpl<_$UnAuthorizedFailure>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String? message) cacheFailure,
+    required TResult Function(String? message) unExpectedFailure,
+    required TResult Function(String? message) notFound,
+    required TResult Function(String? message, String? key) validationFailure,
+    required TResult Function(String? message) noDataFailure,
+    required TResult Function(String? message) serverFailure,
+    required TResult Function(String? message) networkFailure,
+    required TResult Function(String? message) unauthorized,
+  }) {
+    return unauthorized(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String? message)? cacheFailure,
+    TResult Function(String? message)? unExpectedFailure,
+    TResult Function(String? message)? notFound,
+    TResult Function(String? message, String? key)? validationFailure,
+    TResult Function(String? message)? noDataFailure,
+    TResult Function(String? message)? serverFailure,
+    TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
+  }) {
+    return unauthorized?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String? message)? cacheFailure,
+    TResult Function(String? message)? unExpectedFailure,
+    TResult Function(String? message)? notFound,
+    TResult Function(String? message, String? key)? validationFailure,
+    TResult Function(String? message)? noDataFailure,
+    TResult Function(String? message)? serverFailure,
+    TResult Function(String? message)? networkFailure,
+    TResult Function(String? message)? unauthorized,
+    required TResult orElse(),
+  }) {
+    if (unauthorized != null) {
+      return unauthorized(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CacheFailure value) cacheFailure,
+    required TResult Function(UnExpectedFailure value) unExpectedFailure,
+    required TResult Function(NotFound value) notFound,
+    required TResult Function(ValidationFailure value) validationFailure,
+    required TResult Function(NoDataFailure value) noDataFailure,
+    required TResult Function(ServerFailure value) serverFailure,
+    required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(UnAuthorizedFailure value) unauthorized,
+  }) {
+    return unauthorized(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CacheFailure value)? cacheFailure,
+    TResult Function(UnExpectedFailure value)? unExpectedFailure,
+    TResult Function(NotFound value)? notFound,
+    TResult Function(ValidationFailure value)? validationFailure,
+    TResult Function(NoDataFailure value)? noDataFailure,
+    TResult Function(ServerFailure value)? serverFailure,
+    TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
+  }) {
+    return unauthorized?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(CacheFailure value)? cacheFailure,
+    TResult Function(UnExpectedFailure value)? unExpectedFailure,
+    TResult Function(NotFound value)? notFound,
+    TResult Function(ValidationFailure value)? validationFailure,
+    TResult Function(NoDataFailure value)? noDataFailure,
+    TResult Function(ServerFailure value)? serverFailure,
+    TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(UnAuthorizedFailure value)? unauthorized,
+    required TResult orElse(),
+  }) {
+    if (unauthorized != null) {
+      return unauthorized(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UnAuthorizedFailure implements Failure {
+  factory UnAuthorizedFailure({final String? message}) = _$UnAuthorizedFailure;
+
+  @override
+  String? get message;
+  @override
+  @JsonKey(ignore: true)
+  _$$UnAuthorizedFailureCopyWith<_$UnAuthorizedFailure> get copyWith =>
       throw _privateConstructorUsedError;
 }

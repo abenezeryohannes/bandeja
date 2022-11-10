@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/padels/entities/promo.code.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
@@ -25,13 +26,16 @@ class PadelRepository implements IPadelRepository {
 
   @override
   Future<Either<Failure, List<PadelModel>>?>? getFeaturedPadels(
-      {int? page, AddressModel? address, LocationModel? location}) async {
+      {int? page,
+      AddressModel? address,
+      LocationModel? location,
+      PadelGroupModel? padelGroup}) async {
     try {
       if (await networkInfo.isConnected) {
-        final response =
-            await remoteDataSource.getFeaturedPadels(page, address, location);
+        final response = await remoteDataSource.getFeaturedPadels(
+            page, address, location, padelGroup);
         if (response == null) return null;
-        await localDataSource.saveFeaturedPadels(page, address, response);
+        await localDataSource.saveFeaturedPadels(page, padelGroup, response);
         return Right(response);
       } else {
         final result = await localDataSource.loadFeaturedPadels(page, address);
@@ -83,7 +87,7 @@ class PadelRepository implements IPadelRepository {
       if (await networkInfo.isConnected) {
         final response =
             await remoteDataSource.getBookmarks(page: page, limit: limit);
-        if (response == null) return null;
+        if (response == null) return const Right([]);
         await localDataSource.saveBookmarks(page, response);
         return Right(response);
       } else {
@@ -134,6 +138,78 @@ class PadelRepository implements IPadelRepository {
     try {
       if (await networkInfo.isConnected) {
         final response = await remoteDataSource.setBookmark(padelId: padelId);
+        if (response == null) throw Failure.serverFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PromoCodeModel>?>? checkPromo(
+      {required String promo, required int padelId}) async {
+    try {
+      final result =
+          await remoteDataSource.checkPromo(promo: promo, padelId: padelId);
+      if (result == null) throw ServerFailure();
+      return Right(result);
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PadelModel>?>? findPadel(
+      {required int padelId, DateTime? date}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response =
+            await remoteDataSource.findPadel(padelId: padelId, date: date);
+        if (response == null) throw Failure.serverFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PadelModel>?>? findPadelWithPeriod(
+      {required int padelId,
+      required DateTime startTime,
+      required DateTime endTime}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.findPadelWIthPeriod(
+            padelId: padelId, startTime: startTime, endTime: endTime);
+        if (response == null) throw Failure.serverFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>?>? isBookmark({required int padelId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.isBookmark(padelId: padelId);
         if (response == null) throw Failure.serverFailure();
         return Right(response);
       } else {

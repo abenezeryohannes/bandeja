@@ -12,7 +12,7 @@ class PadelAvatar extends StatefulWidget {
       required this.borderColor,
       required this.radius,
       required this.margins,
-      required this.hero,
+      this.hero ='',
       required this.onClick})
       : super(key: key);
 
@@ -33,6 +33,7 @@ class _PadelAvatarState extends State<PadelAvatar> {
     return CustomShimmer(
       show: widget.item == null,
       child: Container(
+        decoration: const BoxDecoration(shape: BoxShape.circle),
         width: (widget.radius * 2) + 10,
         height: (widget.radius * 2) + 10,
         margin: widget.margins,

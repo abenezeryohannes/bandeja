@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,57 +34,56 @@ class _AddPostPageState extends State<AddPostPage> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Obx(() => Center(
-                          child: PostImagesFrom(
-                        onLoadingChanged: (isLoading) {
-                          controller.isLoading.value = isLoading;
-                        },
-                        placeholder: 'assets/img/add_img.png',
-                        postImages: controller.postImages.value,
-                        uploadImage: (String imgPath) {
-                          controller.uploadImage(imgPath);
-                        },
-                      ))),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      elevation: 1,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
+              child: Form(
+                key: controller.formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Obx(() => Center(
+                            child: PostImagesFrom(
+                          onLoadingChanged: (isLoading) {
+                            controller.isLoading.value = isLoading;
+                          },
+                          validator: () => controller.validated.value,
+                          placeholder: 'assets/img/add_img.png',
+                          postImages: controller.postImages.value,
+                          uploadImage: (String imgPath) {
+                            controller.uploadImage(imgPath);
+                          },
+                        ))),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextInputForm(
                           label: 'Description',
                           minLines: 4,
                           maxLines: 5,
                           placeholder: 'Write the Ads Title',
-                          error: null,
+                          elevation: 1,
+                          radius: 12,
+                          validator: (value) =>
+                              controller.validateNoEmpty(value),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           initialValue: controller.postDto.value.desc,
                           onChanged: (change) {
                             controller.postDto.value.desc = change;
                           }),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      elevation: 1,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextInputForm(
-                          label: 'BookingPrice',
+                          label: 'Booking Price',
                           placeholder: '00',
                           error: null,
+                          elevation: 1,
+                          radius: 12,
                           suffixText: 'KD',
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           initialValue: controller.postDto.value.price,
@@ -91,44 +91,42 @@ class _AddPostPageState extends State<AddPostPage> {
                             controller.postDto.value.price = change;
                           }),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2 - 30,
-                        child: Material(
-                          elevation: 1,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12))),
-                          child: TextInputForm(
-                              label: 'Whatsapp',
-                              placeholder: 'Add your number',
-                              error: null,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              initialValue:
-                                  controller.postDto.value.whatsApp ?? '',
-                              onChanged: (change) {
-                                controller.postDto.value.whatsApp = change;
-                              }),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2 - 30,
+                              child: TextInputForm(
+                                  label: 'Whatsapp',
+                                  placeholder: 'Add your number',
+                                  validator: (value) =>
+                                      controller.phoneValidation(value),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  elevation: 1,
+                                  radius: 12,
+                                  initialValue:
+                                      controller.postDto.value.whatsApp ?? '',
+                                  onChanged: (change) {
+                                    controller.postDto.value.whatsApp = change;
+                                  }),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2 - 30,
-                        child: Material(
-                          elevation: 1,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12))),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2 - 30,
                           child: TextInputForm(
                               label: 'Call',
                               placeholder: 'Add your number',
-                              error: null,
+                              validator: (value) =>
+                                  controller.phoneValidation(value),
+                              elevation: 1,
+                              radius: 12,
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               initialValue:
@@ -137,76 +135,66 @@ class _AddPostPageState extends State<AddPostPage> {
                                 controller.postDto.value.phoneNumber = change;
                               }),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Court Category',
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            'Court Category',
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  _postCategory(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Type to add',
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyLarge,
+                      ],
+                    ),
+                    _postCategory(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Text(
+                            'Type to add',
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  _postType()
-                ],
+                      ],
+                    ),
+                    _postType()
+                  ],
+                ),
               ),
             ),
             if (MediaQuery.of(context).viewInsets.bottom < 10)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    border: Border(
-                      top: BorderSide(width: 0.5, color: Colors.grey.shade400),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      border: Border(
+                        top:
+                            BorderSide(width: 0.5, color: Colors.grey.shade400),
+                      ),
                     ),
-                  ),
-                  padding: const EdgeInsets.only(
-                      left: 40, right: 40, bottom: 10, top: 20),
-                  child: InkWell(
-                    onTap: () {
-                      controller.addPost(context);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: Get.width,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: Text("Send",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: Colors.white)),
-                    ),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(
+                        left: 40, right: 40, bottom: 10, top: 20),
+                    child: Obx(
+                      () => BigTextButton(
+                        onClick: () {
+                          controller.addPost(context);
+                        },
+                        isLoading: controller.isLoading.value,
+                        textWidget: const Text('Save'),
+                      ),
+                    )),
               )
           ],
         ),
@@ -229,7 +217,10 @@ class _AddPostPageState extends State<AddPostPage> {
               padding: const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 10),
               child: _tabs(value));
         }, loadingState: (_) {
-          return const CircularProgressIndicator();
+          return Container(
+              height: 60,
+              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 10),
+              child: _tabs([null, null, null, null, null]));
         }));
   }
 
@@ -240,37 +231,6 @@ class _AddPostPageState extends State<AddPostPage> {
       height: 60,
       child: Row(
         children: [
-          const SizedBox(
-            width: 16,
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                controller.postDto.value.offer = true;
-              });
-            },
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: Theme.of(context).dividerColor,
-                      width: controller.postDto.value.offer ? 0 : 1.2),
-                  color: controller.postDto.value.offer
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.transparent),
-              child: Text('Offer',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: controller.postDto.value.offer
-                          ? FontWeight.bold
-                          : FontWeight.w400,
-                      color: controller.postDto.value.offer
-                          ? Colors.white
-                          : Theme.of(context).colorScheme.shadow)),
-            ),
-          ),
           const SizedBox(
             width: 10,
           ),
@@ -301,7 +261,38 @@ class _AddPostPageState extends State<AddPostPage> {
                           ? Colors.white
                           : Theme.of(context).colorScheme.shadow)),
             ),
-          )
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                controller.postDto.value.offer = true;
+              });
+            },
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                      width: controller.postDto.value.offer ? 0 : 1.2),
+                  color: controller.postDto.value.offer
+                      ? Theme.of(context).colorScheme.secondary
+                      : Colors.transparent),
+              child: Text('Offered',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: controller.postDto.value.offer
+                          ? FontWeight.bold
+                          : FontWeight.w400,
+                      color: controller.postDto.value.offer
+                          ? Colors.white
+                          : Theme.of(context).colorScheme.shadow)),
+            ),
+          ),
         ],
       ),
     );
@@ -315,7 +306,7 @@ class _AddPostPageState extends State<AddPostPage> {
       backgroundColor: Colors.grey.shade50,
       elevation: 0,
       leading: Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 25),
+          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 20),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(width: 1, color: Colors.grey.shade600)),
@@ -332,12 +323,13 @@ class _AddPostPageState extends State<AddPostPage> {
     );
   }
 
-  Widget _tabs(List<PostGroupModel> postGroups) {
+  Widget _tabs(List<PostGroupModel?> postGroups) {
     return CircularTabBar(
-        tabs: postGroups.map((e) => CircularTab(text: e.name)).toList(),
+        tabs: postGroups.map((e) => CircularTab(text: e?.name)).toList(),
         onItemClick: (index) {
+          if (postGroups[index] == null) return;
           controller.selectedPostGroup.value = index;
-          controller.postDto.value.postGroupId = postGroups[index].id;
+          controller.postDto.value.postGroupId = postGroups[index]!.id;
         },
         value: controller.selectedPostGroup.value);
   }

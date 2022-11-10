@@ -177,9 +177,7 @@ class __$$_PostImageModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PostImageModel
-    with DiagnosticableTreeMixin
-    implements _PostImageModel {
+class _$_PostImageModel implements _PostImageModel {
   _$_PostImageModel(
       {this.id = -1,
       required this.postId,
@@ -206,21 +204,8 @@ class _$_PostImageModel
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'PostImageModel(id: $id, postId: $postId, img: $img, Post: $Post, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PostImageModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('postId', postId))
-      ..add(DiagnosticsProperty('img', img))
-      ..add(DiagnosticsProperty('Post', Post))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

@@ -1,18 +1,19 @@
+import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/authentication/entities/user.dart';
-import '../../../presentation/padels/pages/checkout.page.dart';
+import '../../../presentation/booking/pages/checkout.page.dart';
 import 'padel.card.dart';
 import 'schedules.card.dart';
 
 class PadelSearchResultCard extends StatefulWidget {
   const PadelSearchResultCard({
     Key? key,
-    required this.user,
+    this.user,
   }) : super(key: key);
-  final UserModel user;
+  final UserModel? user;
 
   @override
   State<PadelSearchResultCard> createState() => _PadelSearchResultCardState();
@@ -22,9 +23,18 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
   DateTime? selectedDate;
   late PageController _pageController;
   double _scrollAmount = 0.0;
+  bool showScroll = false;
 
   @override
   void initState() {
+    _scrollAmount = 0.0;
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          showScroll = (widget.user?.Padels?.length ?? 0) > 0;
+        });
+      }
+    });
     _pageController = PageController(initialPage: _scrollAmount.toInt());
     _pageController.addListener(() {
       setState(() {
@@ -37,7 +47,7 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
           children: [
             Card(
@@ -46,27 +56,32 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: ExpandablePageView.builder(
                   controller: _pageController,
-                  itemCount: widget.user.getPadels().length,
+                  itemCount: widget.user?.getPadels().length ?? 1,
                   itemBuilder: ((context, index) => InkWell(
                         onTap: () {},
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            PadelCard(item: widget.user.getPadels()[index]),
+                            PadelCard(item: widget.user?.getPadels()[index]),
                             SchedulesCard(
-                              padel: widget.user.getPadels()[index],
+                              schedules: widget.user == null
+                                  ? [null]
+                                  : widget.user!
+                                          .getPadels()[index]
+                                          .PadelSchedules ??
+                                      [null],
                               date: DateTime.now(),
-                              onClick: (DateTime time) {
+                              onClick: (PadelScheduleModel scheduleModel) {
+                                selectedDate = scheduleModel.startTime;
+                                // if (scheduleModel.booked) return;
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
                                       opaque: false, // set to false
                                       pageBuilder: (_, __, ___) => CheckoutPage(
-                                          padel: widget.user.getPadels()[index],
-                                          time: time)),
+                                          padel:
+                                              widget.user!.getPadels()[index],
+                                          schedule: scheduleModel)),
                                 );
-                              },
-                              onDateSelected: (DateTime d) {
-                                selectedDate = d;
                               },
                             ),
                             const SizedBox(
@@ -79,15 +94,19 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
             const SizedBox(
               height: 10,
             ),
-            DotsIndicator(
-              dotsCount: widget.user.getPadels().length,
-              position: _scrollAmount,
-              decorator: DotsDecorator(
-                  size: const Size(10, 10),
-                  activeSize: const Size(40, 10),
-                  activeShape: const StadiumBorder(),
-                  color: Colors.grey.shade300,
-                  activeColor: Theme.of(context).colorScheme.secondary),
+            AnimatedOpacity(
+              duration: const Duration(seconds: 1),
+              opacity: showScroll ? 1 : 0,
+              child: DotsIndicator(
+                dotsCount: widget.user?.getPadels().length ?? 1,
+                position: _scrollAmount,
+                decorator: DotsDecorator(
+                    size: const Size(10, 10),
+                    activeSize: const Size(40, 10),
+                    activeShape: const StadiumBorder(),
+                    color: Colors.grey.shade300,
+                    activeColor: Theme.of(context).colorScheme.secondary),
+              ),
             ),
             const SizedBox(
               height: 5,

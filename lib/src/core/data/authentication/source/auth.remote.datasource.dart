@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bandeja/src/admin/data/notification/dto/notification.dto.dart';
+import 'package:bandeja/src/core/data/authentication/dto/location.dto.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
@@ -45,7 +48,6 @@ class AuthRemoteDataSource {
       Map<String, dynamic> jsonMap = userDto.toJson();
       jsonMap.forEach((key, value) {
         if (value != null &&
-            key != 'id' &&
             key != 'avatar' &&
             key != 'enabled' &&
             key != 'localImage') {
@@ -53,7 +55,9 @@ class AuthRemoteDataSource {
         }
       });
 
-      request.headers.addAll(Api.multipartHeader("user")!);
+      String token = GetStorage().read('token');
+      Map<String, String>? header = Api.multipartHeader(token);
+      request.headers.addAll(header!);
       final streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
@@ -72,8 +76,8 @@ class AuthRemoteDataSource {
 
   Future<UserModel> getUser({required int id}) async {
     http.Response response = await client.get(
-      Api.request("user"),
-      headers: Api.getHeader("user"),
+      Api.request("users"),
+      headers: Api.getHeader(GetStorage().read('token')),
     );
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
@@ -84,13 +88,14 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<UserModel> signupUser({required UserModel user}) async {
+  Future<UserModel> signupUser({required UserDto user}) async {
     Map<String, String> body = <String, String>{};
 
     Map<String, dynamic> jsonMap = user.toJson();
     jsonMap.forEach((key, value) {
-      if (value != null &&
-          (key == 'UID' || key == 'phoneNumber' || key == 'role')) {
+      if (value != null
+          // && (key == 'UID' || key == 'phoneNumber' || key == 'role')
+          ) {
         body[key] = value.toString();
       }
     });
@@ -105,13 +110,14 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<UserModel> loginUser({required UserModel user}) async {
+  Future<UserModel> loginUser({required UserDto user}) async {
     Map<String, String> body = <String, String>{};
 
     Map<String, dynamic> jsonMap = user.toJson();
     jsonMap.forEach((key, value) {
-      if (value != null &&
-          (key == 'UID' || key == 'phoneNumber' || key == 'role')) {
+      if (value != null
+          // &&(key == 'UID' || key == 'phoneNumber' || key == 'role')
+          ) {
         body[key] = value.toString();
       }
     });
@@ -121,6 +127,76 @@ class AuthRemoteDataSource {
     if (responseDto.success) {
       UserModel user = UserModel.fromJson(responseDto.data);
       return user;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<bool> logOut() async {
+    String? token = GetStorage().read('token');
+    if (token == null) return true;
+    http.Response response = await client.post(Api.request("auth/logout"),
+        headers: Api.postHeader(token));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      return true;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<UserModel>? setFCMToken({required String token}) async {
+    Map<String, String> body = <String, String>{};
+    body['fcm'] = token;
+    http.Response response = await client.post(Api.request("auth/updateFCM"),
+        body: body, headers: Api.postHeader(GetStorage().read('token')));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      UserModel user = UserModel.fromJson(responseDto.data);
+      return user;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<bool> onAppVisit() async {
+    String? token = GetStorage().read('token');
+    if (token == null) return true;
+    http.Response response = await client.post(Api.request("users/visitStart"),
+        headers: Api.postHeader(token));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      return true;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<bool> onAppVisitEnd() async {
+    String? token = GetStorage().read('token');
+    if (token == null) return true;
+    http.Response response = await client.post(Api.request("users/visitEnd"),
+        headers: Api.postHeader(token));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      return true;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<bool> editLocation({required LocationDto locationDto}) async {
+    Map<String, String> body = <String, String>{};
+    locationDto.toJson().forEach((key, value) {
+      if (value != null) body.addEntries({key: value.toString()}.entries);
+    });
+    http.Response response = await client.post(
+        Api.request("users/editLocation"),
+        headers: Api.postHeader(GetStorage().read('token')),
+        body: body);
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      return true;
     } else {
       throw ServerFailure(message: responseDto.message);
     }

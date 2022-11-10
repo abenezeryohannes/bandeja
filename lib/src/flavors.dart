@@ -16,13 +16,13 @@ class FF {
   static String get title {
     switch (appFlavor) {
       case Flavor.main:
-        return 'feekpadel';
+        return 'Bandeja';
       case Flavor.admin:
-        return 'feekpadel Admin';
+        return 'Bandeja Admin';
       case Flavor.owner:
-        return 'feekpadel Owner';
+        return 'Bandeja Owner';
       default:
-        return 'title';
+        return 'Bandeja';
     }
   }
 

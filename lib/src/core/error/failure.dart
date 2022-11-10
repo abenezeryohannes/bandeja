@@ -1,4 +1,7 @@
+import 'package:bandeja/src/core/dto/wrapper.dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../dto/response.dto.dart';
 
 part 'failure.freezed.dart';
 
@@ -32,4 +35,15 @@ class Failure with _$Failure implements Exception {
   factory Failure.networkFailure(
       {@Default("No connection, please connect to the Internet and try again.")
           final String? message}) = NetworkFailure;
+
+  factory Failure.unauthorized(
+      {@Default("Not authorized, please signup or login and try again.")
+          final String? message}) = UnAuthorizedFailure;
+  static Failure AssignFailureType(ResponseDto responseDto) {
+    if (responseDto.statusCode == 403) {
+      return UnAuthorizedFailure(message: responseDto.message);
+    } else {
+      return ServerFailure(message: responseDto.message);
+    }
+  }
 }

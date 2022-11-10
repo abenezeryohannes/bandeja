@@ -39,8 +39,8 @@ class _CircularTabBarState extends State<CircularTabBar> {
           return CustomShimmer(
             show: widget.tabs[index].text == null,
             child: Container(
-              margin: EdgeInsets.fromLTRB(
-                  10, 0, index == widget.tabs.length - 1 ? 20 : 0, 0),
+              margin: EdgeInsets.fromLTRB(index == 0 ? 16 : 10, 0,
+                  index == widget.tabs.length - 1 ? 16 : 0, 0),
               child: InkWell(
                 onTap: () {
                   widget.onItemClick(index);
@@ -51,7 +51,7 @@ class _CircularTabBarState extends State<CircularTabBar> {
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                          widget.tabs[index].radius ?? 12),
+                          widget.tabs[index].radius ?? 16),
                       border: Border.all(
                           color: Theme.of(context).dividerColor,
                           width: _isSelected(widget.tabs[index]) ? 0 : 1.2),
@@ -62,7 +62,7 @@ class _CircularTabBarState extends State<CircularTabBar> {
                               : Colors.transparent),
                   child: Text(widget.tabs[index].text ?? '            ',
                       style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: _isSelected(widget.tabs[index])
                               ? FontWeight.bold
                               : FontWeight.w400,

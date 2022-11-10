@@ -8,8 +8,9 @@ part 'location.g.dart';
 class LocationModel with _$LocationModel {
   factory LocationModel({
     @Default(-1) int id,
-    @Default('0') String latitude,
-    @Default('0') String longitude,
+    @Default(0) double latitude,
+    @Default(0) double longitude,
+    String? address,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) = _LocationModel;

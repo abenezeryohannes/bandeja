@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
@@ -42,14 +43,14 @@ class PostRemoteDataSource {
   Future<List<PostModel>>? getFeaturedPosts(int? page) async {
     http.Response response = await client.get(
       Api.request("posts/featured"),
-      headers: Api.getHeader("user"),
+      headers: Api.getHeader(GetStorage().read('token')),
     );
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       List<PostModel> padels = await loadPostsFromJson(responseDto.data);
       return padels;
     } else {
-      throw ServerFailure(message: responseDto.message);
+      throw Failure.AssignFailureType(responseDto);
     }
   }
 
@@ -88,14 +89,14 @@ class PostRemoteDataSource {
 
     http.Response response = await client.get(
       Api.getRequestWithParams("posts", query),
-      headers: Api.getHeader("user"),
+      headers: Api.getHeader(GetStorage().read('token')),
     );
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       List<PostModel> padels = await loadPostsFromJson(responseDto.data);
       return padels;
     } else {
-      throw ServerFailure(message: responseDto.message);
+      throw Failure.AssignFailureType(responseDto);
     }
   }
 
@@ -114,14 +115,14 @@ class PostRemoteDataSource {
 
     http.Response response = await client.get(
       Api.getRequestWithParams("posts/mine", query),
-      headers: Api.getHeader("user"),
+      headers: Api.getHeader(GetStorage().read('token')),
     );
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       List<PostModel> padels = await loadPostsFromJson(responseDto.data);
       return padels;
     } else {
-      throw ServerFailure(message: responseDto.message);
+      throw Failure.AssignFailureType(responseDto);
     }
   }
 
@@ -173,7 +174,7 @@ class PostRemoteDataSource {
         }
       });
 
-      request.headers.addAll(Api.multipartHeader("user")!);
+      request.headers.addAll(Api.multipartHeader(GetStorage().read('token'))!);
       final streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
       ResponseDto responseDto =
@@ -182,7 +183,7 @@ class PostRemoteDataSource {
         PostModel post = PostModel.fromJson(responseDto.data);
         return post;
       } else {
-        throw ServerFailure(message: responseDto.message);
+        throw Failure.AssignFailureType(responseDto);
       }
     } catch (e) {
       throw Failure.unExpectedFailure(message: e.toString());
@@ -193,12 +194,12 @@ class PostRemoteDataSource {
     Map<String, String> body = <String, String>{};
     body.addAll({'postId': id.toString()});
     http.Response response = await client.post(Api.request("posts/delete"),
-        headers: Api.postHeader("user"), body: body);
+        headers: Api.postHeader(GetStorage().read('token')), body: body);
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       return true;
     } else {
-      throw ServerFailure(message: responseDto.message);
+      throw Failure.AssignFailureType(responseDto);
     }
   }
 }

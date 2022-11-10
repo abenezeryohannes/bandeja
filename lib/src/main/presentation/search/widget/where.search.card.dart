@@ -28,7 +28,7 @@ class _WhereSearchCardState extends State<WhereSearchCard> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.fastOutSlowIn,
       child: Container(
-          margin: const EdgeInsets.only(left: 10, top: 16, right: 10),
+          margin: const EdgeInsets.only(left: 20, top: 16, right: 20),
           padding:
               const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
           decoration: BoxDecoration(
@@ -76,7 +76,7 @@ class _WhereSearchCardState extends State<WhereSearchCard> {
               ),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                height: widget.active ? 80 : 0,
+                height: widget.active ? 70 : 0,
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 300),
                   opacity: widget.active ? 1 : 0,

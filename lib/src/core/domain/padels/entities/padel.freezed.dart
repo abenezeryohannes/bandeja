@@ -23,19 +23,20 @@ mixin _$PadelModel {
   int get id => throw _privateConstructorUsedError;
   int get userId => throw _privateConstructorUsedError;
   int get durationId => throw _privateConstructorUsedError;
-  int get padelGroupId => throw _privateConstructorUsedError;
+  int? get padelGroupId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get banner => throw _privateConstructorUsedError;
   String get avatar => throw _privateConstructorUsedError;
   int? get locationId => throw _privateConstructorUsedError;
   int? get addressId => throw _privateConstructorUsedError;
+  bool get approved => throw _privateConstructorUsedError;
   DateTime get startTime => throw _privateConstructorUsedError;
   DateTime get endTime => throw _privateConstructorUsedError;
-  String get price => throw _privateConstructorUsedError;
+  double get price => throw _privateConstructorUsedError;
   bool get indoor => throw _privateConstructorUsedError;
   bool get onlyLadies => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
-  PadelGroupModel? get PadelGroup => throw _privateConstructorUsedError;
+  List<PadelGroupModel>? get PadelGroups => throw _privateConstructorUsedError;
   List<FeatureModel>? get Features => throw _privateConstructorUsedError;
   LocationModel? get Location => throw _privateConstructorUsedError;
   DurationModel? get Duration => throw _privateConstructorUsedError;
@@ -62,19 +63,20 @@ abstract class $PadelModelCopyWith<$Res> {
       {int id,
       int userId,
       int durationId,
-      int padelGroupId,
+      int? padelGroupId,
       String name,
       String banner,
       String avatar,
       int? locationId,
       int? addressId,
+      bool approved,
       DateTime startTime,
       DateTime endTime,
-      String price,
+      double price,
       bool indoor,
       bool onlyLadies,
       bool enabled,
-      PadelGroupModel? PadelGroup,
+      List<PadelGroupModel>? PadelGroups,
       List<FeatureModel>? Features,
       LocationModel? Location,
       DurationModel? Duration,
@@ -85,7 +87,6 @@ abstract class $PadelModelCopyWith<$Res> {
       DateTime? createdAt,
       DateTime? updatedAt});
 
-  $PadelGroupModelCopyWith<$Res>? get PadelGroup;
   $LocationModelCopyWith<$Res>? get Location;
   $DurationModelCopyWith<$Res>? get Duration;
   $AddressModelCopyWith<$Res>? get Address;
@@ -111,13 +112,14 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
     Object? avatar = freezed,
     Object? locationId = freezed,
     Object? addressId = freezed,
+    Object? approved = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
     Object? price = freezed,
     Object? indoor = freezed,
     Object? onlyLadies = freezed,
     Object? enabled = freezed,
-    Object? PadelGroup = freezed,
+    Object? PadelGroups = freezed,
     Object? Features = freezed,
     Object? Location = freezed,
     Object? Duration = freezed,
@@ -144,7 +146,7 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
       padelGroupId: padelGroupId == freezed
           ? _value.padelGroupId
           : padelGroupId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -165,6 +167,10 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
           ? _value.addressId
           : addressId // ignore: cast_nullable_to_non_nullable
               as int?,
+      approved: approved == freezed
+          ? _value.approved
+          : approved // ignore: cast_nullable_to_non_nullable
+              as bool,
       startTime: startTime == freezed
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -176,7 +182,7 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       indoor: indoor == freezed
           ? _value.indoor
           : indoor // ignore: cast_nullable_to_non_nullable
@@ -189,10 +195,10 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      PadelGroup: PadelGroup == freezed
-          ? _value.PadelGroup
-          : PadelGroup // ignore: cast_nullable_to_non_nullable
-              as PadelGroupModel?,
+      PadelGroups: PadelGroups == freezed
+          ? _value.PadelGroups
+          : PadelGroups // ignore: cast_nullable_to_non_nullable
+              as List<PadelGroupModel>?,
       Features: Features == freezed
           ? _value.Features
           : Features // ignore: cast_nullable_to_non_nullable
@@ -230,17 +236,6 @@ class _$PadelModelCopyWithImpl<$Res> implements $PadelModelCopyWith<$Res> {
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ));
-  }
-
-  @override
-  $PadelGroupModelCopyWith<$Res>? get PadelGroup {
-    if (_value.PadelGroup == null) {
-      return null;
-    }
-
-    return $PadelGroupModelCopyWith<$Res>(_value.PadelGroup!, (value) {
-      return _then(_value.copyWith(PadelGroup: value));
-    });
   }
 
   @override
@@ -297,19 +292,20 @@ abstract class _$$_PadelCopyWith<$Res> implements $PadelModelCopyWith<$Res> {
       {int id,
       int userId,
       int durationId,
-      int padelGroupId,
+      int? padelGroupId,
       String name,
       String banner,
       String avatar,
       int? locationId,
       int? addressId,
+      bool approved,
       DateTime startTime,
       DateTime endTime,
-      String price,
+      double price,
       bool indoor,
       bool onlyLadies,
       bool enabled,
-      PadelGroupModel? PadelGroup,
+      List<PadelGroupModel>? PadelGroups,
       List<FeatureModel>? Features,
       LocationModel? Location,
       DurationModel? Duration,
@@ -320,8 +316,6 @@ abstract class _$$_PadelCopyWith<$Res> implements $PadelModelCopyWith<$Res> {
       DateTime? createdAt,
       DateTime? updatedAt});
 
-  @override
-  $PadelGroupModelCopyWith<$Res>? get PadelGroup;
   @override
   $LocationModelCopyWith<$Res>? get Location;
   @override
@@ -352,13 +346,14 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
     Object? avatar = freezed,
     Object? locationId = freezed,
     Object? addressId = freezed,
+    Object? approved = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
     Object? price = freezed,
     Object? indoor = freezed,
     Object? onlyLadies = freezed,
     Object? enabled = freezed,
-    Object? PadelGroup = freezed,
+    Object? PadelGroups = freezed,
     Object? Features = freezed,
     Object? Location = freezed,
     Object? Duration = freezed,
@@ -385,7 +380,7 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
       padelGroupId: padelGroupId == freezed
           ? _value.padelGroupId
           : padelGroupId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -406,6 +401,10 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
           ? _value.addressId
           : addressId // ignore: cast_nullable_to_non_nullable
               as int?,
+      approved: approved == freezed
+          ? _value.approved
+          : approved // ignore: cast_nullable_to_non_nullable
+              as bool,
       startTime: startTime == freezed
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -417,7 +416,7 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       indoor: indoor == freezed
           ? _value.indoor
           : indoor // ignore: cast_nullable_to_non_nullable
@@ -430,10 +429,10 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      PadelGroup: PadelGroup == freezed
-          ? _value.PadelGroup
-          : PadelGroup // ignore: cast_nullable_to_non_nullable
-              as PadelGroupModel?,
+      PadelGroups: PadelGroups == freezed
+          ? _value._PadelGroups
+          : PadelGroups // ignore: cast_nullable_to_non_nullable
+              as List<PadelGroupModel>?,
       Features: Features == freezed
           ? _value._Features
           : Features // ignore: cast_nullable_to_non_nullable
@@ -476,24 +475,25 @@ class __$$_PadelCopyWithImpl<$Res> extends _$PadelModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Padel with DiagnosticableTreeMixin implements _Padel {
+class _$_Padel implements _Padel {
   _$_Padel(
       {this.id = -1,
       required this.userId,
       required this.durationId,
-      required this.padelGroupId,
+      this.padelGroupId,
       this.name = '',
       this.banner = 'placeholder.jpg',
       this.avatar = 'placeholder.jpg',
       this.locationId,
       this.addressId,
+      this.approved = false,
       required this.startTime,
       required this.endTime,
-      this.price = '0.0',
+      this.price = 0,
       this.indoor = false,
       this.onlyLadies = false,
       this.enabled = true,
-      this.PadelGroup,
+      final List<PadelGroupModel>? PadelGroups,
       final List<FeatureModel>? Features,
       this.Location,
       this.Duration,
@@ -503,7 +503,8 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
       final List<PadelScheduleModel>? PadelSchedules,
       this.createdAt,
       this.updatedAt})
-      : _Features = Features,
+      : _PadelGroups = PadelGroups,
+        _Features = Features,
         _Bookmarks = Bookmarks,
         _PadelSchedules = PadelSchedules;
 
@@ -518,7 +519,7 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
   @override
   final int durationId;
   @override
-  final int padelGroupId;
+  final int? padelGroupId;
   @override
   @JsonKey()
   final String name;
@@ -533,12 +534,15 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
   @override
   final int? addressId;
   @override
+  @JsonKey()
+  final bool approved;
+  @override
   final DateTime startTime;
   @override
   final DateTime endTime;
   @override
   @JsonKey()
-  final String price;
+  final double price;
   @override
   @JsonKey()
   final bool indoor;
@@ -548,8 +552,15 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
   @override
   @JsonKey()
   final bool enabled;
+  final List<PadelGroupModel>? _PadelGroups;
   @override
-  final PadelGroupModel? PadelGroup;
+  List<PadelGroupModel>? get PadelGroups {
+    final value = _PadelGroups;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final List<FeatureModel>? _Features;
   @override
   List<FeatureModel>? get Features {
@@ -591,40 +602,8 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PadelModel(id: $id, userId: $userId, durationId: $durationId, padelGroupId: $padelGroupId, name: $name, banner: $banner, avatar: $avatar, locationId: $locationId, addressId: $addressId, startTime: $startTime, endTime: $endTime, price: $price, indoor: $indoor, onlyLadies: $onlyLadies, enabled: $enabled, PadelGroup: $PadelGroup, Features: $Features, Location: $Location, Duration: $Duration, Address: $Address, Bookmarks: $Bookmarks, User: $User, PadelSchedules: $PadelSchedules, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PadelModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('durationId', durationId))
-      ..add(DiagnosticsProperty('padelGroupId', padelGroupId))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('banner', banner))
-      ..add(DiagnosticsProperty('avatar', avatar))
-      ..add(DiagnosticsProperty('locationId', locationId))
-      ..add(DiagnosticsProperty('addressId', addressId))
-      ..add(DiagnosticsProperty('startTime', startTime))
-      ..add(DiagnosticsProperty('endTime', endTime))
-      ..add(DiagnosticsProperty('price', price))
-      ..add(DiagnosticsProperty('indoor', indoor))
-      ..add(DiagnosticsProperty('onlyLadies', onlyLadies))
-      ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('PadelGroup', PadelGroup))
-      ..add(DiagnosticsProperty('Features', Features))
-      ..add(DiagnosticsProperty('Location', Location))
-      ..add(DiagnosticsProperty('Duration', Duration))
-      ..add(DiagnosticsProperty('Address', Address))
-      ..add(DiagnosticsProperty('Bookmarks', Bookmarks))
-      ..add(DiagnosticsProperty('User', User))
-      ..add(DiagnosticsProperty('PadelSchedules', PadelSchedules))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
+  String toString() {
+    return 'PadelModel(id: $id, userId: $userId, durationId: $durationId, padelGroupId: $padelGroupId, name: $name, banner: $banner, avatar: $avatar, locationId: $locationId, addressId: $addressId, approved: $approved, startTime: $startTime, endTime: $endTime, price: $price, indoor: $indoor, onlyLadies: $onlyLadies, enabled: $enabled, PadelGroups: $PadelGroups, Features: $Features, Location: $Location, Duration: $Duration, Address: $Address, Bookmarks: $Bookmarks, User: $User, PadelSchedules: $PadelSchedules, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -644,6 +623,7 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
             const DeepCollectionEquality()
                 .equals(other.locationId, locationId) &&
             const DeepCollectionEquality().equals(other.addressId, addressId) &&
+            const DeepCollectionEquality().equals(other.approved, approved) &&
             const DeepCollectionEquality().equals(other.startTime, startTime) &&
             const DeepCollectionEquality().equals(other.endTime, endTime) &&
             const DeepCollectionEquality().equals(other.price, price) &&
@@ -652,7 +632,7 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
                 .equals(other.onlyLadies, onlyLadies) &&
             const DeepCollectionEquality().equals(other.enabled, enabled) &&
             const DeepCollectionEquality()
-                .equals(other.PadelGroup, PadelGroup) &&
+                .equals(other._PadelGroups, _PadelGroups) &&
             const DeepCollectionEquality().equals(other._Features, _Features) &&
             const DeepCollectionEquality().equals(other.Location, Location) &&
             const DeepCollectionEquality().equals(other.Duration, Duration) &&
@@ -679,13 +659,14 @@ class _$_Padel with DiagnosticableTreeMixin implements _Padel {
         const DeepCollectionEquality().hash(avatar),
         const DeepCollectionEquality().hash(locationId),
         const DeepCollectionEquality().hash(addressId),
+        const DeepCollectionEquality().hash(approved),
         const DeepCollectionEquality().hash(startTime),
         const DeepCollectionEquality().hash(endTime),
         const DeepCollectionEquality().hash(price),
         const DeepCollectionEquality().hash(indoor),
         const DeepCollectionEquality().hash(onlyLadies),
         const DeepCollectionEquality().hash(enabled),
-        const DeepCollectionEquality().hash(PadelGroup),
+        const DeepCollectionEquality().hash(_PadelGroups),
         const DeepCollectionEquality().hash(_Features),
         const DeepCollectionEquality().hash(Location),
         const DeepCollectionEquality().hash(Duration),
@@ -715,19 +696,20 @@ abstract class _Padel implements PadelModel {
       {final int id,
       required final int userId,
       required final int durationId,
-      required final int padelGroupId,
+      final int? padelGroupId,
       final String name,
       final String banner,
       final String avatar,
       final int? locationId,
       final int? addressId,
+      final bool approved,
       required final DateTime startTime,
       required final DateTime endTime,
-      final String price,
+      final double price,
       final bool indoor,
       final bool onlyLadies,
       final bool enabled,
-      final PadelGroupModel? PadelGroup,
+      final List<PadelGroupModel>? PadelGroups,
       final List<FeatureModel>? Features,
       final LocationModel? Location,
       final DurationModel? Duration,
@@ -747,7 +729,7 @@ abstract class _Padel implements PadelModel {
   @override
   int get durationId;
   @override
-  int get padelGroupId;
+  int? get padelGroupId;
   @override
   String get name;
   @override
@@ -759,11 +741,13 @@ abstract class _Padel implements PadelModel {
   @override
   int? get addressId;
   @override
+  bool get approved;
+  @override
   DateTime get startTime;
   @override
   DateTime get endTime;
   @override
-  String get price;
+  double get price;
   @override
   bool get indoor;
   @override
@@ -771,7 +755,7 @@ abstract class _Padel implements PadelModel {
   @override
   bool get enabled;
   @override
-  PadelGroupModel? get PadelGroup;
+  List<PadelGroupModel>? get PadelGroups;
   @override
   List<FeatureModel>? get Features;
   @override

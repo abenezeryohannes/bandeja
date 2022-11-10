@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "664368582662",
+    "firebase_url": "https://coop-d1eaf.firebaseio.com",
+    "project_id": "coop-d1eaf",
+    "storage_bucket": "coop-d1eaf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664368582662:android:3d49ad9dc18abb487cf387",
+        "android_client_info": {
+          "package_name": "com.konrad.bandeja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664368582662-p8dmadoso9pa2t011679uajiqpgaek1d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.konrad.bandeja",
+            "certificate_hash": "de50f67d41f82dd1fa293bd9a4d0bc657d253bfe"
+          }
+        },
+        {
+          "client_id": "664368582662-0fl5vbkaiav2djir46g7atv3u6ddip6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDITy9BCiVeB7kxRwomPtKIDelwpdBux7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664368582662-0fl5vbkaiav2djir46g7atv3u6ddip6g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "664368582662-5b84l7o8ld0saclvcfnvpeuokuhguh29.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.konrad.bandeja"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664368582662:android:30e7f0ccb9b596ce7cf387",
+        "android_client_info": {
+          "package_name": "com.konrad.bandeja.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664368582662-r858o7kri2e2kf3p2kvgo8jlbr313qk9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.konrad.bandeja.admin",
+            "certificate_hash": "de50f67d41f82dd1fa293bd9a4d0bc657d253bfe"
+          }
+        },
+        {
+          "client_id": "664368582662-0fl5vbkaiav2djir46g7atv3u6ddip6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDITy9BCiVeB7kxRwomPtKIDelwpdBux7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664368582662-0fl5vbkaiav2djir46g7atv3u6ddip6g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "664368582662-5b84l7o8ld0saclvcfnvpeuokuhguh29.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.konrad.bandeja"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

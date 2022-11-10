@@ -25,7 +25,9 @@ mixin _$PromoCodeModel {
   int get padelId => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
   int get maxBooking => throw _privateConstructorUsedError;
+  double get discount => throw _privateConstructorUsedError;
   int get leftForBooking => throw _privateConstructorUsedError;
+  String? get PadelName => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
@@ -46,7 +48,9 @@ abstract class $PromoCodeModelCopyWith<$Res> {
       int padelId,
       String code,
       int maxBooking,
+      double discount,
       int leftForBooking,
+      String? PadelName,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -67,7 +71,9 @@ class _$PromoCodeModelCopyWithImpl<$Res>
     Object? padelId = freezed,
     Object? code = freezed,
     Object? maxBooking = freezed,
+    Object? discount = freezed,
     Object? leftForBooking = freezed,
+    Object? PadelName = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -92,10 +98,18 @@ class _$PromoCodeModelCopyWithImpl<$Res>
           ? _value.maxBooking
           : maxBooking // ignore: cast_nullable_to_non_nullable
               as int,
+      discount: discount == freezed
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
+              as double,
       leftForBooking: leftForBooking == freezed
           ? _value.leftForBooking
           : leftForBooking // ignore: cast_nullable_to_non_nullable
               as int,
+      PadelName: PadelName == freezed
+          ? _value.PadelName
+          : PadelName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -121,7 +135,9 @@ abstract class _$$_PromoCodeModelCopyWith<$Res>
       int padelId,
       String code,
       int maxBooking,
+      double discount,
       int leftForBooking,
+      String? PadelName,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -144,7 +160,9 @@ class __$$_PromoCodeModelCopyWithImpl<$Res>
     Object? padelId = freezed,
     Object? code = freezed,
     Object? maxBooking = freezed,
+    Object? discount = freezed,
     Object? leftForBooking = freezed,
+    Object? PadelName = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -169,10 +187,18 @@ class __$$_PromoCodeModelCopyWithImpl<$Res>
           ? _value.maxBooking
           : maxBooking // ignore: cast_nullable_to_non_nullable
               as int,
+      discount: discount == freezed
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
+              as double,
       leftForBooking: leftForBooking == freezed
           ? _value.leftForBooking
           : leftForBooking // ignore: cast_nullable_to_non_nullable
               as int,
+      PadelName: PadelName == freezed
+          ? _value.PadelName
+          : PadelName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -194,7 +220,9 @@ class _$_PromoCodeModel implements _PromoCodeModel {
       required this.padelId,
       this.code = '',
       this.maxBooking = 0,
+      this.discount = 0,
       this.leftForBooking = 0,
+      this.PadelName,
       this.createdAt,
       this.updatedAt});
 
@@ -216,7 +244,12 @@ class _$_PromoCodeModel implements _PromoCodeModel {
   final int maxBooking;
   @override
   @JsonKey()
+  final double discount;
+  @override
+  @JsonKey()
   final int leftForBooking;
+  @override
+  final String? PadelName;
   @override
   final DateTime? createdAt;
   @override
@@ -224,7 +257,7 @@ class _$_PromoCodeModel implements _PromoCodeModel {
 
   @override
   String toString() {
-    return 'PromoCodeModel(id: $id, userId: $userId, padelId: $padelId, code: $code, maxBooking: $maxBooking, leftForBooking: $leftForBooking, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PromoCodeModel(id: $id, userId: $userId, padelId: $padelId, code: $code, maxBooking: $maxBooking, discount: $discount, leftForBooking: $leftForBooking, PadelName: $PadelName, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -238,8 +271,10 @@ class _$_PromoCodeModel implements _PromoCodeModel {
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality()
                 .equals(other.maxBooking, maxBooking) &&
+            const DeepCollectionEquality().equals(other.discount, discount) &&
             const DeepCollectionEquality()
                 .equals(other.leftForBooking, leftForBooking) &&
+            const DeepCollectionEquality().equals(other.PadelName, PadelName) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.updatedAt, updatedAt));
   }
@@ -253,7 +288,9 @@ class _$_PromoCodeModel implements _PromoCodeModel {
       const DeepCollectionEquality().hash(padelId),
       const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(maxBooking),
+      const DeepCollectionEquality().hash(discount),
       const DeepCollectionEquality().hash(leftForBooking),
+      const DeepCollectionEquality().hash(PadelName),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(updatedAt));
 
@@ -277,7 +314,9 @@ abstract class _PromoCodeModel implements PromoCodeModel {
       required final int padelId,
       final String code,
       final int maxBooking,
+      final double discount,
       final int leftForBooking,
+      final String? PadelName,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$_PromoCodeModel;
 
@@ -295,7 +334,11 @@ abstract class _PromoCodeModel implements PromoCodeModel {
   @override
   int get maxBooking;
   @override
+  double get discount;
+  @override
   int get leftForBooking;
+  @override
+  String? get PadelName;
   @override
   DateTime? get createdAt;
   @override

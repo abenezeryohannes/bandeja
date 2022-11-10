@@ -10,6 +10,7 @@ class TokenModel with _$TokenModel {
     @Default(-1) int id,
     required int userId,
     @Default("token") String token,
+    String? fcmToken,
     DateTime? validUntil,
     DateTime? createdAt,
     DateTime? updatedAt,

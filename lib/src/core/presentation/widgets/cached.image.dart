@@ -9,13 +9,15 @@ class CachedImage extends StatefulWidget {
       this.height,
       this.width,
       this.radius = 0,
-      this.gradient})
+      this.gradient,
+      this.color})
       : super(key: key);
   final String imageLink;
   final double radius;
   final double? height;
   final double? width;
   final Gradient? gradient;
+  final Color? color;
 
   @override
   State<CachedImage> createState() => _CachedImageState();
@@ -34,7 +36,10 @@ class _CachedImageState extends State<CachedImage> {
           child: Container(
             height: widget.height,
             width: widget.width,
-            color: Colors.grey.shade300,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.all(Radius.circular(widget.radius)),
+            ),
           ),
         ),
       ),
@@ -46,12 +51,16 @@ class _CachedImageState extends State<CachedImage> {
             borderRadius: BorderRadius.all(Radius.circular(widget.radius)),
             gradient: (widget.gradient != null)
                 ? widget.gradient
-                : const LinearGradient(colors: [])),
+                : const LinearGradient(
+                    colors: [Colors.transparent, Colors.transparent])),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(widget.radius)),
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.cover,
+            colorFilter: widget.color == null
+                ? null
+                : ColorFilter.mode(widget.color!, BlendMode.srcIn),
           ),
         ),
       ),

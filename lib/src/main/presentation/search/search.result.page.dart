@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/domain/authentication/entities/user.dart';
 import '../../../core/domain/padels/entities/padel.group.dart';
+import '../../../core/error/failure.dart';
 import '../../../core/presentation/widgets/show.error.dart';
 import '../../../core/presentation/widgets/tab.bar.dart';
 import '../../../core/presentation/widgets/toggle.form.dart';
@@ -32,6 +33,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   @override
   void initState() {
     times = Util.times(widget.date);
+    times.insert(0, DateTime(0, 0, 0));
     controller = Get.put(SearchResultController(
         address: widget.addressModel,
         date: widget.date,
@@ -48,76 +50,131 @@ class _SearchResultPageState extends State<SearchResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        appBar: _appBar(),
-        body: SafeArea(
-          child: Column(
-            children: [
-              _tabBar(),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: PagedListView<int, UserModel>(
-                  shrinkWrap: true,
-                  pagingController: controller.pagingController,
-                  builderDelegate: PagedChildBuilderDelegate<UserModel>(
-                      itemBuilder: (context, item, index) =>
-                          PadelSearchResultCard(
-                            user: item,
-                          )),
+        backgroundColor: Colors.grey.shade100,
+        body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  pinned: true,
+                  backgroundColor: Colors.grey.shade100,
+                  floating: true,
+                  iconTheme: const IconThemeData(size: 0),
+                  leadingWidth: 0,
+                  leading: null,
+                  collapsedHeight: 60,
+                  expandedHeight: 100,
+                  forceElevated: innerBoxIsScrolled,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: _tabBar(),
+                    titlePadding: EdgeInsets.zero,
+                    expandedTitleScale: 1,
+                    background: _appBar(),
+                  ),
                 ),
-              )
-              // Obx(() => controller.filterOwners.value.when(emptyState: () {
-              //       return const SizedBox();
-              //     }, errorState: (failure) {
-              //       return Expanded(
-              //           child: Center(child: ShowError(failure: failure)));
-              //     }, loadedState: (value) {
-              //       return Expanded(
-              //         child: PagedListView<int, UserModel>(
-              //           shrinkWrap: true,
-              //           pagingController: controller.pagingController,
-              //           builderDelegate: PagedChildBuilderDelegate<UserModel>(
-              //               itemBuilder: (context, item, index) =>
-              //                   PadelSearchResultCard(
-              //                     user: value[index],
-              //                   )),
-              //         ),
-              //       );
-              //     }, loadingState: (_) {
-              //       return const CircularProgressIndicator();
-              //     })),
-            ],
+              ];
+            },
+            body: _body()));
+  }
+
+  Widget _body() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        // Obx(() => controller.filterOwners.value.when(
+        //     emptyState: () => const SizedBox(),
+        //     loadingState: (_) => const SizedBox(),
+        //     loadedState: (value) {
+        //       if ((value as List<UserModel>)
+        //           .where((element) => element.getPadels().isNotEmpty)
+        //           .isEmpty) {
+        //         return Padding(
+        //           padding: const EdgeInsets.only(top: 100.0),
+        //           child: ShowError(
+        //             failure: NoDataFailure(
+        //                 message: 'Sorry, No open Courts at this time yet.'),
+        //             errorShowType: ErrorShowType.vertical,
+        //           ),
+        //         );
+        //       }
+        //       return const SizedBox();
+        //     },
+        //     errorState: (_) => const SizedBox())),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              controller.pagingController.refresh();
+            },
+            child: PagedListView<int, UserModel>(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              pagingController: controller.pagingController,
+              builderDelegate: PagedChildBuilderDelegate<UserModel>(
+                  noItemsFoundIndicatorBuilder: (context) => Padding(
+                        padding: const EdgeInsets.only(top: 100.0),
+                        child: ShowError(
+                          failure: Failure.noDataFailure(
+                              message:
+                                  'Sorry, No open Courts at this time yet.'),
+                          errorShowType: ErrorShowType.vertical,
+                        ),
+                      ),
+                  firstPageErrorIndicatorBuilder: (_) => Padding(
+                        padding: const EdgeInsets.only(top: 100.0),
+                        child: ShowError(
+                            failure:
+                                controller.pagingController.error as Failure),
+                      ),
+                  firstPageProgressIndicatorBuilder: (_) => ListView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        children: const [
+                          PadelSearchResultCard(),
+                          PadelSearchResultCard(),
+                          PadelSearchResultCard(),
+                          PadelSearchResultCard(),
+                          PadelSearchResultCard(),
+                          PadelSearchResultCard(),
+                        ],
+                      ),
+                  itemBuilder: (context, item, index) {
+                    if ((item).getPadels().isEmpty) {
+                      return const SizedBox();
+                    }
+                    return PadelSearchResultCard(
+                      user: item,
+                    );
+                  }),
+            ),
           ),
-        ));
+        )
+      ],
+    );
   }
 
   Widget _tabBar() {
     var tt =
         times.map((e) => CircularTab(text: DateFormat.jm().format(e))).toList();
+    tt.removeAt(0);
     tt.insert(0, CircularTab(text: 'Anytime'));
     return Container(
-      color: Colors.white,
       height: 50,
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Center(
         child: CircularTabBar(
-          onItemClick: (int index) {
-            setState(() {
-              if (index == 0) {
-                controller.pickedTime.value = null;
-                return;
-              }
-              controller.pickeddate.value = (times[index]);
-              controller.pickedTime.value = (times[index]);
-            });
-          },
-          tabs: tt,
-          value: (controller.pickedTime.value == null)
-              ? 0
-              : times.indexOf(controller.pickedTime.value!),
-        ),
+            onItemClick: (int index) {
+              setState(() {
+                controller.pickedTimeIndex.value = index;
+                if (index == 0) {
+                  controller.pickedTime.value = null;
+                  return;
+                }
+                controller.pickeddate.value = (times[index]);
+                controller.pickedTime.value = (times[index]);
+              });
+            },
+            tabs: tt,
+            value: controller.pickedTimeIndex.value),
       ),
     );
   }
@@ -133,7 +190,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
       leadingWidth: 56,
       elevation: 0,
       leading: Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 20),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(width: 1, color: Colors.grey.shade600)),
@@ -148,8 +205,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
             ),
           )),
       actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        Container(
+          margin: const EdgeInsets.only(top: 14, bottom: 14, right: 20),
           child: ToggleForm(
               value: controller.indoor.value,
               inactiveText: "Out",

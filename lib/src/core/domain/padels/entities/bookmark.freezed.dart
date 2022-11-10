@@ -148,7 +148,7 @@ class __$$_BookmarkModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_BookmarkModel with DiagnosticableTreeMixin implements _BookmarkModel {
+class _$_BookmarkModel implements _BookmarkModel {
   _$_BookmarkModel(
       {this.id = -1,
       required this.userId,
@@ -172,20 +172,8 @@ class _$_BookmarkModel with DiagnosticableTreeMixin implements _BookmarkModel {
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'BookmarkModel(id: $id, userId: $userId, padelId: $padelId, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BookmarkModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('padelId', padelId))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

@@ -1,13 +1,19 @@
+import 'package:bandeja/src/core/domain/authentication/entities/user.dart';
+import 'package:bandeja/src/core/domain/booking/entities/padel.order.dart';
 import 'package:bandeja/src/core/error/failure.dart';
+import 'package:bandeja/src/core/presentation/widgets/show.error.dart';
 import 'package:bandeja/src/main/core/presentations/controllers/profile.controller.dart';
+import 'package:bandeja/src/main/presentation/booking/widgets/recent.bookings.dart';
+import 'package:bandeja/src/main/presentation/notification/pages/notification.page.dart';
+import 'package:bandeja/src/main/presentation/posts/pages/my.posts.page.dart';
+import 'package:bandeja/src/main/presentation/profile/pages/contact.us.page.dart';
 import 'package:bandeja/src/main/presentation/profile/widgets/user.avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 import '../../../../core/presentation/widgets/custom.shimmer.dart';
 import '../../../../core/presentation/widgets/image.form.dart';
 import '../../../../core/presentation/widgets/loading.bar.dart';
-import '../../../presentation/profile/widgets/mine.post.card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -20,13 +26,17 @@ class _ProfilePageState extends State<ProfilePage> {
   final ProfileController controller = Get.put(ProfileController());
 
   @override
-  void dispose() {
-    Get.delete<ProfileController>();
-    super.dispose();
+  void initState() {
+    controller.loadBookings();
+    controller.loadNotifications();
+    controller.loadBookings();
+    controller.loadNotificationCount();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(controller.notificationCount.value.toString());
     return Scaffold(
         body: SingleChildScrollView(
       child: Obx(() => Column(
@@ -34,14 +44,15 @@ class _ProfilePageState extends State<ProfilePage> {
               if (controller.loading.value) const LoadingBar(),
               _appBar(context),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               Center(
                 child: UserAvatar(
-                  userDto: controller.user.value,
+                  userDto: controller.userWrapper.value,
                   size: 100,
                   onUpload: (x) {
                     controller.avatar.value = x;
+                    controller.saveUser();
                   },
                   isLoading: (loading) {
                     controller.loading.value = loading;
@@ -50,26 +61,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: controller.user.value.when(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: controller.userWrapper.value.when(
                       emptyState: () => const SizedBox(),
                       loadingState: (_) => const CustomShimmer(
-                          show: true, child: Text("This is place holder")),
-                      loadedState: (value) => Text(value.phoneNumber,
-                          style: Theme.of(context).textTheme.bodyText2),
+                          show: true, child: Text("                ")),
+                      loadedState: (value) => Text(
+                          toBeginningOfSentenceCase(
+                                  (value as UserModel).fullName) ??
+                              '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(fontSize: 16)),
                       errorState: (_) => const SizedBox())),
               Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: controller.user.value.when(
+                  child: controller.userWrapper.value.when(
                       emptyState: () => const SizedBox(),
-                      loadingState: (_) => const CustomShimmer(
+                      loadingState: (_) => CustomShimmer(
                             show: true,
-                            child: Text("+9765432145789"),
+                            child: Text(
+                              '                   ',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
                           ),
-                      loadedState: (value) => Text(value.phoneNumber,
-                          style: Theme.of(context).textTheme.bodyText2),
+                      loadedState: (value) => Text(
+                          (value as UserModel).phoneNumber,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(fontSize: 14)),
                       errorState: (_) => const SizedBox())),
-              controller.user.value.when(
+              controller.userWrapper.value.when(
                   emptyState: () => const Center(),
                   loadingState: (_) => CustomShimmer(
                         show: true,
@@ -84,9 +108,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   loadedState: (value) => Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 60),
+                            padding: const EdgeInsets.only(top: 50),
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(() => const MyPostPage());
+                              },
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -114,9 +140,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 0),
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(() => const ContactUsPage());
+                              },
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -143,9 +171,28 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 60,
+                            height: 20,
                           ),
-                          _myPosts(context),
+                          Obx(() => controller.recentBookingWrapper.value.when(
+                              emptyState: () => const SizedBox(),
+                              loadingState: (_) => const RecentBooking(
+                                  padelOrders: [null, null, null]),
+                              loadedState: (value) {
+                                return ((value as List<PadelOrderModel?>)
+                                        .isNotEmpty)
+                                    ? RecentBooking(padelOrders: (value))
+                                    : ShowError(
+                                        failure: NoDataFailure(
+                                          message:
+                                              'Your recent booking will be shown here.',
+                                        ),
+                                        errorShowType: ErrorShowType.vertical,
+                                      );
+                              },
+                              errorState: (failure) => ShowError(
+                                    failure: failure,
+                                    errorShowType: ErrorShowType.vertical,
+                                  )))
                         ],
                       ),
                   errorState: (Failure f) => ImageForm(
@@ -172,11 +219,45 @@ class _ProfilePageState extends State<ProfilePage> {
           Align(
             alignment: const Alignment(0, 0),
             child: Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Image.asset(
-                "assets/icons/bell.png",
-                height: 30,
-                width: 24,
+              padding: const EdgeInsets.only(right: 10),
+              child: InkWell(
+                onTap: () async {
+                  await Get.to(() => const NotificationPage());
+                  controller.loadNotificationCount();
+                },
+                child: SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        "assets/icons/notification.png",
+                        height: 30,
+                        width: 24,
+                      ),
+                      Obx(() => (controller.notificationCount.value == 0)
+                          ? const SizedBox()
+                          : Align(
+                              alignment: const Alignment(2, 3),
+                              child: Card(
+                                shape: const CircleBorder(),
+                                color: Theme.of(context).colorScheme.secondary,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Center(
+                                    child: Text(
+                                      '${controller.notificationCount.value}',
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ))
+                    ],
+                  ),
+                ),
               ),
             ),
           )
@@ -185,51 +266,46 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  _myPosts(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "My Posts",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    Text("Add",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16)),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        // ListView(
-        //   shrinkWrap: true,
-        //   scrollDirection: Axis.horizontal,
-        //   children: [MyPostCard()],
-        // )
-        Row(
-          children: const [
-            SizedBox(
-              width: 10,
-            ),
-            MinePostCard(),
-          ],
-        )
-      ],
-    );
-  }
+  // _myPosts(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 24.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               "My Posts",
+  //               style: Theme.of(context).textTheme.titleSmall,
+  //             ),
+  //             TextButton(
+  //               onPressed: () {},
+  //               child: Row(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.add,
+  //                     color: Theme.of(context).colorScheme.secondary,
+  //                   ),
+  //                   Text("Add",
+  //                       style: TextStyle(
+  //                           color: Theme.of(context).colorScheme.secondary,
+  //                           fontWeight: FontWeight.bold,
+  //                           fontSize: 16)),
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //       Row(
+  //         children: const [
+  //           SizedBox(
+  //             width: 10,
+  //           ),
+  //           MinePostCard(),
+  //         ],
+  //       )
+  //     ],
+  //   );
+  // }
 }

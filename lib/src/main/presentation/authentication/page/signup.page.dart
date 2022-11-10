@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
 import 'package:bandeja/src/main/presentation/authentication/controllers/auth.state.dart';
 import 'package:bandeja/src/main/presentation/authentication/widgets/fill.user.form.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
@@ -12,8 +13,9 @@ import '../widgets/confirm.widget.dart';
 import '../widgets/signup.widget.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
-
+  const SignupPage({Key? key, required this.onAuthentication})
+      : super(key: key);
+  final Function onAuthentication;
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
@@ -39,118 +41,134 @@ class _SignupPageState extends State<SignupPage> {
           // appBar: _appBar(),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: SafeArea(
-              child: Obx(() => Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
+              child: Obx(() => Stack(
                     children: [
-                      Column(
-                        children: [
-                          if (controller.state.value == VerifiyingState() ||
-                              controller.state.value == ConfirmingState() ||
-                              controller.isLoading.value)
-                            const LoadingBar(),
-                          _appBar(),
-                          SizedBox(
-                            // height: Get.height * 5 / 12,
-                            child: ExpandablePageView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: controller.pageController,
-                              scrollDirection: Axis.horizontal,
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Column(
                               children: [
-                                SignupSlide(
-                                  hint: '0000000000',
-                                  onChanged: (String val) {
-                                    controller.phoneNumber.value = val;
-                                  },
-                                  value: controller.phoneNumber.value,
-                                  onCountryChange: (Country country) {
-                                    controller.country.value = country;
-                                  },
-                                  countries: controller.countries.value,
-                                  country: controller.country.value,
-                                  error: controller.isPhoneNumberValid.value
-                                      ? (controller.state.value.runtimeType ==
-                                              VerificationFailedState(
-                                                      failure:
-                                                          UnExpectedFailure())
-                                                  .runtimeType)
-                                          ? (controller.state.value
-                                                  as VerificationFailedState)
-                                              .failure
-                                              .message
-                                          : null
-                                      : "Phone Number is not valid.",
-                                  onFocustChange: (bool focus) {
-                                    setState(() {
-                                      controller.keyboard.value = focus;
-                                    });
-                                  },
+                                if (controller.state.value == VerifiyingState() ||
+                                    controller.state.value ==
+                                        ConfirmingState() ||
+                                    controller.isLoading.value)
+                                  const LoadingBar(),
+                                _appBar(),
+                                SizedBox(
+                                  // height: Get.height * 5 / 12,
+                                  child: ExpandablePageView(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    controller: controller.pageController,
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      SignupSlide(
+                                        hint: '0000000000',
+                                        onChanged: (String val) {
+                                          controller.phoneNumber.value = val;
+                                        },
+                                        value: controller.phoneNumber.value,
+                                        onCountryChange: (Country country) {
+                                          controller.country.value = country;
+                                        },
+                                        countries: controller.countries.value,
+                                        country: controller.country.value,
+                                        error: controller
+                                                .isPhoneNumberValid.value
+                                            ? (controller.state.value
+                                                        .runtimeType ==
+                                                    VerificationFailedState(
+                                                            failure:
+                                                                UnExpectedFailure())
+                                                        .runtimeType)
+                                                ? (controller.state.value
+                                                        as VerificationFailedState)
+                                                    .failure
+                                                    .message
+                                                : null
+                                            : "Phone Number is not valid.",
+                                        onFocustChange: (bool focus) {
+                                          setState(() {
+                                            controller.keyboard.value = focus;
+                                          });
+                                        },
+                                      ),
+                                      ConfirmSlide(
+                                        onFocustChange: (bool focus) {
+                                          // setState(() {
+                                          //   controller.keyboard.value = focus;
+                                          // });
+                                        },
+                                        onResendCode: () {
+                                          controller.resendCode();
+                                        },
+                                        error: controller
+                                                .isConfirmationCodeValid.value
+                                            ? (controller.state.value
+                                                        .runtimeType ==
+                                                    ConfirmationFailedState(
+                                                            failure:
+                                                                UnExpectedFailure())
+                                                        .runtimeType)
+                                                ? (controller.state.value
+                                                        as ConfirmationFailedState)
+                                                    .failure
+                                                    .message
+                                                : null
+                                            : 'Invalid Confirmation code.',
+                                        onCodeChange: (val) {
+                                          if (val.trim().length > 6) {
+                                            controller.code.value =
+                                                val.trim().substring(0, 6);
+                                          } else {
+                                            controller.code.value = val;
+                                          }
+                                        },
+                                        code: controller.code.value,
+                                      ),
+                                      FillUserForm(
+                                        userW: controller.userModel.value,
+                                        userDto: controller.userDto.value,
+                                        isLoading: (isLoading) => controller
+                                            .isLoading.value = isLoading,
+                                        onUpload: (path) =>
+                                            controller.userDto.value = UserDto(
+                                                fullName: controller
+                                                    .userDto.value.fullName,
+                                                role: controller
+                                                    .userDto.value.role,
+                                                avatar: controller
+                                                    .userDto.value.avatar,
+                                                localImage: path),
+                                        onNameChange: (name) =>
+                                            controller.userDto.value = UserDto(
+                                                fullName: name,
+                                                role: controller
+                                                    .userDto.value.role,
+                                                localImage: controller
+                                                    .userDto.value.localImage,
+                                                avatar: controller
+                                                    .userDto.value.avatar),
+                                        onFocus: (bool focus) {
+                                          setState(() {
+                                            controller.keyboard.value = focus;
+                                          });
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                ConfirmSlide(
-                                  onFocustChange: (bool focus) {
-                                    setState(() {
-                                      controller.keyboard.value = focus;
-                                    });
-                                  },
-                                  onResendCode: () {
-                                    controller.resendCode();
-                                  },
-                                  error: controller
-                                          .isConfirmationCodeValid.value
-                                      ? (controller.state.value.runtimeType ==
-                                              ConfirmationFailedState(
-                                                      failure:
-                                                          UnExpectedFailure())
-                                                  .runtimeType)
-                                          ? (controller.state.value
-                                                  as ConfirmationFailedState)
-                                              .failure
-                                              .message
-                                          : null
-                                      : 'Invalid Confirmation code.',
-                                  onCodeChange: (val) {
-                                    controller.code.value = val;
-                                  },
-                                  code: controller.code.value,
-                                ),
-                                FillUserForm(
-                                  userW: controller.userModel.value,
-                                  userDto: controller.userDto.value,
-                                  isLoading: (isLoading) =>
-                                      controller.isLoading.value = isLoading,
-                                  onUpload: (path) => controller.userDto.value =
-                                      UserDto(
-                                          fullName:
-                                              controller.userDto.value.fullName,
-                                          role: controller.userDto.value.role,
-                                          avatar:
-                                              controller.userDto.value.avatar,
-                                          localImage: path),
-                                  onNameChange: (name) =>
-                                      controller.userDto.value = UserDto(
-                                          fullName: name,
-                                          role: controller.userDto.value.role,
-                                          localImage: controller
-                                              .userDto.value.localImage,
-                                          avatar:
-                                              controller.userDto.value.avatar),
-                                  onFocus: (bool focus) {
-                                    setState(() {
-                                      controller.keyboard.value = true;
-                                    });
-                                  },
-                                )
                               ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: controller.keyboard.value ? 0 : 40,
-                            horizontal: controller.keyboard.value ? 0 : 40),
-                        child: InkWell(
-                          onTap: () {
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: BigTextButton(
+                          onClick: () {
                             if (controller.pageController.page == 0) {
                               String phoneNumber =
                                   "${controller.country.value.code}${controller.phoneNumber.value}";
@@ -163,29 +181,26 @@ class _SignupPageState extends State<SignupPage> {
                               controller.isConfirmationCodeValid.value =
                                   (controller.code.value.length <= 6);
                               controller.confirm(
-                                  code: controller.code.value.substring(0, 6));
+                                  code: controller.code.value.substring(0, 6),
+                                  onAuthentication: widget.onAuthentication);
                             } else {
-                              controller.saveUser();
+                              controller.saveUser(widget.onAuthentication);
                             }
                           },
-                          child: Container(
-                            width: Get.width,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.all(Radius.circular(
-                                    controller.keyboard.value ? 0 : 20))),
-                            child: Text(
-                              'Next',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(color: Colors.white),
-                            ),
+                          textWidget: Text(
+                            'Next',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                           ),
+                          horizontalMargin: EdgeInsets.symmetric(
+                              vertical: controller.keyboard.value ? 0 : 40,
+                              horizontal: controller.keyboard.value ? 0 : 40),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          cornerRadius: controller.keyboard.value ? 0 : 20,
                         ),
                       ),
                     ],

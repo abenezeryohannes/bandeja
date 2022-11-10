@@ -27,6 +27,8 @@ mixin _$PadelOrderModel {
   int? get promoCodeId => throw _privateConstructorUsedError;
   int? get paymentId => throw _privateConstructorUsedError;
   String? get barCode => throw _privateConstructorUsedError;
+  DateTime? get paymentDate => throw _privateConstructorUsedError;
+  double get amount => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -56,6 +58,8 @@ abstract class $PadelOrderModelCopyWith<$Res> {
       int? promoCodeId,
       int? paymentId,
       String? barCode,
+      DateTime? paymentDate,
+      double amount,
       String status,
       bool enabled,
       DateTime? createdAt,
@@ -91,6 +95,8 @@ class _$PadelOrderModelCopyWithImpl<$Res>
     Object? promoCodeId = freezed,
     Object? paymentId = freezed,
     Object? barCode = freezed,
+    Object? paymentDate = freezed,
+    Object? amount = freezed,
     Object? status = freezed,
     Object? enabled = freezed,
     Object? createdAt = freezed,
@@ -130,6 +136,14 @@ class _$PadelOrderModelCopyWithImpl<$Res>
           ? _value.barCode
           : barCode // ignore: cast_nullable_to_non_nullable
               as String?,
+      paymentDate: paymentDate == freezed
+          ? _value.paymentDate
+          : paymentDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      amount: amount == freezed
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as double,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -240,6 +254,8 @@ abstract class _$$_PadelOrderModelCopyWith<$Res>
       int? promoCodeId,
       int? paymentId,
       String? barCode,
+      DateTime? paymentDate,
+      double amount,
       String status,
       bool enabled,
       DateTime? createdAt,
@@ -282,6 +298,8 @@ class __$$_PadelOrderModelCopyWithImpl<$Res>
     Object? promoCodeId = freezed,
     Object? paymentId = freezed,
     Object? barCode = freezed,
+    Object? paymentDate = freezed,
+    Object? amount = freezed,
     Object? status = freezed,
     Object? enabled = freezed,
     Object? createdAt = freezed,
@@ -321,6 +339,14 @@ class __$$_PadelOrderModelCopyWithImpl<$Res>
           ? _value.barCode
           : barCode // ignore: cast_nullable_to_non_nullable
               as String?,
+      paymentDate: paymentDate == freezed
+          ? _value.paymentDate
+          : paymentDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      amount: amount == freezed
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as double,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -363,9 +389,7 @@ class __$$_PadelOrderModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PadelOrderModel
-    with DiagnosticableTreeMixin
-    implements _PadelOrderModel {
+class _$_PadelOrderModel implements _PadelOrderModel {
   _$_PadelOrderModel(
       {this.id = -1,
       required this.userId,
@@ -374,6 +398,8 @@ class _$_PadelOrderModel
       this.promoCodeId,
       this.paymentId,
       this.barCode,
+      this.paymentDate,
+      this.amount = 0,
       this.status = 'pending',
       this.enabled = true,
       this.createdAt,
@@ -403,6 +429,11 @@ class _$_PadelOrderModel
   @override
   final String? barCode;
   @override
+  final DateTime? paymentDate;
+  @override
+  @JsonKey()
+  final double amount;
+  @override
   @JsonKey()
   final String status;
   @override
@@ -424,31 +455,8 @@ class _$_PadelOrderModel
   final PadelScheduleModel? PadelSchedule;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PadelOrderModel(id: $id, userId: $userId, padelId: $padelId, padelScheduleId: $padelScheduleId, promoCodeId: $promoCodeId, paymentId: $paymentId, barCode: $barCode, status: $status, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt, User: $User, Payment: $Payment, PromoCode: $PromoCode, Padel: $Padel, PadelSchedule: $PadelSchedule)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PadelOrderModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('padelId', padelId))
-      ..add(DiagnosticsProperty('padelScheduleId', padelScheduleId))
-      ..add(DiagnosticsProperty('promoCodeId', promoCodeId))
-      ..add(DiagnosticsProperty('paymentId', paymentId))
-      ..add(DiagnosticsProperty('barCode', barCode))
-      ..add(DiagnosticsProperty('status', status))
-      ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt))
-      ..add(DiagnosticsProperty('User', User))
-      ..add(DiagnosticsProperty('Payment', Payment))
-      ..add(DiagnosticsProperty('PromoCode', PromoCode))
-      ..add(DiagnosticsProperty('Padel', Padel))
-      ..add(DiagnosticsProperty('PadelSchedule', PadelSchedule));
+  String toString() {
+    return 'PadelOrderModel(id: $id, userId: $userId, padelId: $padelId, padelScheduleId: $padelScheduleId, promoCodeId: $promoCodeId, paymentId: $paymentId, barCode: $barCode, paymentDate: $paymentDate, amount: $amount, status: $status, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt, User: $User, Payment: $Payment, PromoCode: $PromoCode, Padel: $Padel, PadelSchedule: $PadelSchedule)';
   }
 
   @override
@@ -465,6 +473,9 @@ class _$_PadelOrderModel
                 .equals(other.promoCodeId, promoCodeId) &&
             const DeepCollectionEquality().equals(other.paymentId, paymentId) &&
             const DeepCollectionEquality().equals(other.barCode, barCode) &&
+            const DeepCollectionEquality()
+                .equals(other.paymentDate, paymentDate) &&
+            const DeepCollectionEquality().equals(other.amount, amount) &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality().equals(other.enabled, enabled) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
@@ -488,6 +499,8 @@ class _$_PadelOrderModel
       const DeepCollectionEquality().hash(promoCodeId),
       const DeepCollectionEquality().hash(paymentId),
       const DeepCollectionEquality().hash(barCode),
+      const DeepCollectionEquality().hash(paymentDate),
+      const DeepCollectionEquality().hash(amount),
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(enabled),
       const DeepCollectionEquality().hash(createdAt),
@@ -520,6 +533,8 @@ abstract class _PadelOrderModel implements PadelOrderModel {
       final int? promoCodeId,
       final int? paymentId,
       final String? barCode,
+      final DateTime? paymentDate,
+      final double amount,
       final String status,
       final bool enabled,
       final DateTime? createdAt,
@@ -547,6 +562,10 @@ abstract class _PadelOrderModel implements PadelOrderModel {
   int? get paymentId;
   @override
   String? get barCode;
+  @override
+  DateTime? get paymentDate;
+  @override
+  double get amount;
   @override
   String get status;
   @override

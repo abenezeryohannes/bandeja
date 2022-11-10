@@ -22,28 +22,28 @@ class PostLocalDataSource {
     if (page != null && page > 1) return [];
     final data = cache.getString(wantsKey);
     if (data == null) throw CacheFailure();
-    return loadItemsFromJson(await fixture("posts.json"));
+    return loadItemsFromJson(data);
   }
 
   Future<List<PostModel>>? loadPosts(int? page) async {
     if (page != null && page > 1) return [];
     final data = cache.getString(postsKey);
     if (data == null) throw CacheFailure();
-    return loadItemsFromJson(await fixture("posts.json"));
+    return loadItemsFromJson(data);
   }
 
   Future<List<PostModel>>? loadOffers(int? page) async {
     if (page != null && page > 1) return [];
     final data = cache.getString(offersKey);
     if (data == null) throw CacheFailure();
-    return loadItemsFromJson(await fixture("posts.json"));
+    return loadItemsFromJson(data);
   }
 
   Future<List<PostModel>>? loadFeaturedPosts(int? page) async {
     if (page != null && page > 1) return [];
     final data = cache.getString(featuredPostsKey);
     if (data == null) throw CacheFailure();
-    return loadItemsFromJson(await fixture("posts.json"));
+    return loadItemsFromJson(data);
   }
 
   ///

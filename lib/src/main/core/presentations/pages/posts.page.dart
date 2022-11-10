@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../core/domain/posts/entities/post.dart';
 import '../../../../core/domain/posts/entities/post.group.dart';
+import '../../../../core/error/failure.dart';
 import '../../../../core/presentation/widgets/show.error.dart';
 import '../../../../core/presentation/widgets/tab.bar.dart';
 import '../../../presentation/posts/pages/my.posts.page.dart';
@@ -29,11 +30,11 @@ class _PostsPageState extends State<PostsPage> {
               return <Widget>[
                 SliverAppBar(
                   pinned: true,
-                  backgroundColor: Colors.grey.shade100,
                   floating: true,
                   iconTheme: const IconThemeData(size: 0),
                   leadingWidth: 0,
                   leading: null,
+                  backgroundColor: Colors.transparent,
                   collapsedHeight: 60,
                   expandedHeight: 100,
                   forceElevated: innerBoxIsScrolled,
@@ -52,11 +53,11 @@ class _PostsPageState extends State<PostsPage> {
   AppBar _appBar() {
     return AppBar(
       title: Text(
-        'What you looking for',
+        'What are you looking for?',
         style: Theme.of(context).textTheme.bodyText1,
       ),
       centerTitle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade50,
     );
   }
 
@@ -71,7 +72,7 @@ class _PostsPageState extends State<PostsPage> {
           );
         }, loadedState: (value) {
           return Container(
-              color: Colors.white,
+              color: Colors.grey.shade50,
               height: 60,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
@@ -79,7 +80,7 @@ class _PostsPageState extends State<PostsPage> {
               ));
         }, loadingState: (_) {
           return Container(
-              color: Colors.white,
+              color: Colors.grey.shade50,
               height: 60,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
@@ -139,33 +140,52 @@ class _PostsPageState extends State<PostsPage> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: PagedGridView<int, PostModel>(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 100 / 120,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 0,
-                crossAxisCount: 2,
-              ),
-              pagingController: c.adsPagingController,
-              builderDelegate: PagedChildBuilderDelegate<PostModel>(
-                  firstPageProgressIndicatorBuilder: (_) => GridView.builder(
-                        itemCount: 20,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return const PostCard();
-                        },
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 100 / 120,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 0,
-                          crossAxisCount: 2,
+            child: RefreshIndicator(
+              onRefresh: () async => c.adsPagingController.refresh(),
+              child: PagedGridView<int, PostModel>(
+                padding: const EdgeInsets.only(bottom: 100),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 100 / 120,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 0,
+                  crossAxisCount: 2,
+                ),
+                pagingController: c.adsPagingController,
+                builderDelegate: PagedChildBuilderDelegate<PostModel>(
+                    noItemsFoundIndicatorBuilder: (context) => Padding(
+                          padding: const EdgeInsets.only(top: 100.0),
+                          child: ShowError(
+                            failure: Failure.noDataFailure(
+                                message: 'No Ads here yet!'),
+                            errorShowType: ErrorShowType.vertical,
+                          ),
                         ),
-                      ),
-                  itemBuilder: (context, post, index) => PostCard(
-                        post: post,
-                      )),
+                    firstPageErrorIndicatorBuilder: (_) => Padding(
+                          padding: const EdgeInsets.only(top: 100.0),
+                          child: ShowError(
+                            failure: c.adsPagingController.error as Failure,
+                            errorShowType: ErrorShowType.vertical,
+                          ),
+                        ),
+                    firstPageProgressIndicatorBuilder: (_) => GridView.builder(
+                          itemCount: 20,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return const PostCard();
+                          },
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 100 / 120,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 0,
+                            crossAxisCount: 2,
+                          ),
+                        ),
+                    itemBuilder: (context, post, index) => PostCard(
+                          post: post,
+                        )),
+              ),
             ),
           ),
         ),

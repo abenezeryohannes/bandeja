@@ -10,22 +10,22 @@ _$_Padel _$$_PadelFromJson(Map<String, dynamic> json) => _$_Padel(
       id: json['id'] as int? ?? -1,
       userId: json['userId'] as int,
       durationId: json['durationId'] as int,
-      padelGroupId: json['padelGroupId'] as int,
+      padelGroupId: json['padelGroupId'] as int?,
       name: json['name'] as String? ?? '',
       banner: json['banner'] as String? ?? 'placeholder.jpg',
       avatar: json['avatar'] as String? ?? 'placeholder.jpg',
       locationId: json['locationId'] as int?,
       addressId: json['addressId'] as int?,
+      approved: json['approved'] as bool? ?? false,
       startTime: DateTime.parse(json['startTime'] as String),
       endTime: DateTime.parse(json['endTime'] as String),
-      price: json['price'] as String? ?? '0.0',
+      price: (json['price'] as num?)?.toDouble() ?? 0,
       indoor: json['indoor'] as bool? ?? false,
       onlyLadies: json['onlyLadies'] as bool? ?? false,
       enabled: json['enabled'] as bool? ?? true,
-      PadelGroup: json['PadelGroup'] == null
-          ? null
-          : PadelGroupModel.fromJson(
-              json['PadelGroup'] as Map<String, dynamic>),
+      PadelGroups: (json['PadelGroups'] as List<dynamic>?)
+          ?.map((e) => PadelGroupModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       Features: (json['Features'] as List<dynamic>?)
           ?.map((e) => FeatureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -65,13 +65,14 @@ Map<String, dynamic> _$$_PadelToJson(_$_Padel instance) => <String, dynamic>{
       'avatar': instance.avatar,
       'locationId': instance.locationId,
       'addressId': instance.addressId,
+      'approved': instance.approved,
       'startTime': instance.startTime.toIso8601String(),
       'endTime': instance.endTime.toIso8601String(),
       'price': instance.price,
       'indoor': instance.indoor,
       'onlyLadies': instance.onlyLadies,
       'enabled': instance.enabled,
-      'PadelGroup': instance.PadelGroup,
+      'PadelGroups': instance.PadelGroups,
       'Features': instance.Features,
       'Location': instance.Location,
       'Duration': instance.Duration,

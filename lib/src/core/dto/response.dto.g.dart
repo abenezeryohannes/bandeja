@@ -9,7 +9,7 @@ part of 'response.dto.dart';
 _$_ResponseDto _$$_ResponseDtoFromJson(Map<String, dynamic> json) =>
     _$_ResponseDto(
       statusCode: json['statusCode'] as int? ?? 200,
-      success: json['success'] as bool? ?? true,
+      success: json['success'] as bool? ?? false,
       data: json['data'] ?? null,
       message: json['message'] as String?,
       count: json['count'] as int?,

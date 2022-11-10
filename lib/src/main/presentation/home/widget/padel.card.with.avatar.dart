@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../../main/injection/injector.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/network/api.dart';
 import '../../../../core/presentation/widgets/cached.image.provider.dart';
 import '../../../../core/presentation/widgets/custom.shimmer.dart';
+import '../../../domain/padels/repositories/i.padel.repository.dart';
 import 'padel.avatar.dart';
 
 class PadelCardWithAvatar extends StatefulWidget {
@@ -49,8 +52,12 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
   late Offset offset;
   late double clampedDifference;
 
+  bool bookmarked = false;
+  final padelRepository = getIt<IPadelRepository>();
+
   @override
   void initState() {
+    bookmarked = !(widget.item == null || widget.item!.isBookmarked());
     super.initState();
   }
 
@@ -79,6 +86,31 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
                           ? '/img/placeholder.jpg'
                           : widget.item!.banner)),
                 ),
+                // CustomShimmer(
+                //   show: widget.item == null,
+                //   child: IconButton(
+                //       onPressed: () async {
+                //         if (widget.item == null) return;
+                //         final result = await padelRepository.setBookmark(
+                //             padelId: widget.item!.id);
+                //         result!.fold((l) {
+                //           Get.snackbar('Error', l.message ?? '',
+                //               backgroundColor: Colors.red,
+                //               colorText: Colors.white);
+                //         }, (r) {
+                //           setState(() {
+                //             if (r) {
+                //               bookmarked = !bookmarked;
+                //             }
+                //           });
+                //         });
+                //       },
+                //       icon: Icon(
+                //         bookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                //         size: 32,
+                //         color: Colors.white,
+                //       )),
+                // ),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
@@ -94,15 +126,17 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
                       )),
                 ),
                 Align(
-                  alignment: const Alignment(0.9, -0.9),
+                  alignment: const Alignment(1, -1),
                   child: CustomShimmer(
                     show: widget.item == null,
                     child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
+                          vertical: 7, horizontal: 16),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.85)),
+                          color: Colors.white.withOpacity(0.80)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(
                           widget.item == null
@@ -110,14 +144,14 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
                               : widget.item!.Address == null
                                   ? ''
                                   : widget.item!.Address!.name,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.caption,
                         ),
                         const SizedBox(
-                          width: 10,
+                          width: 6,
                         ),
                         const Icon(
                           Icons.location_on,
-                          size: 20,
+                          size: 16,
                         )
                       ]),
                     ),

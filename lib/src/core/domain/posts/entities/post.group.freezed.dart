@@ -174,9 +174,7 @@ class __$$_PostGroupModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PostGroupModel
-    with DiagnosticableTreeMixin
-    implements _PostGroupModel {
+class _$_PostGroupModel implements _PostGroupModel {
   _$_PostGroupModel(
       {this.id = -1,
       this.name = '',
@@ -208,22 +206,8 @@ class _$_PostGroupModel
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'PostGroupModel(id: $id, name: $name, icon: $icon, color: $color, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PostGroupModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('icon', icon))
-      ..add(DiagnosticsProperty('color', color))
-      ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

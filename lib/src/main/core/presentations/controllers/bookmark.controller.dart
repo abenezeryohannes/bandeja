@@ -36,6 +36,7 @@ class BookmarkController extends GetxController {
     final result = await repository.getBookmarks(page: page, limit: pageSize);
     if (result == null) {
       bookmarks.value = WrapperDto.errorState(failure: UnExpectedFailure());
+      pagingController.error = UnExpectedFailure();
     } else {
       result.fold((l) {
         bookmarks.value = WrapperDto.errorState(failure: l);

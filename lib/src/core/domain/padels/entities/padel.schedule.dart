@@ -9,10 +9,11 @@ class PadelScheduleModel with _$PadelScheduleModel {
     @Default(-1) id,
     required int padelId,
     @Default('') String reason,
-    @Default('open') status,
-    @Default(true) bool booked,
+    @Default('free') status,
+    @Default(false) bool booked,
     required DateTime startTime,
     required DateTime endTime,
+    double? price,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) = _PadelScheduleModel;

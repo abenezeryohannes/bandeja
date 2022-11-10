@@ -15,6 +15,10 @@ _$_PadelOrderModel _$$_PadelOrderModelFromJson(Map<String, dynamic> json) =>
       promoCodeId: json['promoCodeId'] as int?,
       paymentId: json['paymentId'] as int?,
       barCode: json['barCode'] as String?,
+      paymentDate: json['paymentDate'] == null
+          ? null
+          : DateTime.parse(json['paymentDate'] as String),
+      amount: (json['amount'] as num?)?.toDouble() ?? 0,
       status: json['status'] as String? ?? 'pending',
       enabled: json['enabled'] as bool? ?? true,
       createdAt: json['createdAt'] == null
@@ -50,6 +54,8 @@ Map<String, dynamic> _$$_PadelOrderModelToJson(_$_PadelOrderModel instance) =>
       'promoCodeId': instance.promoCodeId,
       'paymentId': instance.paymentId,
       'barCode': instance.barCode,
+      'paymentDate': instance.paymentDate?.toIso8601String(),
+      'amount': instance.amount,
       'status': instance.status,
       'enabled': instance.enabled,
       'createdAt': instance.createdAt?.toIso8601String(),

@@ -6,16 +6,19 @@ class BigTextButton extends StatefulWidget {
     this.cornerRadius = 10.0,
     this.text,
     this.textWidget,
-    this.textColor = const Color(0xFF030303),
-    this.backgroudColor = const Color(0XFFFFD337),
+    this.textColor = Colors.white,
+    this.backgroudColor = Colors.blueAccent,
     required this.onClick,
     this.elevation = 1,
     this.fontSize = 14,
     this.enabled = true,
     this.isExpanded = true,
-    this.horizontalMargin = 10,
+    this.horizontalMargin = EdgeInsets.zero,
     this.fontWight = FontWeight.w400,
-    required this.padding,
+    this.padding = EdgeInsets.zero,
+    this.isLoading = false,
+    this.borderWidth = 0,
+    this.borderColor = Colors.blue,
   }) : super(key: key);
 
   final double cornerRadius;
@@ -24,13 +27,16 @@ class BigTextButton extends StatefulWidget {
   final Widget? textWidget;
   final Color textColor;
   final bool isExpanded;
+  final bool isLoading;
   final Color backgroudColor;
   final Function onClick;
   final bool enabled;
   final EdgeInsets padding;
   final double fontSize;
   final FontWeight fontWight;
-  final double horizontalMargin;
+  final double borderWidth;
+  final Color borderColor;
+  final EdgeInsets horizontalMargin;
 
   @override
   State<BigTextButton> createState() => _BigTextButtonState();
@@ -39,8 +45,8 @@ class BigTextButton extends StatefulWidget {
 class _BigTextButtonState extends State<BigTextButton> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
+    return Container(
+      margin: widget.horizontalMargin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: (widget.isExpanded) ? MainAxisSize.max : MainAxisSize.min,
@@ -64,10 +70,14 @@ class _BigTextButtonState extends State<BigTextButton> {
 
   Widget _button() {
     return ElevatedButton(
-        onPressed: () => !widget.enabled ? null : {widget.onClick()},
+        onPressed: () =>
+            !widget.enabled || widget.isLoading ? null : {widget.onClick()},
         style: ButtonStyle(
             elevation: MaterialStateProperty.all(widget.elevation),
-            padding: MaterialStateProperty.all(widget.padding),
+            side: MaterialStateProperty.all(BorderSide(
+                color: widget.borderColor,
+                width: widget.borderWidth,
+                style: BorderStyle.solid)),
             backgroundColor: MaterialStateProperty.all(widget.enabled
                 ? widget.backgroudColor
                 : widget.backgroudColor.withOpacity(0.6)),
@@ -75,16 +85,26 @@ class _BigTextButtonState extends State<BigTextButton> {
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(widget.cornerRadius),
             ))),
-        child: (widget.text != null)
-            ? Text(
-                widget.text!,
-                style: TextStyle(
-                    color: widget.textColor,
-                    fontSize: widget.fontSize,
-                    fontWeight: widget.fontWight),
-              )
-            : (widget.textWidget == null)
-                ? const SizedBox()
-                : widget.textWidget!);
+        child: Padding(
+            padding: widget.padding,
+            child: (widget.isLoading)
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                : (widget.text != null)
+                    ? Text(
+                        widget.text!,
+                        style: TextStyle(
+                            color: widget.textColor,
+                            fontSize: widget.fontSize,
+                            fontWeight: widget.fontWight),
+                      )
+                    : (widget.textWidget == null)
+                        ? const SizedBox()
+                        : widget.textWidget!));
   }
 }

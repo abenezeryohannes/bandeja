@@ -17,6 +17,7 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         onTap: () {
@@ -32,12 +33,15 @@ class _PostCardState extends State<PostCard> {
               const SizedBox(
                 height: 3,
               ),
-              PostImage(
-                post: widget.post,
-                img: widget.post == null
-                    ? "img/placeholder.jpg"
-                    : widget.post!.coverImage(),
-                height: 120,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: PostImage(
+                  post: widget.post,
+                  img: widget.post == null
+                      ? "img/placeholder.jpg"
+                      : widget.post!.coverImage(),
+                  height: 120,
+                ),
               ),
               const SizedBox(
                 height: 10,

@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/utils/util.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/posts/entities/post.dart';
@@ -101,7 +102,11 @@ class _PostBottomSheetState extends State<PostBottomSheet> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (widget.post.phoneNumber != null) {
+                                      Util.openPhone(widget.post.phoneNumber!);
+                                    }
+                                  },
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                         vertical: 5.0, horizontal: 13),
@@ -122,7 +127,11 @@ class _PostBottomSheetState extends State<PostBottomSheet> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (widget.post.phoneNumber != null) {
+                                      Util.openwhatsapp(widget.post.whatsApp!);
+                                    }
+                                  },
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(
                                         vertical: 5.0, horizontal: 13),

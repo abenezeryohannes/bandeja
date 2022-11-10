@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:bandeja/src/core/domain/padels/entities/bookmark.dart';
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../core/domain/authentication/entities/user.dart';
 import '../../../../main/domain/core/entities/address.dart';
@@ -19,19 +21,20 @@ class PadelModel with _$PadelModel {
     @Default(-1) int id,
     required int userId,
     required int durationId,
-    required int padelGroupId,
+    int? padelGroupId,
     @Default('') String name,
     @Default('placeholder.jpg') String banner,
     @Default('placeholder.jpg') String avatar,
     int? locationId,
     int? addressId,
+    @Default(false) bool approved,
     required DateTime startTime,
     required DateTime endTime,
-    @Default('0.0') String price,
+    @Default(0) double price,
     @Default(false) bool indoor,
     @Default(false) bool onlyLadies,
     @Default(true) bool enabled,
-    PadelGroupModel? PadelGroup,
+    List<PadelGroupModel>? PadelGroups,
     List<FeatureModel>? Features,
     LocationModel? Location,
     DurationModel? Duration,
@@ -49,6 +52,24 @@ class PadelModel with _$PadelModel {
 extension PadelModelX on PadelModel {
   AddressModel getAddress() {
     return Address ?? AddressModel(name: "Unknown");
+  }
+
+  String getDistance() {
+    if (Location == null ||
+        GetStorage().read('latitude') == null ||
+        GetStorage().read('longitude') == null) {
+      return 'Unknown';
+    }
+    double lat1 = Location?.latitude ?? 0;
+    double lon1 = Location?.longitude ?? 0;
+    double lat2 = GetStorage().read('latitude');
+    double lon2 = GetStorage().read('longitude');
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return '${12742 * asin(sqrt(a))} Km';
   }
 
   bool isBookmarked() {

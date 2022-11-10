@@ -16,6 +16,7 @@
 		5ED117686CD8C5698B6B478A /* ownerDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = AC224D78BA8E24F54686386F /* ownerDebug.xcconfig */; };
 		658ED6F65F22C241E128BA55 /* ownerLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BEC0DAE082BFF44B0DC9 /* ownerLaunchScreen.storyboard */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		8081CD7553009BD1C682E40E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE481D86724B0B4B90B93C47 /* GoogleService-Info.plist */; };
 		93EF06CB64B6D2A489E6ABF3 /* adminDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DBAABEB5F5A847489095E57B /* adminDebug.xcconfig */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -61,6 +62,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC224D78BA8E24F54686386F /* ownerDebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = ownerDebug.xcconfig; path = Flutter/ownerDebug.xcconfig; sourceTree = "<group>"; };
 		B37AC73AB8AF47788B416DC4 /* ownerRelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = ownerRelease.xcconfig; path = Flutter/ownerRelease.xcconfig; sourceTree = "<group>"; };
+		BE481D86724B0B4B90B93C47 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D048B7A30BBF24840CAF4786 /* adminRelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = adminRelease.xcconfig; path = Flutter/adminRelease.xcconfig; sourceTree = "<group>"; };
 		D47FB759B7F105A36BEDDDB2 /* adminProfile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = adminProfile.xcconfig; path = Flutter/adminProfile.xcconfig; sourceTree = "<group>"; };
 		DBAABEB5F5A847489095E57B /* adminDebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = adminDebug.xcconfig; path = Flutter/adminDebug.xcconfig; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				1C0F0C1154FD7BCB25F8D3E3 /* mainLaunchScreen.storyboard */,
 				14558F25AEEC84C157AB0FD6 /* adminLaunchScreen.storyboard */,
 				16B5BEC0DAE082BFF44B0DC9 /* ownerLaunchScreen.storyboard */,
+				BE481D86724B0B4B90B93C47 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,6 +144,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
+				B3F246B69690E0B04442295D /* Firebase Setup */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -211,6 +215,7 @@
 				A1680F07B62E8C5EAA4ECF7C /* mainLaunchScreen.storyboard in Resources */,
 				DDCF78CDD81C091266473EBD /* adminLaunchScreen.storyboard in Resources */,
 				658ED6F65F22C241E128BA55 /* ownerLaunchScreen.storyboard in Resources */,
+				8081CD7553009BD1C682E40E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +249,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		B3F246B69690E0B04442295D /* Firebase Setup */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Firebase Setup";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" == \"Debug-main\" ] || [ \"$CONFIGURATION\" == \"Release-main\" ]; then\n  cp Runner/main/GoogleService-Info.plist Runner/GoogleService-Info.plist\nelif [ \"$CONFIGURATION\" == \"Debug-admin\" ] || [ \"$CONFIGURATION\" == \"Release-admin\" ]; then\n  cp Runner/admin/GoogleService-Info.plist Runner/GoogleService-Info.plist\nelif [ \"$CONFIGURATION\" == \"Debug-owner\" ] || [ \"$CONFIGURATION\" == \"Release-owner\" ]; then\n  cp Runner/owner/GoogleService-Info.plist Runner/GoogleService-Info.plist\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -344,7 +367,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_owner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.owner;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -488,7 +511,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_admin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.admin;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -554,7 +577,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_admin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.admin;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -624,7 +647,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_admin;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.admin;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -1053,7 +1076,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_owner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.owner;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1123,7 +1146,7 @@
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja_owner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.konrad.bandeja.owner;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

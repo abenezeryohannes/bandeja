@@ -174,9 +174,7 @@ class __$$_NotificationModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_NotificationModel
-    with DiagnosticableTreeMixin
-    implements _NotificationModel {
+class _$_NotificationModel implements _NotificationModel {
   _$_NotificationModel(
       {this.id = -1,
       required this.userId,
@@ -209,22 +207,8 @@ class _$_NotificationModel
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'NotificationModel(id: $id, userId: $userId, title: $title, desc: $desc, seen: $seen, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'NotificationModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('title', title))
-      ..add(DiagnosticsProperty('desc', desc))
-      ..add(DiagnosticsProperty('seen', seen))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

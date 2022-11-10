@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class WhenSearchCard extends StatefulWidget {
@@ -31,9 +30,9 @@ class _WhenSearchCardState extends State<WhenSearchCard> {
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 300),
       child: Container(
-          margin: const EdgeInsets.only(left: 10, top: 16, right: 10),
+          margin: const EdgeInsets.only(left: 20, top: 16, right: 20),
           padding:
-              const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
+              const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 0),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             boxShadow: [
@@ -86,23 +85,19 @@ class _WhenSearchCardState extends State<WhenSearchCard> {
               ),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: widget.active ? 360 : 0,
+                  height: widget.active ? 289 : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     opacity: widget.active ? 1 : 0,
-                    child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16,
-                        ),
-                        child: DayPicker.single(
-                            selectedDate: widget.value == null
-                                ? DateTime.now()
-                                : widget.value!,
-                            onChanged: (d) {
-                              widget.onChange(d);
-                            },
-                            firstDate: widget.startDate,
-                            lastDate: widget.endDate)),
+                    child: DayPicker.single(
+                        selectedDate: widget.value == null
+                            ? DateTime.now()
+                            : widget.value!,
+                        onChanged: (d) {
+                          widget.onChange(d);
+                        },
+                        firstDate: widget.startDate,
+                        lastDate: widget.endDate),
                   )),
             ],
           )),

@@ -20,6 +20,8 @@ class PadelOrderModel with _$PadelOrderModel {
     int? promoCodeId,
     int? paymentId,
     String? barCode,
+    DateTime? paymentDate,
+    @Default(0) double amount,
     @Default('pending') String status,
     @Default(true) bool enabled,
     DateTime? createdAt,
@@ -36,8 +38,26 @@ class PadelOrderModel with _$PadelOrderModel {
 }
 
 extension PadelOrderModelX on PadelOrderModel {
+  UserModel getUser() {
+    return this.User ?? UserModel(fullName: '    ');
+  }
+
+  PaymentModel getPayment() {
+    return Payment ?? PaymentModel(userId: getUser().id);
+  }
+
+  PadelModel getPadel() {
+    return Padel ??
+        PadelModel(
+            userId: -1,
+            durationId: -1,
+            padelGroupId: -1,
+            startTime: DateTime.now(),
+            endTime: DateTime.now());
+  }
+
   PadelScheduleModel getSchedule() {
-    return this.PadelSchedule ??
+    return PadelSchedule ??
         PadelScheduleModel(
             endTime: DateTime.now(), padelId: 1, startTime: DateTime.now());
   }

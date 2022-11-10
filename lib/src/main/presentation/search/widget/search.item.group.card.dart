@@ -35,7 +35,7 @@ class _SearchItemGroupCardState extends State<SearchItemGroupCard> {
             },
             child: CustomShimmer(
               show: widget.icon == null,
-              child: Container(
+              child: AnimatedContainer(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
@@ -46,13 +46,27 @@ class _SearchItemGroupCardState extends State<SearchItemGroupCard> {
                           : widget.active
                               ? Theme.of(context).colorScheme.secondary
                               : Theme.of(context).cardColor),
-                  child: CachedImage(
-                    height: 42,
-                    width: 42,
-                    imageLink: Api.getMedia(widget.icon == null
-                        ? 'img/placeholder.jpg'
-                        : widget.icon!),
-                  )),
+                  duration: const Duration(seconds: 1),
+                  child: widget.icon == null
+                      ? const SizedBox(
+                          height: 42,
+                          width: 42,
+                        )
+                      : Image.network(
+                          Api.getMedia(widget.icon!),
+                          height: 42,
+                          width: 42,
+                          color: widget.active ? Colors.white : null,
+                        )
+                  // child: CachedImage(
+                  //   height: 42,
+                  //   width: 42,
+                  //   color: widget.active ? Colors.white : null,
+                  //   imageLink: Api.getMedia(widget.icon == null
+                  //       ? 'img/placeholder.jpg'
+                  //       : widget.icon!),
+                  // )
+                  ),
             ),
           ),
           Padding(

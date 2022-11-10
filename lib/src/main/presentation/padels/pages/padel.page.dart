@@ -1,6 +1,14 @@
+import 'package:bandeja/src/core/presentation/widgets/app.snack.bar.dart';
+import 'package:bandeja/src/main/presentation/padels/controllers/padel.page.controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../../main/injection/injector.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/network/api.dart';
+import '../../../../core/utils/util.dart';
+import '../../../domain/padels/repositories/i.padel.repository.dart';
 import '../../home/widget/padel.avatar.dart';
 import '../widgets/padel.page.body.dart';
 
@@ -14,44 +22,41 @@ class PadelPage extends StatefulWidget {
 class _PadelPageState extends State<PadelPage> {
   bool isFloating = true;
   double offset = 0;
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
+  late PadelPageController controller;
+  final padelRepository = getIt<IPadelRepository>();
+
   @override
   void initState() {
+    controller = Get.put(PadelPageController(padel: widget.padel));
     _controller.addListener(() {
-      setState(() {
-        offset = _controller.offset.toDouble();
-        // isFloating = false;
-      });
-      // if (_controller.offset >= _controller.position.maxScrollExtent &&
-      //     !_controller.position.outOfRange) {
-      //   setState(() {
-      //     offset = _controller.offset.abs();
-      //     // isFloating = false;
-      //   });
-      // }
-      // if (_controller.offset <= _controller.position.minScrollExtent &&
-      //     !_controller.position.outOfRange) {
-      //   setState(() {
-      //     offset = _controller.offset.abs();
-      //     // isFloating = true;
-      //   });
-      // }
+      if (mounted) {
+        setState(() {
+          offset = _controller.offset.toDouble();
+        });
+      }
     });
+
+    try {
+      controller.schedule.value =
+          widget.padel.getSchedules().firstWhere((element) => !element.booked);
+    } catch (_) {}
+
+    controller.loadPadel();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: offset < 120
-            ? Align(
-                alignment: Alignment(0.5, -0.72 - (offset / 800)),
-                child: AnimatedOpacity(
-                    duration: const Duration(microseconds: 300),
-                    opacity: ((120 - offset) / 120),
-                    child: _floatingCard()),
-              )
-            : null,
+        floatingActionButton: Align(
+          alignment: Alignment(0.5, -0.72 - (offset / 400)),
+          child: AnimatedOpacity(
+              duration: const Duration(microseconds: 300),
+              opacity: ((120 - (offset > 120 ? 120 : offset)) / 120),
+              child: _floatingCard()),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
         body: NestedScrollView(
             controller: _controller,
@@ -65,40 +70,38 @@ class _PadelPageState extends State<PadelPage> {
                   iconTheme: const IconThemeData(size: 0),
                   leadingWidth: 0,
                   leading: null,
-                  expandedHeight: 250,
+                  expandedHeight: 200,
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   forceElevated: innerBoxIsScrolled,
                   flexibleSpace: FlexibleSpaceBar(
                     expandedTitleScale: 3,
-                    background: SizedBox(
-                      height: 260,
-                      width: MediaQuery.of(context).size.width,
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: 250,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                image: DecorationImage(
-                                    image: NetworkImage(widget.padel.banner))),
-                          ),
-                          // Padding(
-                          //   padding: const EdgeInsets.only(top: 150),
-                          //   child: _floatingCard(),
-                          // )
-                        ],
-                      ),
+                    background: Stack(
+                      children: [
+                        Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      Api.getMedia(widget.padel.banner)))),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ];
             },
-            body: SingleChildScrollView(
-                child: PadelPageBody(padel: widget.padel))));
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 48.0, top: 70),
+              child: PadelPageBody(
+                padel: widget.padel,
+                controller: controller,
+              ),
+            )));
   }
 
   Widget _floatingCard() {
-    return Container(
+    return SizedBox(
       height: 200,
       child: Stack(
         alignment: const Alignment(0, 0),
@@ -109,13 +112,13 @@ class _PadelPageState extends State<PadelPage> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 5,
                     blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
-                borderRadius: BorderRadius.all(Radius.circular(20))),
+                borderRadius: const BorderRadius.all(Radius.circular(20))),
             padding:
                 const EdgeInsets.only(left: 24, right: 20, top: 10, bottom: 20),
             child: Column(
@@ -133,7 +136,7 @@ class _PadelPageState extends State<PadelPage> {
                             color: Theme.of(context)
                                 .colorScheme
                                 .secondary
-                                .withOpacity(0.4)),
+                                .withOpacity(0.3)),
                         child: Row(mainAxisSize: MainAxisSize.min, children: [
                           Text(
                             widget.padel.getAddress().name,
@@ -173,6 +176,35 @@ class _PadelPageState extends State<PadelPage> {
               radius: 40,
             ),
           ),
+          Align(
+            alignment: const Alignment(0.8, 0.5),
+            child: IconButton(
+                onPressed: () async {
+                  final result = await padelRepository.setBookmark(
+                      padelId: widget.padel.id);
+                  result!.fold((l) {
+                    AppSnackBar.failure(failure: l);
+                  }, (r) {
+                    if (mounted) {
+                      setState(() {
+                        if (r) {
+                          controller.isBookmarked.value =
+                              !(controller.isBookmarked.value);
+                        }
+                      });
+                    }
+                  });
+                },
+                icon: Icon(
+                  controller.isBookmarked.value
+                      ? Icons.bookmark
+                      : Icons.bookmark_outline,
+                  size: 32,
+                  color: controller.isBookmarked.value
+                      ? Theme.of(context).colorScheme.secondary
+                      : Colors.grey,
+                )),
+          ),
         ],
       ),
     );
@@ -183,6 +215,7 @@ class _PadelPageState extends State<PadelPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
+            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -198,25 +231,43 @@ class _PadelPageState extends State<PadelPage> {
               ),
             )),
         IconButton(
-            onPressed: () {},
-            icon: Column(
-              mainAxisSize: MainAxisSize.min,
+            onPressed: () async {
+              if (widget.padel.Location == null) {
+                return;
+              }
+              try {
+                await Util.launchUrI(Api.mapUrI(widget.padel.Location!));
+              } on Failure catch (f) {
+                AppSnackBar.failure(failure: f);
+              }
+            },
+            icon: Stack(
               children: [
-                const Icon(
-                  Icons.add_location_alt,
-                  size: 20,
-                  color: Colors.white,
+                Image.asset(
+                  'assets/icons/location.png',
+                  width: 24,
+                  height: 24,
+                  color: Colors.grey.shade700,
                 ),
-                const SizedBox(
-                  height: 2,
+
+                AnimatedOpacity(
+                  duration: const Duration(microseconds: 300),
+                  opacity: ((120 - (offset > 120 ? 120 : offset)) / 120),
+                  child: Image.asset(
+                    'assets/icons/location.png',
+                    width: 24,
+                    height: 24,
+                    color: Colors.white,
+                  ),
                 ),
-                Flexible(
-                  child: Text('Location',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption!
-                          .copyWith(color: Colors.white, fontSize: 11)),
-                )
+
+                // Flexible(
+                //   child: Text('Location',
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .caption!
+                //           .copyWith(color: Colors.white, fontSize: 11)),
+                // )
               ],
             ))
       ],

@@ -35,17 +35,20 @@ class _PostImagesState extends State<PostImages> {
         height: widget.height,
         child: Column(
           children: [
-            SizedBox(
-              height: widget.height - 30,
-              child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: widget.post.coverImages().length,
-                  itemBuilder: ((context, index) {
-                    return PostImage(
-                        post: widget.post,
-                        img: widget.post.coverImages()[index],
-                        height: widget.height - 30);
-                  })),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: SizedBox(
+                height: widget.height - 30,
+                child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: widget.post.coverImages().length,
+                    itemBuilder: ((context, index) {
+                      return PostImage(
+                          post: widget.post,
+                          img: widget.post.coverImages()[index],
+                          height: widget.height - 30);
+                    })),
+              ),
             ),
             DotsIndicator(
               dotsCount: widget.post.coverImages().length,

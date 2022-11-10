@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/presentation/widgets/app.snack.bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ import '../../../domain/posts/repositories/i.post.repository.dart';
 
 class AddPostController extends GetxController {
   RxBool isLoading = false.obs;
+  RxnString validated = RxnString();
   Rx<PostDto> postDto =
       Rx<PostDto>(PostDto(id: -1, enabled: true, featured: false));
   Rx<List<PostImageDto>> postImages = Rx<List<PostImageDto>>([]);
@@ -20,6 +22,7 @@ class AddPostController extends GetxController {
   final postGroupRepository = getIt<IPostGroupRepository>();
   final postRepository = getIt<IPostRepository>();
   var postsGroup = Rx<WrapperDto<List<PostGroupModel>>>(EmptyState());
+  final formKey = GlobalKey<FormState>();
 
   Rx<WrapperDto<PostModel>> post = Rx<WrapperDto<PostModel>>(
       WrapperDto.loadedState(value: PostModel(postGroupId: -1, userId: -1)));
@@ -58,6 +61,12 @@ class AddPostController extends GetxController {
   }
 
   void addPost(BuildContext context) async {
+    validated.value = postImages.value.isNotEmpty ? null : "Required Field!";
+    if ((formKey.currentState != null && !formKey.currentState!.validate()) ||
+        postImages.value.isEmpty) {
+      postImages.refresh();
+      return;
+    }
     List<String> images = postImages.value
         .where((element) => element.localImg != null)
         .map((e) => e.localImg!)
@@ -68,33 +77,33 @@ class AddPostController extends GetxController {
     final result =
         await postRepository.addPost(imagePaths: images, post: postDto.value);
 
-    if (result == null) {}
-    result?.fold((l) {
-      Get.showSnackbar(GetSnackBar(
-        title: 'Error',
-        message: l.message,
-        backgroundColor: Colors.red,
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 4),
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
-        ),
-      ));
+    if (result == null) {
+      AppSnackBar.failure(failure: UnExpectedFailure());
+      return;
+    }
+    result.fold((l) {
+      AppSnackBar.failure(failure: l);
       post.value = WrapperDto<PostModel>.errorState(failure: l);
     }, (r) {
       Navigator.maybePop(context, 'saved');
-      Get.showSnackbar(const GetSnackBar(
-        title: 'Successful',
-        message: 'Ad created successfuly!',
-        backgroundColor: Colors.green,
-        snackPosition: SnackPosition.TOP,
-        duration: Duration(seconds: 1),
-        icon: Icon(
-          Icons.check,
-          color: Colors.white,
-        ),
-      ));
+      AppSnackBar.success(message: 'New Ad have added.');
     });
+  }
+
+  String? phoneValidation(String? input) {
+    if (input == null) return null;
+    String? validation =
+        GetUtils.isPhoneNumber(input) ? null : 'Not valid phone number!';
+    return validation;
+  }
+
+  String? validateNoEmpty(String? input) {
+    if (input == null || input.trim().isEmpty) return 'Required Field!';
+    return null;
+  }
+
+  String? validateMedia(String? input) {
+    if (input == null || input.trim().isEmpty) return 'Required Field!';
+    return null;
   }
 }

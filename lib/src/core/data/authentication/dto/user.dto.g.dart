@@ -7,7 +7,7 @@ part of 'user.dto.dart';
 // **************************************************************************
 
 UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
-      fullName: json['fullName'] as String,
+      fullName: json['fullName'] as String?,
       avatar: json['avatar'] as String?,
       UID: json['UID'] as String?,
       localImage: json['localImage'] as String?,
@@ -16,6 +16,11 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
       role: json['role'] as String,
       locationId: json['locationId'] as int?,
       phoneNumber: json['phoneNumber'] as String?,
+      faceId: json['faceId'] as bool?,
+      bookingNotification: json['bookingNotification'] as bool?,
+      Location: json['Location'] == null
+          ? null
+          : LocationDto.fromJson(json['Location'] as Map<String, dynamic>),
       enabled: json['enabled'] as bool? ?? true,
     );
 
@@ -30,4 +35,7 @@ Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
       'phoneNumber': instance.phoneNumber,
       'enabled': instance.enabled,
       'localImage': instance.localImage,
+      'bookingNotification': instance.bookingNotification,
+      'faceId': instance.faceId,
+      'Location': instance.Location,
     };

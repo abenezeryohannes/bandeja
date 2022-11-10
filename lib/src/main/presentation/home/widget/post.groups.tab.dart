@@ -18,7 +18,6 @@ class _ItemGroupsTabState extends State<ItemGroupsTab> {
     return DefaultTabController(
         length: widget.itemGroups.length,
         child: TabBar(
-          indicatorPadding: const EdgeInsets.only(top: 5),
           indicatorColor: Theme.of(context).indicatorColor,
           onTap: (index) {
             widget.onItemClick(widget.itemGroups[index]);

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/domain/padels/entities/feature.dart';
 import '../../../../core/network/api.dart';
-import '../../../../core/presentation/widgets/cached.image.provider.dart';
 
 class FeatureCard extends StatefulWidget {
   const FeatureCard({Key? key, this.feature, this.big = false})
@@ -22,7 +21,7 @@ class _FeatureCardState extends State<FeatureCard> {
       children: [
         SizedBox(
           width: widget.big ? 44 : 30,
-          height: widget.big ? 40 : 28,
+          height: widget.big ? 30 : 28,
           child: Stack(
             alignment: const Alignment(1, 1),
             children: [
@@ -30,14 +29,13 @@ class _FeatureCardState extends State<FeatureCard> {
                 show: widget.feature == null,
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: CachedImageProvider(
-                      borderRadius: 0,
-                      height: widget.big ? 34 : 24,
-                      image: Api.getMedia(widget.feature == null
+                  child: Image.network(
+                      Api.getMedia(widget.feature == null
                           ? "img/placeholder.jpg"
                           : widget.feature!.icon),
-                      onError: Container(color: Colors.grey.shade200),
-                      width: widget.big ? 24 : 24),
+                      color: widget.big ? Colors.grey.shade700 : Colors.black,
+                      height: widget.big ? 24 : 20,
+                      width: widget.big ? 24 : 20),
                 ),
               ),
               if (widget.feature == null
@@ -46,7 +44,7 @@ class _FeatureCardState extends State<FeatureCard> {
                 Align(
                   alignment: const Alignment(1, 2),
                   child: Container(
-                      padding: EdgeInsets.all(widget.big ? 6 : 5),
+                      padding: EdgeInsets.all(widget.big ? 5 : 5),
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.green),
                       child: Text(
@@ -54,7 +52,7 @@ class _FeatureCardState extends State<FeatureCard> {
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: widget.big ? 14 : 10),
+                            fontSize: widget.big ? 10 : 10),
                       )),
                 )
             ],
@@ -63,10 +61,9 @@ class _FeatureCardState extends State<FeatureCard> {
         Padding(
             padding: const EdgeInsets.only(top: 0.0),
             child: Text(widget.feature == null ? '' : widget.feature!.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(fontSize: widget.big ? 14 : 10)))
+                style: Theme.of(context).textTheme.caption!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: widget.big ? 14 : 10)))
       ],
     );
   }

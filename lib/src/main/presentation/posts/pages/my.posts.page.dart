@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../core/domain/posts/entities/post.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/presentation/widgets/show.error.dart';
 import '../controllers/my.posts.controller.dart';
 import '../widget/my.post.card.dart';
+import '../widget/post.card.dart';
 import 'add.post.page.dart';
 
 class MyPostPage extends StatefulWidget {
@@ -15,7 +18,13 @@ class MyPostPage extends StatefulWidget {
 }
 
 class _MyPostPageState extends State<MyPostPage> {
-  final controller = Get.put(MyPostController());
+  MyPostController controller = Get.put(MyPostController());
+
+  @override
+  void initState() {
+    controller = Get.put(MyPostController());
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -50,7 +59,14 @@ class _MyPostPageState extends State<MyPostPage> {
                 ),
               ];
             },
-            body: _body()));
+            body: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10),
+              child: Column(
+                children: [
+                  _body(),
+                ],
+              ),
+            )));
   }
 
   Widget addNewButton() {
@@ -94,37 +110,54 @@ class _MyPostPageState extends State<MyPostPage> {
   }
 
   Widget _body() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: PagedGridView<int, PostModel>(
-        shrinkWrap: false,
-        padding: EdgeInsets.zero,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 100 / 120,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 0,
-          crossAxisCount: 2,
-        ),
-        pagingController: controller.postPagingController,
-        builderDelegate: PagedChildBuilderDelegate<PostModel>(
-            firstPageProgressIndicatorBuilder: (_) => GridView.builder(
-                  itemCount: 20,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return MyPostCard(
-                      onDelete: () {},
-                    );
-                  },
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 100 / 120,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 0,
-                    crossAxisCount: 2,
+    return Expanded(
+      child: RefreshIndicator(
+        onRefresh: () async {
+          controller.postPagingController.refresh();
+        },
+        child: PagedGridView<int, PostModel>(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 100 / 120,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 0,
+            crossAxisCount: 2,
+          ),
+          pagingController: controller.postPagingController,
+          builderDelegate: PagedChildBuilderDelegate<PostModel>(
+              noItemsFoundIndicatorBuilder: (context) => Padding(
+                    padding: const EdgeInsets.only(top: 100.0),
+                    child: ShowError(
+                      failure: Failure.noDataFailure(
+                          message: 'All of Your Ads will be showen here!'),
+                      errorShowType: ErrorShowType.vertical,
+                    ),
                   ),
-                ),
-            itemBuilder: (context, post, index) => getCard(
-                  post: post,
-                )),
+              firstPageErrorIndicatorBuilder: (_) => Padding(
+                    padding: const EdgeInsets.only(top: 100.0),
+                    child: ShowError(
+                      failure: controller.postPagingController.error as Failure,
+                      errorShowType: ErrorShowType.vertical,
+                    ),
+                  ),
+              firstPageProgressIndicatorBuilder: (_) => GridView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: 20,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return const PostCard();
+                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 100 / 120,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 0,
+                      crossAxisCount: 2,
+                    ),
+                  ),
+              itemBuilder: (context, post, index) => getCard(post: post)),
+        ),
       ),
     );
   }
@@ -132,7 +165,7 @@ class _MyPostPageState extends State<MyPostPage> {
   Widget getCard({required PostModel post}) {
     return MyPostCard(
       post: post,
-      onDelete: () {
+      onDelete: (_) {
         Get.dialog(Container(
           margin:
               EdgeInsets.symmetric(horizontal: 40, vertical: Get.height / 3),
@@ -146,6 +179,7 @@ class _MyPostPageState extends State<MyPostPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Are You sure?',
@@ -199,7 +233,8 @@ class _MyPostPageState extends State<MyPostPage> {
       backgroundColor: Colors.grey.shade50,
       elevation: 0,
       leading: Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 25),
+          width: double.maxFinite,
+          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 20),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(width: 1, color: Colors.grey.shade600)),

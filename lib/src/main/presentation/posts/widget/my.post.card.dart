@@ -7,7 +7,7 @@ class MyPostCard extends StatefulWidget {
   const MyPostCard({Key? key, this.post, required this.onDelete})
       : super(key: key);
   final PostModel? post;
-  final Function onDelete;
+  final Function(PostModel?) onDelete;
   @override
   State<MyPostCard> createState() => _MyPostCardState();
 }
@@ -25,7 +25,7 @@ class _MyPostCardState extends State<MyPostCard> {
               alignment: const Alignment(0.95, -0.95),
               child: InkWell(
                 onTap: () {
-                  widget.onDelete();
+                  widget.onDelete(widget.post);
                 },
                 child: const Card(
                   shape: RoundedRectangleBorder(

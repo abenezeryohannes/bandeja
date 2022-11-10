@@ -30,7 +30,7 @@ class _PostImageState extends State<PostImage> {
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
               color: Colors.blue,
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(0)),
               image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(Api.getMedia(widget.img))),

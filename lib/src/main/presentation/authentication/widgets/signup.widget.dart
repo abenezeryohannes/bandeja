@@ -160,7 +160,7 @@ class _SignupSlideState extends State<SignupSlide> {
             child: Row(
               children: [
                 Image.asset(
-                  'assets/img/kuwait.png',
+                  country?.flag ?? 'assets/img/kuwait.png',
                   width: 24,
                   height: 16,
                 ),

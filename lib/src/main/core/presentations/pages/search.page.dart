@@ -66,19 +66,15 @@ class _SearchPageState extends State<SearchPage> {
                           }, loadedState: (padelGroups) {
                             return LookingForSearchCard(
                               activate: () {
-                                setState(() {
-                                  c.activeFilter.value =
-                                      ActiveSearchFilter.groupType;
-                                });
+                                c.activeFilter.value =
+                                    ActiveSearchFilter.groupType;
                               },
                               active: c.activeFilter.value ==
                                   ActiveSearchFilter.groupType,
                               onChange: (PadelGroupModel padel) {
                                 c.padelPicked.value = padel;
-                                setState(() {
-                                  c.activeFilter.value =
-                                      ActiveSearchFilter.address;
-                                });
+                                c.activeFilter.value =
+                                    ActiveSearchFilter.address;
                               },
                               items: padelGroups,
                               value: c.padelPicked.value,
@@ -119,23 +115,21 @@ class _SearchPageState extends State<SearchPage> {
                           }, errorState: (error) {
                             return Expanded(child: ShowError(failure: error));
                           })),
-                      WhenSearchCard(
-                        activate: () {
-                          setState(() {
-                            c.activeFilter.value = ActiveSearchFilter.time;
-                          });
-                        },
-                        active: c.activeFilter.value == ActiveSearchFilter.time,
-                        onChange: (date) {
-                          setState(() {
-                            c.datePicked.value = date;
-                          });
-                        },
-                        value: c.datePicked.value,
-                        startDate:
-                            DateTime.now().subtract(const Duration(hours: 12)),
-                        endDate: DateTime.now().add(const Duration(days: 365)),
-                      ),
+                      Obx(() => WhenSearchCard(
+                            activate: () {
+                              c.activeFilter.value = ActiveSearchFilter.time;
+                            },
+                            active:
+                                c.activeFilter.value == ActiveSearchFilter.time,
+                            onChange: (date) {
+                              c.datePicked.value = date;
+                            },
+                            value: c.datePicked.value,
+                            startDate: DateTime.now()
+                                .subtract(const Duration(hours: 12)),
+                            endDate:
+                                DateTime.now().add(const Duration(days: 365)),
+                          )),
                     ],
                   ),
                 ),
@@ -151,15 +145,15 @@ class _SearchPageState extends State<SearchPage> {
   AppBar _appBar() {
     return AppBar(
       title: Text(
-        "Booking",
-        style: Theme.of(context).textTheme.titleMedium,
+        "Search",
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       centerTitle: true,
       backgroundColor: Colors.transparent,
       leadingWidth: 56,
       elevation: 0,
       leading: Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 25),
+          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 20),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               border: Border.all(width: 1, color: Colors.grey.shade600)),
@@ -178,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _next(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 14, bottom: 10),
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.4)),
       alignment: Alignment.center,
       child: Row(
@@ -193,14 +187,12 @@ class _SearchPageState extends State<SearchPage> {
                     if (c.padelGroups.value.runtimeType ==
                         LoadedState<List<PadelGroupModel>>(value: [])
                             .runtimeType) {
-                      c.padelPicked.value =
-                          (c.padelGroups.value as LoadedState).value[0];
+                      c.padelPicked.value = null;
                     }
                     if (c.addresses.value.runtimeType ==
                         LoadedState<List<AddressModel>>(value: [])
                             .runtimeType) {
-                      c.padelPicked.value =
-                          (c.padelGroups.value as LoadedState).value[0];
+                      c.padelPicked.value = null;
                     }
                   });
                 },
@@ -208,6 +200,7 @@ class _SearchPageState extends State<SearchPage> {
                     style: Theme.of(context).textTheme.bodyText1)),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(

@@ -1,3 +1,4 @@
+import 'package:http/retry.dart';
 import 'package:injectable/injectable.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,7 @@ abstract class ExternalInjections {
   Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
 
   @lazySingleton
-  http.Client get client => http.Client();
+  http.Client get client => RetryClient(http.Client());
 
   @lazySingleton
   InternetConnectionChecker get connectionChecker =>

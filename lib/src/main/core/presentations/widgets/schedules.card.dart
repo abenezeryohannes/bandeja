@@ -1,32 +1,37 @@
+import 'package:bandeja/src/core/presentation/widgets/custom.shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/domain/padels/entities/padel.schedule.dart';
+import '../../../../core/utils/util.dart';
 
 class SchedulesCard extends StatefulWidget {
   const SchedulesCard(
       {Key? key,
-      required this.padel,
+      required this.schedules,
       required this.onClick,
       required this.date,
-      required this.onDateSelected,
-      this.cols = 3})
+      this.cols = 3,
+      this.selectable = true})
       : super(key: key);
-  final PadelModel padel;
+  final List<PadelScheduleModel?> schedules;
   final int cols;
-  final Function onDateSelected;
-  final Function(DateTime) onClick;
+  final bool selectable;
+  final Function(PadelScheduleModel) onClick;
   final DateTime date;
   @override
   State<SchedulesCard> createState() => _SchedulesCardState();
 }
 
 class _SchedulesCardState extends State<SchedulesCard> {
-  DateTime? selectedDate;
+  PadelScheduleModel? selectedSchedule;
   @override
   void initState() {
-    selectedDate = widget.padel.getFirstFreeSpot();
+    if (!widget.schedules.contains(null) && widget.selectable) {
+      selectedSchedule = Util.getAllSchedulesFirstFreeSopt(
+          widget.schedules.map((e) => e!).toList());
+    }
     super.initState();
   }
 
@@ -43,43 +48,52 @@ class _SchedulesCardState extends State<SchedulesCard> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: getList().map((e) {
-          bool occupaid = e.booked; //checkIfOccupaid(e.startTime);
-          return ElevatedButton(
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                      const EdgeInsets.symmetric(horizontal: 3)),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          side: BorderSide(
-                              width: 2,
-                              color: Theme.of(context).dividerColor))),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      (selectedDate == e.startTime)
-                          ? Theme.of(context).colorScheme.secondary
-                          : (occupaid)
-                              ? Colors.grey.shade200
-                              : Theme.of(context).scaffoldBackgroundColor)),
-              onPressed: () {
-                if (!occupaid) {
-                  setState(() {
-                    selectedDate = e.startTime;
-                  });
-                  widget.onClick(selectedDate!);
-                }
-              },
-              child: Text(
-                (DateFormat.jm().format(e.startTime)),
-                style: Theme.of(context).textTheme.caption?.copyWith(
-                    color: (selectedDate == e.startTime)
-                        ? Colors.white
-                        : (occupaid)
-                            ? Colors.grey.shade500
-                            : Colors.grey.shade700,
-                    fontSize: 12),
-              ));
+          bool occupaid =
+              (e == null) ? false : e.booked; //checkIfOccupaid(e.startTime);
+          return CustomShimmer(
+            show: e == null,
+            child: ElevatedButton(
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        const EdgeInsets.symmetric(horizontal: 3)),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            side: BorderSide(
+                                width: e == null ? 0 : 2,
+                                color: Theme.of(context).dividerColor))),
+                    backgroundColor: MaterialStateProperty.all<Color>((e == null
+                        ? Colors.grey.shade200
+                        : (selectedSchedule == e && widget.selectable)
+                            ? Theme.of(context).colorScheme.secondary
+                            : (occupaid)
+                                ? Colors.grey.shade200
+                                : Theme.of(context).scaffoldBackgroundColor))),
+                onPressed: () {
+                  if (e == null) return;
+                  if (!occupaid) {
+                    setState(() {
+                      selectedSchedule = e;
+                    });
+                  }
+                  widget.onClick(e);
+                },
+                child: Text(
+                  e == null ? "" : (DateFormat.jm().format(e.startTime)),
+                  style: Theme.of(context).textTheme.caption?.copyWith(
+                        color: (e != null &&
+                                selectedSchedule == e &&
+                                widget.selectable)
+                            ? Colors.white
+                            : (occupaid)
+                                ? Colors.grey.shade500
+                                : Colors.grey.shade700,
+                        fontSize: 12,
+                      ),
+                )),
+          );
         }).toList(),
       ),
     );
@@ -94,7 +108,7 @@ class _SchedulesCardState extends State<SchedulesCard> {
   //   return false;
   // }
 
-  List<PadelScheduleModel> getList() {
+  List<PadelScheduleModel?> getList() {
     // if (!widget.padel.startTime.isBefore(widget.padel.endTime)) return [];
     // int gap = widget.padel.getDuration().minute;
     // List<PadelScheduleModel> schedules = [];
@@ -107,7 +121,14 @@ class _SchedulesCardState extends State<SchedulesCard> {
     //       startTime: start,
     //       endTime: start.add(Duration(minutes: gap))));
     // }
-    final result = widget.padel.getSchedules();
+    if (widget.schedules.contains(null)) {
+      List<PadelScheduleModel?> emptyLists = [];
+      for (int i = 0; i < 12; i++) {
+        emptyLists.add(null);
+      }
+      return emptyLists;
+    }
+    final result = widget.schedules;
     return result;
     // return widget.padel.getSchedules();
     // return schedules;

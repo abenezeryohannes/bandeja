@@ -214,7 +214,7 @@ class __$$_ResponseDtoCopyWithImpl<$Res> extends _$ResponseDtoCopyWithImpl<$Res>
 class _$_ResponseDto implements _ResponseDto {
   _$_ResponseDto(
       {this.statusCode = 200,
-      this.success = true,
+      this.success = false,
       this.data = null,
       this.message,
       this.count,

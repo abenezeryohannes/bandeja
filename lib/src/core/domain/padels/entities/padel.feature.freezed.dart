@@ -161,9 +161,7 @@ class __$$_PadelFeatureModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PadelFeatureModel
-    with DiagnosticableTreeMixin
-    implements _PadelFeatureModel {
+class _$_PadelFeatureModel implements _PadelFeatureModel {
   _$_PadelFeatureModel(
       {this.id = -1,
       required this.padelId,
@@ -191,21 +189,8 @@ class _$_PadelFeatureModel
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'PadelFeatureModel(id: $id, padelId: $padelId, featureId: $featureId, free: $free, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PadelFeatureModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('padelId', padelId))
-      ..add(DiagnosticsProperty('featureId', featureId))
-      ..add(DiagnosticsProperty('free', free))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

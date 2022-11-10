@@ -1,16 +1,27 @@
+import 'package:bandeja/firebase/admin/firebase_options.dart' as FirebaseAdmin;
+import 'package:bandeja/firebase/owner/firebase_options.dart' as FirebaseOwner;
+import 'package:bandeja/firebase/main/firebase_options.dart';
+import 'package:bandeja/src/core/domain/authentication/repositories/i.user.repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../src/app.dart';
-import '../src/flavors.dart' as f_f;
+import '../src/core/domain/notifications/entities/notification.dart';
+import '../src/core/domain/notifications/repositories/i.notification.repository.dart';
+import '../src/core/presentation/widgets/app.snack.bar.dart';
+import '../src/flavors.dart';
 import 'injection/injector.dart';
 
 Future<void> mainCommon() async {
   await preRunApp();
-  runApp(App());
+  runApp(const App());
   return FlutterNativeSplash.remove();
 }
 
@@ -52,8 +63,144 @@ Future<void> preRunApp() async {
   //   yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   // });
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   //injections and firebase config ....
-  await configureDependencies(f_f.FF.env);
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  switch (FF.appFlavor) {
+    case Flavor.owner:
+      await Firebase.initializeApp(
+          options: FirebaseOwner.DefaultFirebaseOptions.currentPlatform);
+
+      break;
+    case Flavor.admin:
+      await Firebase.initializeApp(
+          options: FirebaseAdmin.DefaultFirebaseOptions.currentPlatform);
+
+      break;
+    default:
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
+  }
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true, // Required to display a heads up notification
+    badge: true,
+    sound: true,
+  );
+
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'bandeja_notifications', // id
+    'High Importance Bandeja Notifications', // title
+    description:
+        'This channel is used for important Bandeja notifications.', // description
+    importance: Importance.max,
+  );
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  FirebaseMessaging.onBackgroundMessage((_firebaseMessagingBackgroundHandler));
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification == null || message.notification?.android == null) {
+      return;
+    }
+
+    RemoteNotification notification = message.notification!;
+    AndroidNotification android = message.notification!.android!;
+
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: android.smallIcon,
+            // other properties...
+          ),
+        ));
+
+    if (FF.appFlavor == Flavor.owner) {
+      loadNotifications();
+    }
+  });
+  await configureDependencies(FF.env);
+  await GetStorage.init();
+  await (getIt<IUserRepository>()).onAppVisit();
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (message.notification == null || message.notification?.android == null) {
+    return;
+  }
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'bandeja_notifications', // id
+    'High Importance Bandeja Notifications', // title
+    description:
+        'This channel is used for important Bandeja notifications.', // description
+    importance: Importance.max,
+  );
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  RemoteNotification notification = message.notification!;
+  AndroidNotification android = message.notification!.android!;
+
+  flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          icon: android.smallIcon,
+          // other properties...
+        ),
+      ));
+}
+
+void loadNotifications() async {
+  final result =
+      await getIt<INotificationRepository>().getUnSeenNotifications();
+  if (result == null) {
+    return;
+  }
+  result.fold((l) {
+    return;
+  }, (r) {
+    for (var notification in r) {
+      showSnackBar(notification);
+    }
+  });
+}
+
+showSnackBar(NotificationModel notification) {
+  AppSnackBar.warning(
+      title: notification.title,
+      message: notification.desc,
+      icon: Image.asset(
+        'assets/icons/speaker.png',
+        color: Colors.grey.shade800,
+        width: 24,
+        height: 24,
+      ),
+      position: SnackPosition.TOP);
+
+  getIt<INotificationRepository>()
+      .makeNotificationSeen(notificationId: notification.id);
 }

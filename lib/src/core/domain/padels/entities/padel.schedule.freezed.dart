@@ -27,6 +27,7 @@ mixin _$PadelScheduleModel {
   bool get booked => throw _privateConstructorUsedError;
   DateTime get startTime => throw _privateConstructorUsedError;
   DateTime get endTime => throw _privateConstructorUsedError;
+  double? get price => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
@@ -49,6 +50,7 @@ abstract class $PadelScheduleModelCopyWith<$Res> {
       bool booked,
       DateTime startTime,
       DateTime endTime,
+      double? price,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -71,6 +73,7 @@ class _$PadelScheduleModelCopyWithImpl<$Res>
     Object? booked = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? price = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -103,6 +106,10 @@ class _$PadelScheduleModelCopyWithImpl<$Res>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as double?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -130,6 +137,7 @@ abstract class _$$_PadelScheduleModelCopyWith<$Res>
       bool booked,
       DateTime startTime,
       DateTime endTime,
+      double? price,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -154,6 +162,7 @@ class __$$_PadelScheduleModelCopyWithImpl<$Res>
     Object? booked = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? price = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -180,6 +189,10 @@ class __$$_PadelScheduleModelCopyWithImpl<$Res>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as double?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -199,10 +212,11 @@ class _$_PadelScheduleModel implements _PadelScheduleModel {
       {this.id = -1,
       required this.padelId,
       this.reason = '',
-      this.status = 'open',
-      this.booked = true,
+      this.status = 'free',
+      this.booked = false,
       required this.startTime,
       required this.endTime,
+      this.price,
       this.createdAt,
       this.updatedAt});
 
@@ -228,13 +242,15 @@ class _$_PadelScheduleModel implements _PadelScheduleModel {
   @override
   final DateTime endTime;
   @override
+  final double? price;
+  @override
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
 
   @override
   String toString() {
-    return 'PadelScheduleModel(id: $id, padelId: $padelId, reason: $reason, status: $status, booked: $booked, startTime: $startTime, endTime: $endTime, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PadelScheduleModel(id: $id, padelId: $padelId, reason: $reason, status: $status, booked: $booked, startTime: $startTime, endTime: $endTime, price: $price, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -249,6 +265,7 @@ class _$_PadelScheduleModel implements _PadelScheduleModel {
             const DeepCollectionEquality().equals(other.booked, booked) &&
             const DeepCollectionEquality().equals(other.startTime, startTime) &&
             const DeepCollectionEquality().equals(other.endTime, endTime) &&
+            const DeepCollectionEquality().equals(other.price, price) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.updatedAt, updatedAt));
   }
@@ -264,6 +281,7 @@ class _$_PadelScheduleModel implements _PadelScheduleModel {
       const DeepCollectionEquality().hash(booked),
       const DeepCollectionEquality().hash(startTime),
       const DeepCollectionEquality().hash(endTime),
+      const DeepCollectionEquality().hash(price),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(updatedAt));
 
@@ -290,6 +308,7 @@ abstract class _PadelScheduleModel implements PadelScheduleModel {
       final bool booked,
       required final DateTime startTime,
       required final DateTime endTime,
+      final double? price,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$_PadelScheduleModel;
 
@@ -310,6 +329,8 @@ abstract class _PadelScheduleModel implements PadelScheduleModel {
   DateTime get startTime;
   @override
   DateTime get endTime;
+  @override
+  double? get price;
   @override
   DateTime? get createdAt;
   @override

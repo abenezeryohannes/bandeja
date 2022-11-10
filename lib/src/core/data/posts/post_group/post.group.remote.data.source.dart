@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
@@ -21,7 +22,7 @@ class PostGroupRemoteDataSource {
   Future<List<PostGroupModel>>? getPostGroups(int? page) async {
     Response response = await client.get(
       Api.request("postGroups"),
-      headers: Api.getHeader("user"),
+      headers: Api.getHeader(GetStorage().read('token')),
     );
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
@@ -29,7 +30,7 @@ class PostGroupRemoteDataSource {
           await loadPostGroupsFromJson(responseDto.data);
       return posts;
     } else {
-      throw ServerFailure(message: responseDto.message);
+      throw Failure.AssignFailureType(responseDto);
     }
   }
 

@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:bandeja/src/core/domain/padels/entities/padel.group.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/domain/padels/entities/padel.dart';
+import '../../../../../core/domain/padels/entities/promo.code.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/fixtures/fixture.reader.dart';
 import '../../../../domain/core/entities/address.dart';
@@ -21,12 +23,11 @@ class PadelLocalDataSource {
     if (page != null && page > 1) return [];
     final data = cache.getString(featuredPadelsKey);
     if (data == null) throw CacheFailure();
-    // return loadItemGroupsFromJson(data);
-    return loadPadelsFromJson(await fixture("padels.json"));
+    return loadPadelsFromJson(data);
   }
 
   saveFeaturedPadels(
-      int? page, AddressModel? address, List<PadelModel> padels) async {
+      int? page, PadelGroupModel? address, List<PadelModel> padels) async {
     if (page != null && page > 1) return [];
     return await cache.setString(
         featuredPadelsKey + (address == null ? "" : address.name),
@@ -42,7 +43,7 @@ class PadelLocalDataSource {
     if (page != null && page > 1) return [];
     final data = cache.getString(bookmarkKey);
     if (data == null) throw CacheFailure();
-    return loadPadelsFromJson(await fixture("padels.json"));
+    return loadPadelsFromJson(data);
   }
 
   Future<bool> saveBookmarks(int? page, List<PadelModel> items) async {

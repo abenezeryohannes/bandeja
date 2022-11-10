@@ -1,5 +1,11 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io';
 
+import 'package:bandeja/src/main/domain/core/entities/location.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
+import '../error/failure.dart';
 import '../utils/util.dart';
 
 class Api {
@@ -26,63 +32,49 @@ class Api {
         "Authorization": token,
       };
 
+  static GetListQuery({int? page, int? limit}) {
+    Map<String, String> query = <String, String>{};
+
+    query.addEntries({'page': '${page ?? 1}'}.entries);
+
+    if (limit != null) {
+      query.addEntries({'limit': '$limit'}.entries);
+    }
+
+    return query;
+  }
+
   static String getMedia(String x) {
     if (Util.isUrl(x)) return x;
     return "${hostUrl()}/media?path=$x";
   }
 
-  // static Future<String?> uploadImage({required List<String> pathes}) async {
-  //   if (pathes.isEmpty) return null;
-  //   File file = File(pathes[0]);
+  static Uri mapUrI(LocationModel location) {
+    final url = 'geo:${location.latitude},${location.longitude}';
+    return Uri.parse(url);
+  }
 
-  //   try {
-  //     if (!(await file.exists()))
-  //       throw Failure.unExpectedFailure(message: "File not found");
+  static Future<MultipartRequest> addImage(
+      {required String name,
+      String? path,
+      required MultipartRequest request}) async {
+    if (path != null && path.isNotEmpty) {
+      File file = File(path);
+      if (!(await file.exists())) {
+        throw Failure.unExpectedFailure(message: "File not found");
+      }
+      String? memeTD = lookupMimeType(path, headerBytes: [0xFF, 0xD8]);
 
-  //     String fileName = file.path.split('/').last;
+      List<String> memes =
+          memeTD == null ? ['image', 'jpg'] : memeTD.split('/');
 
-  //     FormData data = FormData.fromMap({
-  //       "action": "upload",
-  //       "source": await MultipartFile.fromFile(
-  //         file.path,
-  //         filename: fileName,
-  //         //contentType: MediaType("image", (fileName.contains("png"))?"png":"jpeg"),
-  //       ),
-  //       //"type": "image/jpg"
-  //     });
-
-  //     var request = new http.MultipartRequest("POST", url);
-  //     request.fields['user'] = 'someone@somewhere.com';
-  //     request.files.add(http.MultipartFile.fromPath(
-  //       'package',
-  //       'build/package.tar.gz',
-  //       contentType: new MediaType('application', 'x-tar'),
-  //     ));
-  //     request.send().then((response) {
-  //       if (response.statusCode == 200) print("Uploaded!");
-  //     });
-
-  //     Dio dio = Dio();
-  //     // dio.options.queryParameters["key"] = "";
-  //     // dio.options.headers["authorization"] = "${user.getToken().token}";
-  //     Response response = await dio.post(path,
-  //         data: data,
-  //         options: Options(headers: {
-  //           "accept": "*/*",
-  //           // "Authorization": "${user.getToken().token}"
-  //         }));
-  //     if (response.data["status_code"] == 200) {
-  //       AlertBox()
-  //           .showSnackBarSuccess(context: context, text: "Image Uploaded");
-  //       return response.data["image"]["url"];
-  //     } else {
-  //       String error = response.data["error"]["message"];
-  //       AlertBox().showSnackBarError(context: context, text: error);
-  //     }
-  //     print(response);
-  //   } on DioError catch (e) {
-  //     print("uploading error: ${e.toString()}");
-  //     rethrow;
-  //   }
-  // }
+      request.files.add(MultipartFile(
+          name, File(path).readAsBytes().asStream(), File(path).lengthSync(),
+          filename: path.split("/").last,
+          contentType: MediaType(memes[0], memes[1])));
+      return request;
+    } else {
+      return request;
+    }
+  }
 }

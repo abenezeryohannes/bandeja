@@ -147,7 +147,7 @@ class __$$_PaymentModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PaymentModel with DiagnosticableTreeMixin implements _PaymentModel {
+class _$_PaymentModel implements _PaymentModel {
   _$_PaymentModel(
       {this.id = -1,
       required this.userId,
@@ -172,20 +172,8 @@ class _$_PaymentModel with DiagnosticableTreeMixin implements _PaymentModel {
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'PaymentModel(id: $id, userId: $userId, amount: $amount, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PaymentModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('amount', amount))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
   }
 
   @override

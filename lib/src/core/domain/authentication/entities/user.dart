@@ -1,3 +1,5 @@
+import 'package:bandeja/src/core/data/authentication/dto/user.dto.dart';
+import 'package:bandeja/src/core/domain/authentication/entities/setting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,19 +15,20 @@ part 'user.g.dart';
 class UserModel with _$UserModel {
   factory UserModel({
     @Default(-1) int id,
-    required String fullName,
+    @Default('') String fullName,
     String? avatar,
     String? UID,
     String? emailAddress,
     String? password,
     @Default("user") String role,
     int? locationId,
-    @Default("00000000") String phoneNumber,
+    @Default("") String phoneNumber,
     @Default(true) bool enabled,
     DateTime? createdAt,
     DateTime? updatedAt,
     List<TokenModel>? Tokens,
     TokenModel? Token,
+    SettingModel? Setting,
     LocationModel? Location,
     List<BookmarkModel>? Bookmarks,
     List<PadelModel>? Padels,
@@ -34,7 +37,7 @@ class UserModel with _$UserModel {
   factory UserModel.empty() => UserModel(
         id: -1,
         fullName: '',
-        phoneNumber: '00000000',
+        phoneNumber: '',
       );
 
   factory UserModel.fromJson(Map<String, Object?> json) =>
@@ -44,5 +47,14 @@ class UserModel with _$UserModel {
 extension UserModelX on UserModel {
   List<PadelModel> getPadels() {
     return Padels ?? [];
+  }
+
+  UserDto getDTO() {
+    return UserDto(
+        fullName: fullName,
+        role: role,
+        avatar: avatar,
+        emailAddress: emailAddress,
+        enabled: enabled);
   }
 }

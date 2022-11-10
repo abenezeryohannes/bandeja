@@ -21,8 +21,9 @@ LocationModel _$LocationModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LocationModel {
   int get id => throw _privateConstructorUsedError;
-  String get latitude => throw _privateConstructorUsedError;
-  String get longitude => throw _privateConstructorUsedError;
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
 
@@ -39,8 +40,9 @@ abstract class $LocationModelCopyWith<$Res> {
       _$LocationModelCopyWithImpl<$Res>;
   $Res call(
       {int id,
-      String latitude,
-      String longitude,
+      double latitude,
+      double longitude,
+      String? address,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -59,6 +61,7 @@ class _$LocationModelCopyWithImpl<$Res>
     Object? id = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? address = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -70,11 +73,15 @@ class _$LocationModelCopyWithImpl<$Res>
       latitude: latitude == freezed
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       longitude: longitude == freezed
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -96,8 +103,9 @@ abstract class _$$_LocationModelCopyWith<$Res>
   @override
   $Res call(
       {int id,
-      String latitude,
-      String longitude,
+      double latitude,
+      double longitude,
+      String? address,
       DateTime? createdAt,
       DateTime? updatedAt});
 }
@@ -118,6 +126,7 @@ class __$$_LocationModelCopyWithImpl<$Res>
     Object? id = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? address = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
   }) {
@@ -129,11 +138,15 @@ class __$$_LocationModelCopyWithImpl<$Res>
       latitude: latitude == freezed
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       longitude: longitude == freezed
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -148,11 +161,12 @@ class __$$_LocationModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_LocationModel with DiagnosticableTreeMixin implements _LocationModel {
+class _$_LocationModel implements _LocationModel {
   _$_LocationModel(
       {this.id = -1,
-      this.latitude = '0',
-      this.longitude = '0',
+      this.latitude = 0,
+      this.longitude = 0,
+      this.address,
       this.createdAt,
       this.updatedAt});
 
@@ -164,30 +178,20 @@ class _$_LocationModel with DiagnosticableTreeMixin implements _LocationModel {
   final int id;
   @override
   @JsonKey()
-  final String latitude;
+  final double latitude;
   @override
   @JsonKey()
-  final String longitude;
+  final double longitude;
+  @override
+  final String? address;
   @override
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LocationModel(id: $id, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'LocationModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('latitude', latitude))
-      ..add(DiagnosticsProperty('longitude', longitude))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
+  String toString() {
+    return 'LocationModel(id: $id, latitude: $latitude, longitude: $longitude, address: $address, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -198,6 +202,7 @@ class _$_LocationModel with DiagnosticableTreeMixin implements _LocationModel {
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.latitude, latitude) &&
             const DeepCollectionEquality().equals(other.longitude, longitude) &&
+            const DeepCollectionEquality().equals(other.address, address) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.updatedAt, updatedAt));
   }
@@ -209,6 +214,7 @@ class _$_LocationModel with DiagnosticableTreeMixin implements _LocationModel {
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(latitude),
       const DeepCollectionEquality().hash(longitude),
+      const DeepCollectionEquality().hash(address),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(updatedAt));
 
@@ -228,8 +234,9 @@ class _$_LocationModel with DiagnosticableTreeMixin implements _LocationModel {
 abstract class _LocationModel implements LocationModel {
   factory _LocationModel(
       {final int id,
-      final String latitude,
-      final String longitude,
+      final double latitude,
+      final double longitude,
+      final String? address,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$_LocationModel;
 
@@ -239,9 +246,11 @@ abstract class _LocationModel implements LocationModel {
   @override
   int get id;
   @override
-  String get latitude;
+  double get latitude;
   @override
-  String get longitude;
+  double get longitude;
+  @override
+  String? get address;
   @override
   DateTime? get createdAt;
   @override

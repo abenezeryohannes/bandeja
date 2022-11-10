@@ -15,11 +15,15 @@ class AuthLocalDataSource {
 
   Future<UserModel>? loadUser() async {
     final data = cache.getString(userKey);
-    if (data == null) throw CacheFailure(message: "Not logged in yet!");
+    if (data == null) throw UnAuthorizedFailure(message: "Not logged in yet!");
     return UserModel.fromJson(json.decode(data));
   }
 
   Future<bool>? saveUser(UserModel user) async {
     return await cache.setString(userKey, json.encode(user));
+  }
+
+  Future<bool>? removeUser() async {
+    return await cache.remove(userKey);
   }
 }

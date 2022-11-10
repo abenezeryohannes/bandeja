@@ -1,4 +1,5 @@
 import 'package:bandeja/src/core/dto/wrapper.dto.dart';
+import 'package:bandeja/src/core/utils/util.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/data/authentication/dto/user.dto.dart';
@@ -68,16 +69,21 @@ class _FillUserFormState extends State<FillUserForm> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 48.0),
           child: TextInputForm(
-              label: 'Full Name',
-              focusNode: FocusNode(),
-              placeholder: widget.userDto.fullName,
-              error: null,
-              suffixText: 'KD',
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              initialValue: widget.userDto.fullName,
-              onChanged: (change) {
-                widget.onNameChange(change);
-              }),
+            label: 'Full Name',
+            focusNode: FocusNode(),
+            elevation: 1,
+            radius: 12,
+            validator: (value) => Util.validateNoEmpty(value),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            initialValue: widget.userDto.fullName,
+            onChanged: (change) {
+              widget.onNameChange(change);
+            },
+            placeholder: widget.userDto.fullName ?? '',
+          ),
+        ),
+        const SizedBox(
+          height: 20,
         )
       ],
     );

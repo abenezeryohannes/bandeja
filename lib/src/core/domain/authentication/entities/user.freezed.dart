@@ -34,6 +34,7 @@ mixin _$UserModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   List<TokenModel>? get Tokens => throw _privateConstructorUsedError;
   TokenModel? get Token => throw _privateConstructorUsedError;
+  SettingModel? get Setting => throw _privateConstructorUsedError;
   LocationModel? get Location => throw _privateConstructorUsedError;
   List<BookmarkModel>? get Bookmarks => throw _privateConstructorUsedError;
   List<PadelModel>? get Padels => throw _privateConstructorUsedError;
@@ -63,11 +64,13 @@ abstract class $UserModelCopyWith<$Res> {
       DateTime? updatedAt,
       List<TokenModel>? Tokens,
       TokenModel? Token,
+      SettingModel? Setting,
       LocationModel? Location,
       List<BookmarkModel>? Bookmarks,
       List<PadelModel>? Padels});
 
   $TokenModelCopyWith<$Res>? get Token;
+  $SettingModelCopyWith<$Res>? get Setting;
   $LocationModelCopyWith<$Res>? get Location;
 }
 
@@ -95,6 +98,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? updatedAt = freezed,
     Object? Tokens = freezed,
     Object? Token = freezed,
+    Object? Setting = freezed,
     Object? Location = freezed,
     Object? Bookmarks = freezed,
     Object? Padels = freezed,
@@ -156,6 +160,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.Token
           : Token // ignore: cast_nullable_to_non_nullable
               as TokenModel?,
+      Setting: Setting == freezed
+          ? _value.Setting
+          : Setting // ignore: cast_nullable_to_non_nullable
+              as SettingModel?,
       Location: Location == freezed
           ? _value.Location
           : Location // ignore: cast_nullable_to_non_nullable
@@ -179,6 +187,17 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
 
     return $TokenModelCopyWith<$Res>(_value.Token!, (value) {
       return _then(_value.copyWith(Token: value));
+    });
+  }
+
+  @override
+  $SettingModelCopyWith<$Res>? get Setting {
+    if (_value.Setting == null) {
+      return null;
+    }
+
+    return $SettingModelCopyWith<$Res>(_value.Setting!, (value) {
+      return _then(_value.copyWith(Setting: value));
     });
   }
 
@@ -215,12 +234,15 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       DateTime? updatedAt,
       List<TokenModel>? Tokens,
       TokenModel? Token,
+      SettingModel? Setting,
       LocationModel? Location,
       List<BookmarkModel>? Bookmarks,
       List<PadelModel>? Padels});
 
   @override
   $TokenModelCopyWith<$Res>? get Token;
+  @override
+  $SettingModelCopyWith<$Res>? get Setting;
   @override
   $LocationModelCopyWith<$Res>? get Location;
 }
@@ -251,6 +273,7 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? updatedAt = freezed,
     Object? Tokens = freezed,
     Object? Token = freezed,
+    Object? Setting = freezed,
     Object? Location = freezed,
     Object? Bookmarks = freezed,
     Object? Padels = freezed,
@@ -312,6 +335,10 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.Token
           : Token // ignore: cast_nullable_to_non_nullable
               as TokenModel?,
+      Setting: Setting == freezed
+          ? _value.Setting
+          : Setting // ignore: cast_nullable_to_non_nullable
+              as SettingModel?,
       Location: Location == freezed
           ? _value.Location
           : Location // ignore: cast_nullable_to_non_nullable
@@ -330,22 +357,23 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
+class _$_UserModel implements _UserModel {
   _$_UserModel(
       {this.id = -1,
-      required this.fullName,
+      this.fullName = '',
       this.avatar,
       this.UID,
       this.emailAddress,
       this.password,
       this.role = "user",
       this.locationId,
-      this.phoneNumber = "00000000",
+      this.phoneNumber = "",
       this.enabled = true,
       this.createdAt,
       this.updatedAt,
       final List<TokenModel>? Tokens,
       this.Token,
+      this.Setting,
       this.Location,
       final List<BookmarkModel>? Bookmarks,
       final List<PadelModel>? Padels})
@@ -360,6 +388,7 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
   @JsonKey()
   final int id;
   @override
+  @JsonKey()
   final String fullName;
   @override
   final String? avatar;
@@ -396,6 +425,8 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
   @override
   final TokenModel? Token;
   @override
+  final SettingModel? Setting;
+  @override
   final LocationModel? Location;
   final List<BookmarkModel>? _Bookmarks;
   @override
@@ -416,32 +447,8 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserModel(id: $id, fullName: $fullName, avatar: $avatar, UID: $UID, emailAddress: $emailAddress, password: $password, role: $role, locationId: $locationId, phoneNumber: $phoneNumber, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt, Tokens: $Tokens, Token: $Token, Location: $Location, Bookmarks: $Bookmarks, Padels: $Padels)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'UserModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('fullName', fullName))
-      ..add(DiagnosticsProperty('avatar', avatar))
-      ..add(DiagnosticsProperty('UID', UID))
-      ..add(DiagnosticsProperty('emailAddress', emailAddress))
-      ..add(DiagnosticsProperty('password', password))
-      ..add(DiagnosticsProperty('role', role))
-      ..add(DiagnosticsProperty('locationId', locationId))
-      ..add(DiagnosticsProperty('phoneNumber', phoneNumber))
-      ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt))
-      ..add(DiagnosticsProperty('Tokens', Tokens))
-      ..add(DiagnosticsProperty('Token', Token))
-      ..add(DiagnosticsProperty('Location', Location))
-      ..add(DiagnosticsProperty('Bookmarks', Bookmarks))
-      ..add(DiagnosticsProperty('Padels', Padels));
+  String toString() {
+    return 'UserModel(id: $id, fullName: $fullName, avatar: $avatar, UID: $UID, emailAddress: $emailAddress, password: $password, role: $role, locationId: $locationId, phoneNumber: $phoneNumber, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt, Tokens: $Tokens, Token: $Token, Setting: $Setting, Location: $Location, Bookmarks: $Bookmarks, Padels: $Padels)';
   }
 
   @override
@@ -466,6 +473,7 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
             const DeepCollectionEquality().equals(other.updatedAt, updatedAt) &&
             const DeepCollectionEquality().equals(other._Tokens, _Tokens) &&
             const DeepCollectionEquality().equals(other.Token, Token) &&
+            const DeepCollectionEquality().equals(other.Setting, Setting) &&
             const DeepCollectionEquality().equals(other.Location, Location) &&
             const DeepCollectionEquality()
                 .equals(other._Bookmarks, _Bookmarks) &&
@@ -490,6 +498,7 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
       const DeepCollectionEquality().hash(updatedAt),
       const DeepCollectionEquality().hash(_Tokens),
       const DeepCollectionEquality().hash(Token),
+      const DeepCollectionEquality().hash(Setting),
       const DeepCollectionEquality().hash(Location),
       const DeepCollectionEquality().hash(_Bookmarks),
       const DeepCollectionEquality().hash(_Padels));
@@ -510,7 +519,7 @@ class _$_UserModel with DiagnosticableTreeMixin implements _UserModel {
 abstract class _UserModel implements UserModel {
   factory _UserModel(
       {final int id,
-      required final String fullName,
+      final String fullName,
       final String? avatar,
       final String? UID,
       final String? emailAddress,
@@ -523,6 +532,7 @@ abstract class _UserModel implements UserModel {
       final DateTime? updatedAt,
       final List<TokenModel>? Tokens,
       final TokenModel? Token,
+      final SettingModel? Setting,
       final LocationModel? Location,
       final List<BookmarkModel>? Bookmarks,
       final List<PadelModel>? Padels}) = _$_UserModel;
@@ -558,6 +568,8 @@ abstract class _UserModel implements UserModel {
   List<TokenModel>? get Tokens;
   @override
   TokenModel? get Token;
+  @override
+  SettingModel? get Setting;
   @override
   LocationModel? get Location;
   @override

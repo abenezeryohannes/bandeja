@@ -16,6 +16,7 @@ class SearchResultController extends GetxController {
 
   static const pageSize = 25;
   RxBool indoor = true.obs;
+  RxInt pickedTimeIndex = 0.obs;
   final padelRepository = getIt<IPadelRepository>();
   final DateTime date;
   Rx<DateTime> pickeddate = Rx<DateTime>(DateTime.now());
@@ -35,6 +36,8 @@ class SearchResultController extends GetxController {
         time: const Duration(microseconds: 500));
     debounce(pickeddate, (_) => pagingController.refresh(),
         time: const Duration(microseconds: 500));
+    debounce(pickedTime, (_) => pagingController.refresh(),
+        time: const Duration(microseconds: 500));
     pagingController.addPageRequestListener((pageKey) {
       filter(page: pageKey);
     });
@@ -43,13 +46,14 @@ class SearchResultController extends GetxController {
 
   filter({int? page}) async {
     filterOwners.value = WrapperDto<List<UserModel>>.loadingState();
+    String date = pickedTime.value != null
+        ? pickedTime.value!.toIso8601String()
+        : DateFormat('yyyy-MM-dd').format(pickeddate.value);
     final result = await padelRepository.getFilterPadels(
         page: page,
         address: address,
         padelGroup: padelGroup,
-        date: pickedTime.value != null
-            ? pickedTime.value!.toIso8601String()
-            : DateFormat('yyyy-MM-dd').format(pickeddate.value),
+        date: date,
         limit: pageSize,
         indoor: indoor.value);
     if (result == null) {

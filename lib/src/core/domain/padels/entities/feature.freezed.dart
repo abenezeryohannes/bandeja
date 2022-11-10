@@ -176,9 +176,7 @@ class __$$_InstrumentModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_InstrumentModel
-    with DiagnosticableTreeMixin
-    implements _InstrumentModel {
+class _$_InstrumentModel implements _InstrumentModel {
   _$_InstrumentModel(
       {this.id = -1,
       this.name = "",
@@ -207,21 +205,8 @@ class _$_InstrumentModel
   final PadelFeatureModel? PadelFeature;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'FeatureModel(id: $id, name: $name, icon: $icon, createdAt: $createdAt, updatedAt: $updatedAt, PadelFeature: $PadelFeature)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'FeatureModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('icon', icon))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt))
-      ..add(DiagnosticsProperty('PadelFeature', PadelFeature));
   }
 
   @override

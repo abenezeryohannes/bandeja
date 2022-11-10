@@ -317,7 +317,7 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_PostModel with DiagnosticableTreeMixin implements _PostModel {
+class _$_PostModel implements _PostModel {
   _$_PostModel(
       {this.id = -1,
       required this.userId,
@@ -387,31 +387,8 @@ class _$_PostModel with DiagnosticableTreeMixin implements _PostModel {
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'PostModel(id: $id, userId: $userId, title: $title, desc: $desc, whatsApp: $whatsApp, phoneNumber: $phoneNumber, featured: $featured, postGroupId: $postGroupId, price: $price, offer: $offer, enabled: $enabled, createdAt: $createdAt, updatedAt: $updatedAt, PostGroup: $PostGroup, User: $User, PostImages: $PostImages)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'PostModel'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('title', title))
-      ..add(DiagnosticsProperty('desc', desc))
-      ..add(DiagnosticsProperty('whatsApp', whatsApp))
-      ..add(DiagnosticsProperty('phoneNumber', phoneNumber))
-      ..add(DiagnosticsProperty('featured', featured))
-      ..add(DiagnosticsProperty('postGroupId', postGroupId))
-      ..add(DiagnosticsProperty('price', price))
-      ..add(DiagnosticsProperty('offer', offer))
-      ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt))
-      ..add(DiagnosticsProperty('PostGroup', PostGroup))
-      ..add(DiagnosticsProperty('User', User))
-      ..add(DiagnosticsProperty('PostImages', PostImages));
   }
 
   @override

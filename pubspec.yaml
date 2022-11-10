@@ -1,13 +1,12 @@
 name: bandeja
 description: A new Flutter project.
 
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
-
+  sdk: ">=2.17.6 <3.3.6"
 
 dependencies:
   flutter:
@@ -18,7 +17,6 @@ dependencies:
   http: ^0.13.5
   animated_bottom_navigation_bar: ^1.1.0
   internet_connection_checker: ^0.0.1+4
-  flutter_bloc: ^8.1.1
   shared_preferences: ^2.0.15
   dots_indicator: ^2.0.0
   flutter_native_splash: ^2.2.9
@@ -28,27 +26,40 @@ dependencies:
   infinite_scroll_pagination: ^3.2.0
   injectable: ^1.5.3
   get_it: ^7.2.0
-  flutter_dotenv: ^5.0.2 
+  flutter_dotenv: ^5.0.2
   freezed_annotation: ^2.1.0
   json_annotation: any
-  equatable: ^2.0.5
   image_picker: ^0.8.5+3
-  syncfusion_flutter_datepicker: ^20.2.50
   flutter_date_pickers: ^0.4.0
-  # flutter_upayments: ^1.0.2 
+  location: ^4.4.0
   expandable_page_view: ^1.0.17
   intl: ^0.17.0
   flutter_switch: ^0.3.2
   qr_flutter: ^4.0.0
   mime: ^1.0.2
-  virtual_keyboard_multi_language: ^1.0.3
   firebase_core: ^1.24.0
   firebase_auth: ^3.11.2
   firebase_messaging: ^13.1.0
   scroll_snap_list: ^0.9.1
-  
-  
-  cupertino_icons: ^1.0.2 
+  url_launcher: ^6.1.6
+  syncfusion_flutter_sliders: ^20.3.50
+  qr_code_scanner: ^1.0.1
+  status_stepper: ^1.0.0
+  location_picker_flutter_map: ^1.1.5
+  get_storage: ^2.0.3
+  snappy_list_view: ^0.0.7
+  flutter_local_notifications: ^12.0.3
+  social_share: ^2.2.1
+  path_provider: ^2.0.4
+  timeago: ^3.3.0
+
+  scroll_snap_tab_bar:
+    path: ./packages/scroll_snap_tab_bar
+
+  bargraph:
+    path: ./packages/bargraph
+
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -61,72 +72,65 @@ dev_dependencies:
   json_serializable: any
   flutter_flavorizr: ^2.1.4
 
-  
   flutter_lints: ^2.0.0
 
-
 flutter:
-
   uses-material-design: true
 
-  
   assets:
     - assets/img/
     - assets/fixtures/
     - assets/icons/
     - .env
-  
-  
+
 flavorizr:
   app:
     android:
       flavorDimensions: "flavor-type"
     ios: null
   ide: "vscode"
-  
+
   flavors:
-    main: 
+    main:
       app:
         name: "bandeja"
 
       android:
         applicationId: "com.konrad.bandeja"
+        firebase:
+          config: "./lib/firebase/bandeja/google-services.json"
 
       ios:
         bundleId: "com.konrad.bandeja"
+        firebase:
+          config: "./lib/firebase/bandeja/GoogleService-Info.plist"
 
     admin:
       app:
-        name: "bandeja Admin"
+        name: "Bandeja Admin"
 
       android:
-        applicationId: "com.konrad.bandeja_admin"
+        applicationId: "com.konrad.bandeja.admin"
+        firebase:
+          config: "./firebase/admin/google-services.json"
       ios:
-        bundleId: "com.konrad.bandeja_admin"
+        bundleId: "com.konrad.bandeja.admin"
+        firebase:
+          config: "./lib/firebase/admin/GoogleService-Info.plist"
 
     owner:
-        app:
-          name: "bandeja Owner"
+      app:
+        name: "Bandeja Court Owner"
 
-        android:
-          applicationId: "com.konrad.bandeja_owner"
-        ios:
-          bundleId: "com.konrad.bandeja_owner"
-
-
-# flutter_icons:
-#   android: "launcher_icon"
-#   ios: true
-#   image_path: "assets/img/app.png"
-#   min_sdk_android: 21 # android min sdk min:16, default 21
-#   web:
-#     generate: true
-#     image_path: "assets/img/app.png"
-#     background_color: "#f4f4f4"
-#     theme_color: "#ffffff"
-#   windows:
-#     generate: true
-#     image_path: "assets/img/app.png"
+      android:
+        applicationId: "com.konrad.bandeja.owner"
+        firebase:
+          config: "./lib/firebase/owner/google-services.json"
+      ios:
+        bundleId: "com.konrad.bandeja.owner"
+        firebase:
+          config: "./lib/firebase/owner/GoogleService-Info.plist"
+ 
 
 # flutter_native_splash:
 #   color: "#fafafa"
@@ -142,28 +146,3 @@ flavorizr:
 #     color: "#fafafa"
 #     color_dark: "#fafafa"
 
-  
-  
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

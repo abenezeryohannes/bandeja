@@ -46,7 +46,7 @@ class _LookingForSearchCardState extends State<LookingForSearchCard>
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 300),
       child: Container(
-          margin: const EdgeInsets.only(left: 10, top: 16, right: 10),
+          margin: const EdgeInsets.only(left: 20, top: 16, right: 20),
           padding:
               const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
           decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class _LookingForSearchCardState extends State<LookingForSearchCard>
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               height: widget.active
-                  ? ((100 * ((widget.items.length / 3))) + 50)
+                  ? ((100 * ((widget.items.length / 3))) + 100)
                   : 0,
               child: AnimatedOpacity(
                 opacity: widget.active ? 1.0 : 0.0,

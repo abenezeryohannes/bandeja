@@ -6,7 +6,7 @@ part 'response.dto.g.dart';
 class ResponseDto with _$ResponseDto {
   factory ResponseDto(
       {@Default(200) int statusCode,
-      @Default(true) bool success,
+      @Default(false) bool success,
       @Default(null) dynamic data,
       String? message,
       int? count,

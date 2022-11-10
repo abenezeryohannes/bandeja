@@ -13,7 +13,9 @@ _$_PromoCodeModel _$$_PromoCodeModelFromJson(Map<String, dynamic> json) =>
       padelId: json['padelId'] as int,
       code: json['code'] as String? ?? '',
       maxBooking: json['maxBooking'] as int? ?? 0,
+      discount: (json['discount'] as num?)?.toDouble() ?? 0,
       leftForBooking: json['leftForBooking'] as int? ?? 0,
+      PadelName: json['PadelName'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -29,7 +31,9 @@ Map<String, dynamic> _$$_PromoCodeModelToJson(_$_PromoCodeModel instance) =>
       'padelId': instance.padelId,
       'code': instance.code,
       'maxBooking': instance.maxBooking,
+      'discount': instance.discount,
       'leftForBooking': instance.leftForBooking,
+      'PadelName': instance.PadelName,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };

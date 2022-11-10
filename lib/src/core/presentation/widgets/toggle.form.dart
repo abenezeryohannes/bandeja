@@ -7,13 +7,19 @@ class ToggleForm extends StatefulWidget {
       required this.value,
       required this.onChange,
       this.title,
+      this.enabled = true,
       this.inactiveText,
-      this.activeText})
+      this.activeText,
+      this.activeBackgroundColor = Colors.black,
+      this.inActiveBackgroundColor})
       : super(key: key);
   final bool value;
   final String? title;
   final String? inactiveText;
   final String? activeText;
+  final bool enabled;
+  final Color activeBackgroundColor;
+  final Color? inActiveBackgroundColor;
   final Function(bool) onChange;
   @override
   State<ToggleForm> createState() => _ToggleFormState();
@@ -22,52 +28,26 @@ class ToggleForm extends StatefulWidget {
 class _ToggleFormState extends State<ToggleForm> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FlutterSwitch(
-          showOnOff: true,
-          toggleSize: 16,
-          valueFontSize: 14,
-          width: 60,
-          activeColor: Colors.black,
-          activeText: widget.activeText,
-          inactiveText: widget.inactiveText,
-          activeTextColor: Colors.white,
-          inactiveTextColor: Colors.grey.shade900,
-          value: widget.value,
-          onToggle: (val) {
-            setState(() {
-              widget.onChange(val);
-            });
-          },
-        ),
-        // if (widget.title != null)
-        //   Text(
-        //     widget.title!,
-        //     style: const TextStyle(
-        //       fontWeight: FontWeight.w500,
-        //       fontSize: 16,
-        //     ),
-        //   ),
-        // SizedBox(
-        //   height: 10,
-        //   width: 44,
-        //   child: FittedBox(
-        //     fit: BoxFit.cover,
-        //     child: CupertinoSwitch(
-        //       value: widget.value,
-        //       activeColor: Theme.of(context).shadowColor,
-        //       onChanged: (value) {
-        //         setState(() {
-        //           widget.onChange(value);
-        //         });
-        //       },
-        //     ),
-        //   ),
-        // ),
-      ],
+    return FlutterSwitch(
+      showOnOff: true,
+      toggleSize: 16,
+      valueFontSize: 14,
+      disabled: !widget.enabled,
+      width: 60,
+      activeColor: widget.activeBackgroundColor,
+      activeText: widget.activeText,
+      inactiveText: widget.inactiveText,
+      activeTextColor: Colors.white,
+      inactiveTextColor: Colors.grey.shade900,
+      inactiveColor: widget.inActiveBackgroundColor ?? Colors.grey.shade200,
+      value: widget.value,
+      onToggle: (val) {
+        if (widget.enabled) {
+          setState(() {
+            widget.onChange(val);
+          });
+        }
+      },
     );
   }
 }

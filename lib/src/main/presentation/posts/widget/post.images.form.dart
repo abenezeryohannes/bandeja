@@ -9,9 +9,11 @@ class PostImagesFrom extends StatefulWidget {
       required this.postImages,
       required this.uploadImage,
       required this.onLoadingChanged,
+      this.validator,
       required this.placeholder})
       : super(key: key);
   final List<PostImageDto> postImages;
+  final String? Function()? validator;
   final Function(String imgPath) uploadImage;
   final Function(bool isLoading) onLoadingChanged;
   final String placeholder;
@@ -33,18 +35,16 @@ class _PostImagesFromState extends State<PostImagesFrom> {
   }
 
   List<Widget> getForms() {
+    String? error = widget.validator == null ? null : widget.validator!();
     List<Widget> res = widget.postImages
-        .map((pI) => Card(
-              elevation: 2,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              color: Colors.grey.shade100,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
+        .map((pI) => Padding(
+              padding: const EdgeInsets.only(left: 16.0),
               child: ImageForm(
                 imageLink: pI.img,
                 localImage: pI.localImg,
                 width: 100,
                 height: 100,
+                elevation: 2,
                 radius: 12,
                 placeholder: Image.asset(
                   widget.placeholder,
@@ -59,18 +59,18 @@ class _PostImagesFromState extends State<PostImagesFrom> {
               ),
             ))
         .toList();
-    res.add(Card(
-      color: Colors.grey.shade100,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))),
+    res.add(Padding(
+      padding: const EdgeInsets.only(left: 16.0),
       child: ImageForm(
+        backgroundColor: Colors.grey.shade100,
         radius: 12,
+        elevation: 2,
         width: 100,
         height: 100,
+        validator: widget.validator,
         placeholder: Image.asset(
           widget.placeholder,
-          height: 100,
+          height: error == null ? 100 : 70,
         ),
         onUpload: (imagePath) {
           widget.uploadImage(imagePath);
