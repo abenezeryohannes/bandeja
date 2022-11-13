@@ -53,7 +53,7 @@ export class PostsService {
   async featured(user: User, query: any): Promise<Post[]> {
     return await this.postRepository.findAll({
       where: { enabled: true, featured: true },
-      include: [{ model: User, include: [] }, { model: PostGroup }],
+      include: [{ model: User }, { model: PostImage }, { model: PostGroup }],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
       // order: [['distance', 'asc']],

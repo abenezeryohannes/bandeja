@@ -13,6 +13,9 @@ export class FilterPadelDto {
   readonly padelGroupId: number;
 
   @Optional()
+  readonly durationId: number;
+
+  @Optional()
   readonly indoor: string;
 
   constructor(data: any) {
@@ -20,5 +23,6 @@ export class FilterPadelDto {
     this.date = data['date'];
     this.padelGroupId = data['padelGroupId'];
     this.indoor = data['indoor'];
+    this.durationId = data['durationId'];
   }
 }

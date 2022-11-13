@@ -66,9 +66,10 @@ export class NotificationsService {
     notification.seen = true;
     return await notification.save({ transaction: request.transaction });
   }
+
   async clear(request: any): Promise<Notification[]> {
     await this.notificationRepository.destroy({
-      where: { userID: request.user.id },
+      where: { userId: request.user.id },
       transaction: request.transaction,
     });
     return await this.notificationRepository.findAll({
@@ -82,7 +83,7 @@ export class NotificationsService {
   ): Promise<Notification> {
     return await this.notificationRepository.create(
       {
-        userID: notificationDto.userId,
+        userId: notificationDto.userId,
         title: notificationDto.title,
         desc: notificationDto.desc,
         seen: notificationDto.seen,
@@ -102,7 +103,7 @@ export class NotificationsService {
     const data = [];
     usersIds.forEach((id) => {
       data.push({
-        userID: id,
+        userId: id,
         title: notificationDto.title,
         desc: notificationDto.desc,
         seen: notificationDto.seen,

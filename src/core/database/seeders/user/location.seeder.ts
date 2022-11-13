@@ -6,8 +6,8 @@ export class SeedLocation {
     const data = [];
     for (let i = 1; i <= 12 * count; i++) {
       data.push({
-        latitude: (Math.random() + 1) * 2000,
-        longitude: (Math.random() + 1) * 2000,
+        latitude: (Math.random() + 1) * 50,
+        longitude: (Math.random() + 1) * 50,
         address: 'Kuwati main road',
       });
     }

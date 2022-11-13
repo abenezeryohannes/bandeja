@@ -1,14 +1,15 @@
-import { PostImage } from "../../../../modules/posts/domain/entities/post.image.entity";
+import { PostImage } from '../../../../modules/posts/domain/entities/post.image.entity';
 
 export class SeedPostImage {
   async run(): Promise<boolean> {
     const count = Number.parseInt(process.env.SEED_MULTIPLIER);
     const data = [];
+    let attr = 1;
     for (let i = 1; i <= count; i++) {
       for (let j = 1; j <= 3; j++) {
         data.push({
-          postId: i,
-          img: process.env.PLACEHOLDER,
+          postId: i - 1 + j,
+          img: 'img/post' + attr++ + '.jpg',
         });
       }
     }

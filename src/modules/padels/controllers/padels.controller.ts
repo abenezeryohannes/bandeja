@@ -54,6 +54,16 @@ export class PadelsController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Get('durations')
+  async durations(@Request() request, @Query() query) {
+    try {
+      const result = await this.padelsService.findAllDurations(query);
+      return WrapperDto.paginate(result, result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Get(':id')

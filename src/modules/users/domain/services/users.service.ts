@@ -195,7 +195,7 @@ export class UsersService {
     });
   }
 
-  async findUserWithToken(id: number, token: string): Promise<User> {
+  async findUserWithToken(id: number): Promise<User> {
     return await this.userRepository.findByPk<User>(id, {
       include: [{ model: Token }, { model: Setting }],
     });
@@ -287,8 +287,12 @@ export class UsersService {
     filterPadelDto: FilterPadelDto,
   ): Promise<User[]> {
     const conditions = { enabled: true };
+    const durationOption = {};
     if (filterPadelDto.addressId != null) {
       conditions['addressId'] = filterPadelDto.addressId;
+    }
+    if (filterPadelDto.durationId != null) {
+      durationOption['id'] = filterPadelDto.durationId;
     }
     if (filterPadelDto.padelGroupId != null) {
       conditions['padelGroupId'] = filterPadelDto.padelGroupId;
@@ -333,7 +337,7 @@ export class UsersService {
         include: [
           { model: Location },
           { model: Address },
-          { model: Duration },
+          { model: Duration, where: durationOption },
           { model: Feature },
           { model: User },
           {

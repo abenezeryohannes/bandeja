@@ -6,14 +6,15 @@ export class SeedPadel {
     const count = Number.parseInt(process.env.SEED_MULTIPLIER);
     const data = [];
     let attr = 1;
+    let imgCount = 0;
     for (let i = count + 1; i <= 2 * count; i++) {
       for (let j = 1; j < 3; j++) {
         data.push({
           userId: i,
           name: 'Padel Title ' + j,
           barCode: 'XXXX-XXXX-XXXX-XXXX',
-          banner: process.env.PLACEHOLDER,
-          avatar: process.env.PLACEHOLDER,
+          banner: 'img\\padel' + ((imgCount++ % 5) + 1) + '.jpg',
+          avatar: 'img\\padelavatar' + ((imgCount++ % 5) + 1) + '.jpg',
           addressId: Math.floor(Math.random() * (count * 3) + 1),
           locationId: 6 * count + attr++,
           padelGroupId: Math.floor(Math.random() * (count * 3) + 1),

@@ -1,4 +1,4 @@
-import { PostGroup } from "../../../../modules/posts/domain/entities/post.group.entity";
+import { PostGroup } from '../../../../modules/posts/domain/entities/post.group.entity';
 
 export class SeedPostGroup {
   async run(): Promise<boolean> {
@@ -8,7 +8,7 @@ export class SeedPostGroup {
       data.push({
         name: 'Ad Type' + i,
         icon: process.env.PLACEHOLDER,
-        color: process.env.ACCENT_COLOR,
+        color: i % 2 == 0 ? '#05D1F2' : '#FF7846',
       });
     }
     await PostGroup.bulkCreate(data);

@@ -12,7 +12,7 @@ export class SeedPromoCode {
           code: Math.round(Math.random() * 10000 + 1),
           padelId: attr++,
           maxBooking: 20,
-          leftForBooking: 20,
+          leftForBooking: 19,
           discount: 20,
         });
       }
