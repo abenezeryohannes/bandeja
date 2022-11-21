@@ -5,6 +5,7 @@ import {
   NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as moment from 'moment';
 import { Op, Sequelize } from 'sequelize';
 import {
@@ -35,6 +36,7 @@ export class BookingService {
     private readonly paymentRepository: typeof Payment,
     private readonly padelService: PadelsService,
     private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAll(user: User, query: any): Promise<PadelOrder[]> {
@@ -65,6 +67,7 @@ export class BookingService {
     let schedule = await this.padelService.findSchedule(
       orderDto.padelScheduleId,
     );
+
     const padel = await this.padelService.findOne(
       request.user,
       Date(),
@@ -114,6 +117,7 @@ export class BookingService {
     schedule.booked = true;
     schedule.status = 'booked';
     schedule = await schedule.save({ transaction: request.transaction });
+    order.barCode = (await this.jwtService.signAsync(order)).substring(0, 254);
     order = await order.save({ transaction: request.transaction });
     order.PadelSchedule = schedule;
     const result = order['dataValues'];

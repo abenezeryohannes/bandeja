@@ -458,6 +458,10 @@ export class PadelsService {
       padel.approved = padelDto.approved;
     }
 
+    if (padelDto.name != null) {
+      padel.name = padelDto.name;
+    }
+
     if (padelDto.enabled != null) {
       padel.enabled = padelDto.enabled;
     }
@@ -809,20 +813,27 @@ export class PadelsService {
         'Sorry, you are not allowed to change the schedule since your not the owner of this court.',
       );
 
-    if (
-      padelScheduleDto.price != null &&
-      padelScheduleDto.price != schedule.price &&
-      !schedule.booked
-    )
-      schedule.price = padelScheduleDto.price;
-
-    if (padelScheduleDto.booked != null && padelScheduleDto.booked) {
-      schedule.status = 'booked';
+    if (padelScheduleDto.booked != null) {
       schedule.booked = padelScheduleDto.booked;
+      if (schedule.booked && schedule.status == 'free')
+        schedule.status = 'reserved';
+      if (!schedule.booked && schedule.status == 'reserved')
+        schedule.status = 'free';
     }
 
-    if (padelScheduleDto.status != null)
-      schedule.status = padelScheduleDto.status;
+    if (
+      padelScheduleDto.price != null &&
+      padelScheduleDto.price != schedule.price
+    ) {
+      if (!schedule.booked) schedule.price = padelScheduleDto.price;
+      else
+        throw Error(
+          'Sorry, Changing court price while it is booked is no allowed.',
+        );
+    }
+
+    // if (padelScheduleDto.status != null)
+    //   schedule.status = padelScheduleDto.status;
 
     schedule = await schedule.save({ transaction: request.transaction });
 
@@ -830,30 +841,39 @@ export class PadelsService {
       padelScheduleDto.applyForAllDays != null &&
       padelScheduleDto.applyForAllDays
     ) {
+      const hour = moment(schedule.startTime).subtract(3, 'hours').hours();
+      const minute = moment(schedule.startTime).subtract(3, 'hours').minutes();
+
       const result = await this.padelScheduleRepository.update(
         {
           price: schedule.price,
           booked: schedule.booked,
+          status: schedule.status,
         },
         {
+          transaction: request.transaction,
           where: {
             [Op.and]: [
               this.sequelize.where(
                 this.sequelize.literal('HOUR(startTime)'),
                 '=',
-                schedule.startTime.getHours(),
+                hour,
               ),
               this.sequelize.where(
                 this.sequelize.literal('MINUTE(startTime)'),
                 '=',
-                schedule.startTime.getMinutes(),
+                minute,
               ),
               this.sequelize.where(
                 this.sequelize.literal('padelId'),
                 '=',
                 schedule.padelId,
               ),
-              this.sequelize.where(this.sequelize.literal('booked'), '!=', 1),
+              this.sequelize.where(
+                this.sequelize.literal('status'),
+                '!=',
+                'booked',
+              ),
             ],
           },
         },
