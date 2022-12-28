@@ -4,7 +4,6 @@ import {
   Get,
   Query,
   Post,
-  Body,
   UseInterceptors,
 } from '@nestjs/common';
 import { validateOrReject } from 'class-validator';

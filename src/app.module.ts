@@ -1,3 +1,4 @@
+import { AdsModule } from './modules/ads/ads.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,6 +14,7 @@ import 'reflect-metadata';
 import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    AdsModule,
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     UsersModule,

@@ -6,10 +6,12 @@ import {
   APP_VISIT_REPOSITORY,
   LOCATION_REPOSITORY,
   SETTING_REPOSITORY,
+  SYSTEM_VARIABLE_REPOSITORY,
   USER_REPOSITORY,
 } from '../../core/constants';
 import { Setting } from './domain/entities/setting.entity';
 import { AppVisit } from './domain/entities/app.visit.entity';
+import { SystemVariable } from './domain/entities/system.variable.entity';
 
 export const usersProviders = [
   {
@@ -23,6 +25,10 @@ export const usersProviders = [
   {
     provide: LOCATION_REPOSITORY,
     useValue: Location,
+  },
+  {
+    provide: SYSTEM_VARIABLE_REPOSITORY,
+    useValue: SystemVariable,
   },
   {
     provide: SETTING_REPOSITORY,

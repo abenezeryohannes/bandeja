@@ -41,13 +41,20 @@ import { Setting } from '../../../modules/users/domain/entities/setting.entity';
 import { SeedPadelPadelGroup } from './padels/padel.padel.group.seeder';
 import { SeedSetting } from './user/setting.seeder';
 import { PadelPadelGroup } from '../../../modules/padels/domain/entities/padel.padel.group';
+import { SeedSysVar } from './user/sys.var.seeder';
+import { SeedAd } from './ad/ads.seeder';
+import { SystemVariable } from '../../../modules/users/domain/entities/system.variable.entity';
+import { Ad } from '../../../modules/ads/domain/entities/ad.entity';
 
 export class Migrate {
   async run(): Promise<boolean> {
+    await SystemVariable.sync({ force: true });
+
     await Address.sync({ force: true });
     await Location.sync({ force: true });
     await User.sync({ force: true });
     await Token.sync({ force: true });
+    await Ad.sync({ force: true });
 
     await Notification.sync({ force: true });
     await Feature.sync({ force: true });
@@ -83,7 +90,11 @@ export class Migrate {
     await new SeedFeature().run();
     await new SeedPostGroup().run();
     await new SeedDuration().run();
+    if (process.env.ENV == 'DEV') await new SeedSysVar().run();
+
     if (process.env.ENV == 'DEV') await new SeedPadel().run();
+    if (process.env.ENV == 'DEV') await new SeedAd().run();
+
     if (process.env.ENV == 'DEV') await new SeedPadelPadelGroup().run();
     if (process.env.ENV == 'DEV') await new SeedAllowedBookingHour().run();
     if (process.env.ENV == 'DEV') await new SeedPadelFeature().run();
@@ -100,6 +111,8 @@ export class Migrate {
   }
 
   async rollback(): Promise<boolean> {
+    await new SeedAd().clean();
+    await new SeedSysVar().clean();
     await new SeedNotification().clean();
     await new SeedPostImage().clean();
     await new SeedPost().clean();

@@ -34,6 +34,7 @@ export class WrapperDto {
   static paginate(data: any, query: any): WrapperDto {
     const wrapper = new WrapperDto();
     wrapper.page = Number.parseInt(query.page);
+    wrapper.page = 0;
     wrapper.limit = Util.getLimit(query);
     wrapper.success = true;
     wrapper.statusCode = 200;

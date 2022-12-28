@@ -934,9 +934,20 @@ export class PadelsService {
             ? query.enabled == 'true' || query.enabled == true
             : { [Op.or]: [true, false] },
       },
-      include: [Location, Address, Duration],
+      include: [Location, Address, Duration, User],
       limit: Util.getLimit(query),
       offset: Util.getOffset(query),
+    });
+  }
+
+  async findAllAdminPadelsInGroup(groupId: number): Promise<Padel[]> {
+    return await this.padelsRepository.findAll({
+      where: {
+        padelGroupId: groupId,
+      },
+      include: [Location, Address, Duration, User],
+      limit: Util.getLimit(null),
+      offset: Util.getOffset(null),
     });
   }
 

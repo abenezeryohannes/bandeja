@@ -24,6 +24,8 @@ import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
 import { PadelPadelGroup } from '../../modules/padels/domain/entities/padel.padel.group';
 import { AppVisit } from '../../modules/users/domain/entities/app.visit.entity';
+import { Ad } from '../../modules/ads/domain/entities/ad.entity';
+import { SystemVariable } from '../../modules/users/domain/entities/system.variable.entity';
 export const databaseProviders = [
   {
     provide: SEQUELIZE,
@@ -65,6 +67,8 @@ export const databaseProviders = [
         Duration,
         PadelSchedule,
         PromoCode,
+        Ad,
+        SystemVariable,
         Setting,
       ]);
       await sequelize.sync({ logging: true });

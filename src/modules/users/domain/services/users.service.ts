@@ -4,13 +4,14 @@ import {
   APP_VISIT_REPOSITORY,
   LOCATION_REPOSITORY,
   SETTING_REPOSITORY,
+  SYSTEM_VARIABLE_REPOSITORY,
   USER_REPOSITORY,
 } from '../../../../core/constants';
 import { ROLE, UserDto } from '../../infrastructure/dto/user.dto';
 import { Address } from '../entities/address.entity';
 import { User } from '../entities/user.entity';
 import { Location } from '../entities/location.entity';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { join } from 'path';
 import { Token } from '../../../auth/domain/entities/token.entity';
 import { Util } from '../../../../core/utils/util';
@@ -25,11 +26,14 @@ import { LocationDto } from '../../infrastructure/dto/location.dto';
 import { AppVisit } from '../entities/app.visit.entity';
 import * as moment from 'moment';
 import { isNumber } from 'class-validator';
+import { SystemVariable } from '../entities/system.variable.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: typeof User,
+    @Inject(SYSTEM_VARIABLE_REPOSITORY)
+    private readonly systemVarRepository: typeof SystemVariable,
     @Inject(ADDRESS_REPOSITORY)
     private readonly addressRepository: typeof Address,
     @Inject(LOCATION_REPOSITORY)
@@ -228,6 +232,61 @@ export class UsersService {
               : '%%',
         },
       },
+      include: Location,
+      limit: Util.getLimit(request.query),
+      offset: Util.getOffset(request.query),
+    });
+  }
+
+  async findAllAdmins(request: any): Promise<User[]> {
+    return await this.userRepository.findAll({
+      where: {
+        fullName: {
+          [Op.like]:
+            request.query.search != undefined && request.query.search != null
+              ? '%' + request.query.search + '%%'
+              : '%%',
+        },
+        role: 'admin',
+      },
+      include: Location,
+      limit: Util.getLimit(request.query),
+      offset: Util.getOffset(request.query),
+    });
+  }
+
+  async findAllCustomers(request: any): Promise<User[]> {
+    return await this.userRepository.findAll({
+      where: {
+        fullName: {
+          [Op.like]:
+            request.query.search != undefined && request.query.search != null
+              ? '%' + request.query.search + '%%'
+              : '%%',
+        },
+        role: 'user',
+      },
+      include: Location,
+      limit: Util.getLimit(request.query),
+      offset: Util.getOffset(request.query),
+    });
+  }
+
+  async findAllOwners(request: any): Promise<User[]> {
+    return await this.userRepository.findAll({
+      attributes: {
+        include: [[Sequelize.literal('User.fullName'), 'name']],
+      },
+      where: {
+        fullName: {
+          [Op.like]:
+            request.query.search != undefined && request.query.search != null
+              ? '%' + request.query.search + '%%'
+              : '%%',
+        },
+        role: 'owner',
+      },
+      include: Location,
       limit: Util.getLimit(request.query),
       offset: Util.getOffset(request.query),
     });
@@ -248,6 +307,21 @@ export class UsersService {
     if (pastVisit == null) pastVisit = await this.visitStart(request);
     pastVisit.endTime = moment().toDate();
     return await pastVisit.save();
+  }
+
+  async getSysVar(request: any): Promise<string> {
+    const value = await this.systemVarRepository.findOne({
+      where: { key: request.body.key },
+    });
+    return value?.value ?? '';
+  }
+
+  async setSysVar(request: any): Promise<SystemVariable> {
+    const value = await this.systemVarRepository.create({
+      key: request.body.key,
+      value: request.body.value,
+    });
+    return value;
   }
 
   async countAppVisits(startTime: Date, endTime: Date): Promise<number> {

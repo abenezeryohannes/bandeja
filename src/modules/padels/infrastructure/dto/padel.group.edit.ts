@@ -1,10 +1,10 @@
 import { PadelAddDto } from './padel.add.dto';
 import { IsNotEmpty } from 'class-validator';
 
-export class PadelGroupDto {
+export class PadelGroupEditDto {
+  @IsNotEmpty({ message: 'Id is required!' })
   readonly id: number;
 
-  @IsNotEmpty({ message: 'Name is required!' })
   readonly name: string;
 
   readonly icon: string;
@@ -16,4 +16,13 @@ export class PadelGroupDto {
   readonly enabled: boolean;
 
   readonly Padel: PadelAddDto[];
+
+  constructor(body: any) {
+    this.id = body.id;
+    this.color = body.color;
+    this.name = body.name;
+    this.sequence = body.sequence;
+    this.enabled = body.enabled;
+    this.icon = body.icon;
+  }
 }

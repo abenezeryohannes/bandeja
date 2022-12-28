@@ -79,6 +79,39 @@ export class UsersController {
     }
   }
 
+  @Roles(ROLE.ADMIN)
+  @Get('findAllOwners')
+  async findAllOwners(@Request() request) {
+    try {
+      const result = await this.userService.findAllOwners(request);
+      return WrapperDto.paginate(result, request.query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN)
+  @Get('findAllAdmins')
+  async findAllAdmins(@Request() request) {
+    try {
+      const result = await this.userService.findAllAdmins(request);
+      return WrapperDto.paginate(result, request.query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN)
+  @Get('findAllCustomers')
+  async findAllCustomers(@Request() request) {
+    try {
+      const result = await this.userService.findAllCustomers(request);
+      return WrapperDto.paginate(result, request.query);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
   @Post('visitStart')
   async visitStart(@Request() request) {
@@ -95,6 +128,28 @@ export class UsersController {
   async visitEnd(@Request() request) {
     try {
       const result = await this.userService.visitEnd(request);
+      return WrapperDto.successfullCreated(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  // @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Post('getSysVar')
+  async getSysVar(@Request() request) {
+    try {
+      const result = await this.userService.getSysVar(request);
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
+  @Post('setSysVar')
+  async setSysVar(@Request() request) {
+    try {
+      const result = await this.userService.setSysVar(request);
       return WrapperDto.successfullCreated(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

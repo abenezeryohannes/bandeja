@@ -1,28 +1,19 @@
 import { IsNotEmpty } from 'class-validator';
-import { PostDto } from './post.dto';
 
-export class PostGroupDto {
+export class FeatureDto {
   id: number;
 
   @IsNotEmpty({ message: 'Name is required!' })
   name: string;
 
+  @IsNotEmpty({ message: 'Icon is required!' })
   icon: string;
-
-  color: string;
-
-  sequence: number;
 
   enabled: boolean;
 
-  Posts: PostDto[];
-
   constructor(body: any) {
-    this.id = body.id;
-    this.name = body.name;
     this.icon = body.icon;
-    this.color = body.color;
-    this.sequence = body.sequence;
+    this.name = body.name;
     this.enabled = body.enabled;
   }
 }

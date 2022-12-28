@@ -38,5 +38,5 @@ export class PadelGroup extends Model {
   enabled: boolean;
 
   @BelongsToMany(() => Padel, () => PadelPadelGroup)
-  Padel: Padel[];
+  Padels: Padel[];
 }

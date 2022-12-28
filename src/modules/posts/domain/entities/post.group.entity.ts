@@ -6,7 +6,7 @@ import {
   Is,
   Model,
   Table,
-} from 'sequelize-typescript'; 
+} from 'sequelize-typescript';
 import { HEX_REGEX } from '../../../../core/constants';
 import { Post } from './post.entity';
 

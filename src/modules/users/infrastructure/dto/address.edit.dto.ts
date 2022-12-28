@@ -1,14 +1,15 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class AddressDto {
+export class AddressEditDto {
+  @IsNotEmpty({ message: 'Identifier is required!' })
   readonly id: number;
 
-  @IsNotEmpty({ message: 'Name is required!' })
   readonly name: string;
 
   readonly enabled: boolean;
 
   constructor(body: any) {
+    this.id = body.id;
     this.name = body.name;
     this.enabled = body.enabled;
   }

@@ -2,11 +2,11 @@ import { Optional } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 
-export class PostDto {
-  @Optional()
+export class PostEditDto {
+  @IsNotEmpty({ message: 'Identifier is required!' })
   readonly id: number;
 
-  @IsNotEmpty({ message: 'Description is required!' })
+  @Optional()
   readonly desc: string;
 
   @Optional()
@@ -21,14 +21,14 @@ export class PostDto {
   @Optional()
   readonly offer: boolean;
 
-  @IsNotEmpty({ message: "Ad's price is required!" })
+  @Optional()
   @Type(() => Number)
   readonly price: number;
 
   @Optional()
   readonly enabled: boolean;
 
-  @IsNotEmpty({ message: 'Ad Group is required!' })
+  @Optional()
   @Type(() => Number)
   readonly postGroupId: number;
 

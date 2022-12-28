@@ -1,4 +1,13 @@
-import { Column, DataType, Default, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsToMany,
+  Column,
+  DataType,
+  Default,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Padel } from './padel.entity';
+import { PadelFeature } from './padel.feature';
 
 @Table
 export class Feature extends Model {
@@ -12,4 +21,7 @@ export class Feature extends Model {
   @Default(true)
   @Column({ type: DataType.BOOLEAN })
   enabled: boolean;
+
+  @BelongsToMany(() => Padel, () => PadelFeature)
+  Padels: Padel[];
 }

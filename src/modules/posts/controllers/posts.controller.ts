@@ -5,7 +5,6 @@ import {
   Query,
   Post,
   UseInterceptors,
-  Param,
   Body,
 } from '@nestjs/common';
 import { PostsService } from '../domain/services/posts.service';
@@ -21,6 +20,8 @@ import {
   editFileName,
   imageFileFilter,
 } from '../../../core/dto/file.upload.util';
+import { PostEditDto } from '../infrastructure/dto/post.edit.dto';
+import { validateOrReject } from 'class-validator';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -89,6 +90,52 @@ export class PostsController {
     try {
       const result = await this.postsService.destroy(body.postId, request);
       return WrapperDto.successfull(result >= 1);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN)
+  @Post('edit')
+  @UseInterceptors(TransactionInterceptor)
+  @UseInterceptors(
+    FastifyFilesInterceptor('files', 5, {
+      storage: diskStorage({
+        destination: join(process.cwd(), 'assets', 'public'),
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async edit(@Request() request) {
+    try {
+      const postEditDto = new PostEditDto(request.body);
+      await validateOrReject(postEditDto);
+
+      const result = await this.postsService.edit(request, postEditDto);
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN)
+  @Post('deleteAdmin')
+  async deleteAdmin(@Request() request, @Body() body) {
+    try {
+      const result = await this.postsService.delete(body.id);
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.ADMIN)
+  @Post('deleteAll')
+  async deleteAll(@Request() request, @Body() body) {
+    try {
+      const result = await this.postsService.deleteAll(JSON.parse(body.ids));
+      return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }

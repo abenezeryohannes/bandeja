@@ -1,4 +1,12 @@
-import { Column, DataType, Default, Model, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  Default,
+  HasMany,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Padel } from '../../../padels/domain/entities/padel.entity';
 
 @Table
 export class Address extends Model {
@@ -8,4 +16,7 @@ export class Address extends Model {
   @Default(true)
   @Column({ type: DataType.BOOLEAN })
   enabled: boolean;
+
+  @HasMany(() => Padel)
+  Padels: Padel[];
 }

@@ -211,7 +211,7 @@ export class PadelsController {
     }
   }
 
-  @Roles(ROLE.OWNER)
+  @Roles(ROLE.OWNER, ROLE.ADMIN)
   @Get('findAllFeatures')
   async findAllFeatures(@Request() request: any) {
     try {

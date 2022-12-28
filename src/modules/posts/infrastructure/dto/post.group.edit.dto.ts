@@ -1,21 +1,14 @@
 import { IsNotEmpty } from 'class-validator';
-import { PostDto } from './post.dto';
 
-export class PostGroupDto {
+export class PostGroupEditDto {
+  @IsNotEmpty({ message: 'Identifier is required!' })
   id: number;
 
-  @IsNotEmpty({ message: 'Name is required!' })
   name: string;
-
   icon: string;
-
   color: string;
-
   sequence: number;
-
   enabled: boolean;
-
-  Posts: PostDto[];
 
   constructor(body: any) {
     this.id = body.id;
