@@ -308,48 +308,6 @@ export class PadelsService {
       price: Number.parseFloat(padelDto.price.toString()),
     });
 
-    //PADEL GROUP
-    if (padelDto.padelGroupIds != null && padelDto.padelGroupIds.length >= 0) {
-      const ops = [];
-      padelDto.padelGroupIds.forEach((groupId) => {
-        ops.push(
-          this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: groupId,
-          }),
-        );
-      });
-      await Promise.all(ops);
-    }
-
-    if (padelDto.onlyLadies != null) {
-      const ladies = await this.padelGroupService.findOneByName('Ladies');
-      if (padel.indoor && ladies != null) {
-        await this.padelPadelGroupRepository.create({
-          padelId: padel.id,
-          padelGroupId: ladies.id,
-        });
-      }
-    }
-
-    if (padelDto.indoor != null) {
-      const outdoor = await this.padelGroupService.findOneByName('Outdoor');
-      const indoor = await this.padelGroupService.findOneByName('Indoor');
-      if (padel.indoor) {
-        if (indoor != null)
-          await this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: indoor.id,
-          });
-      } else {
-        if (outdoor != null)
-          await this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: outdoor.id,
-          });
-      }
-    }
-
     //START TIME
     if (padelDto.startTime != null) {
       padel.startTime = moment(padelDto.startTime).toDate();
@@ -384,6 +342,57 @@ export class PadelsService {
 
     padel = await padel.save({ transaction: request.transaction });
 
+    //PADEL GROUP
+    if (padelDto.padelGroupIds != null && padelDto.padelGroupIds.length >= 0) {
+      const ops = [];
+      padelDto.padelGroupIds.forEach((groupId) => {
+        ops.push({
+          padelId: padel.id,
+          padelGroupId: groupId,
+        });
+      });
+      await this.padelPadelGroupRepository.bulkCreate(ops, {
+        transaction: request.transaction,
+      });
+    }
+
+    if (padelDto.onlyLadies != null) {
+      const ladies = await this.padelGroupService.findOneByName('Ladies');
+      if (padel.indoor && ladies != null) {
+        await this.padelPadelGroupRepository.create(
+          {
+            padelId: padel.id,
+            padelGroupId: ladies.id,
+          },
+          { transaction: request.transaction },
+        );
+      }
+    }
+
+    if (padelDto.indoor != null) {
+      const outdoor = await this.padelGroupService.findOneByName('Outdoor');
+      const indoor = await this.padelGroupService.findOneByName('Indoor');
+      if (padel.indoor) {
+        if (indoor != null)
+          await this.padelPadelGroupRepository.create(
+            {
+              padelId: padel.id,
+              padelGroupId: indoor.id,
+            },
+            { transaction: request.transaction },
+          );
+      } else {
+        if (outdoor != null)
+          await this.padelPadelGroupRepository.create(
+            {
+              padelId: padel.id,
+              padelGroupId: outdoor.id,
+            },
+            { transaction: request.transaction },
+          );
+      }
+    }
+
     //FEATURES
     if (
       padelDto.padelFeatureDto != null &&
@@ -391,20 +400,15 @@ export class PadelsService {
     ) {
       const ops = [];
       padelDto.padelFeatureDto.forEach((padelFeatureDto) => {
-        ops.push(
-          // this.padelFeaturesRepository.create(
-          {
-            padelId: padel.id,
-            featureId: padelFeatureDto.featureId,
-            quantity: 1,
-            free: padelFeatureDto.free == null ? true : padelFeatureDto.free,
-          },
-          //,{ transaction: request.transaction },
-          //),
-        );
+        ops.push({
+          padelId: padel.id,
+          featureId: padelFeatureDto.featureId,
+          quantity: 1,
+          free: padelFeatureDto.free == null ? true : padelFeatureDto.free,
+        });
       });
       // await Promise.all(ops);
-      await this.featuresRepository.bulkCreate(ops, {
+      await this.padelFeaturesRepository.bulkCreate(ops, {
         transaction: request.transaction,
       });
     }
@@ -489,14 +493,14 @@ export class PadelsService {
       });
       const ops = [];
       padelDto.padelGroupIds.forEach((groupId) => {
-        ops.push(
-          this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: groupId,
-          }),
-        );
+        ops.push({
+          padelId: padel.id,
+          padelGroupId: groupId,
+        });
       });
-      await Promise.all(ops);
+      await this.padelFeaturesRepository.bulkCreate(ops, {
+        transaction: request.transaction,
+      });
     }
 
     if (padelDto.onlyLadies != null) {
@@ -509,12 +513,16 @@ export class PadelsService {
             padelId: padel.id,
             padelGroupId: ladies.id,
           },
+          transaction: request.transaction,
         });
       if (padel.indoor && ladies != null) {
-        await this.padelPadelGroupRepository.create({
-          padelId: padel.id,
-          padelGroupId: ladies.id,
-        });
+        await this.padelPadelGroupRepository.create(
+          {
+            padelId: padel.id,
+            padelGroupId: ladies.id,
+          },
+          { transaction: request.transaction },
+        );
       }
     }
     if (padelDto.indoor != null) {
@@ -528,6 +536,7 @@ export class PadelsService {
             padelId: padel.id,
             padelGroupId: indoor.id,
           },
+          transaction: request.transaction,
         });
       if (outdoor != null)
         await this.padelPadelGroupRepository.destroy({
@@ -535,19 +544,26 @@ export class PadelsService {
             padelId: padel.id,
             padelGroupId: outdoor.id,
           },
+          transaction: request.transaction,
         });
       if (padel.indoor) {
         if (indoor != null)
-          await this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: indoor.id,
-          });
+          await this.padelPadelGroupRepository.create(
+            {
+              padelId: padel.id,
+              padelGroupId: indoor.id,
+            },
+            { transaction: request.transaction },
+          );
       } else {
         if (outdoor != null)
-          await this.padelPadelGroupRepository.create({
-            padelId: padel.id,
-            padelGroupId: outdoor.id,
-          });
+          await this.padelPadelGroupRepository.create(
+            {
+              padelId: padel.id,
+              padelGroupId: outdoor.id,
+            },
+            { transaction: request.transaction },
+          );
       }
     }
     if (
@@ -560,10 +576,12 @@ export class PadelsService {
 
     //START TIME
     if (padelDto.startTime != null) {
+      // padel.startTime = padelDto.startTime; //new Date(padelDto.startTime);
       padel.startTime = moment(padelDto.startTime).toDate();
     }
     //END TIME
     if (padelDto.endTime != null) {
+      // padel.endTime = padelDto.startTime; //new Date(padelDto.endTime);
       padel.endTime = moment(padelDto.endTime).toDate();
     }
     //PADEL Location
@@ -637,6 +655,7 @@ export class PadelsService {
             status: { [Op.eq]: 'free' },
             startTime: { [Op.gt]: possibleToStart },
           },
+          transaction: request.transaction,
         });
         if (padelDto.padelSchedules.length == 0) return padel;
         dayDif =
@@ -707,6 +726,7 @@ export class PadelsService {
           },
         },
       ],
+      order: [['id', 'desc']],
     });
   }
 

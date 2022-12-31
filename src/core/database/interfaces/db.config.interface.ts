@@ -7,6 +7,7 @@ export interface IDatabaseConfigAttributes {
   dialect?: string;
   dialectOptions?: any;
   urlDatabase?: string;
+  timezone?: string;
 }
 
 export interface IDatabaseConfig {

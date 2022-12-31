@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { LIMIT } from '../constants';
 
 export class Util {
@@ -20,5 +21,10 @@ export class Util {
       return false;
     }
     return url.protocol === 'http:' || url.protocol === 'https:';
+  }
+
+  static dateString(val: Date): string {
+    const x = moment(val).format('yyyy-MM-DD HH:mm:ss');
+    return x;
   }
 }
