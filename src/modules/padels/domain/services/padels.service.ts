@@ -426,7 +426,11 @@ export class PadelsService {
                   ? schedule.status
                   : 'free',
               booked:
-                schedule.applyForAllDays || i == 0 ? schedule.booked : false,
+                schedule.applyForAllDays || i == 0
+                  ? schedule.booked == null
+                    ? false
+                    : schedule.booked
+                  : false,
               price:
                 isNaN(schedule.price) && (schedule.applyForAllDays || i == 0)
                   ? padel.price
