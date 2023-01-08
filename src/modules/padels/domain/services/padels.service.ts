@@ -115,10 +115,10 @@ export class PadelsService {
       where: { id: { [Op.in]: filteredPadelIds.map((e) => e.id) } },
       include: [
         { model: User, include: [] },
-        { model: Location },
-        { model: Feature },
-        { model: Duration },
-        { model: Address },
+        { model: Location, required: false },
+        { model: Feature, required: false },
+        { model: Duration, required: false },
+        { model: Address, required: false },
         { model: PadelGroup, where: condition },
         { model: Bookmark, where: { userId: user.id }, required: false },
         {
@@ -509,7 +509,6 @@ export class PadelsService {
 
     if (padelDto.onlyLadies != null) {
       padel.onlyLadies = padelDto.onlyLadies;
-
       const ladies = await this.padelGroupService.findOneByName('Ladies');
       if (ladies != null)
         await this.padelPadelGroupRepository.destroy({
@@ -686,7 +685,11 @@ export class PadelsService {
                 ? schedule.status
                 : 'free',
             booked:
-              schedule.applyForAllDays || i == 0 ? schedule.booked : false,
+              schedule.applyForAllDays || i == 0
+                ? schedule.booked == null
+                  ? false
+                  : schedule.booked
+                : false,
             price:
               isNaN(schedule.price) && (schedule.applyForAllDays || i == 0)
                 ? padel.price
