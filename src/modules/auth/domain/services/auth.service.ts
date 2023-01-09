@@ -94,7 +94,7 @@ export class AuthService {
       {
         ...user,
         phoneNumber: user.phoneNumber == undefined ? null : user.phoneNumber,
-        enabled: user.role == ROLE.OWNER ? false : true,
+        enabled: user.role == ROLE.OWNER ? true : true,
       },
       request.transaction,
     );
