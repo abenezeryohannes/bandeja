@@ -41,6 +41,9 @@ export class BookingController {
       const result = await this.bookingService.book(request, orderDto);
       return WrapperDto.successfullCreated(result);
     } catch (error) {
+      try {
+        await request.transaction.rollback();
+      } catch (e) {}
       return WrapperDto.figureOutTheError(error);
     }
   }
