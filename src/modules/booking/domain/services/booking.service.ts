@@ -117,9 +117,12 @@ export class BookingService {
     schedule.booked = true;
     schedule.status = 'booked';
     schedule = await schedule.save({ transaction: request.transaction });
-    order.barCode = (await this.jwtService.signAsync(order)).substring(0, 254);
-    order = await order.save({ transaction: request.transaction });
+    // order = await order.save({ transaction: request.transaction });
+    order.barCode = (
+      await this.jwtService.signAsync(order['dataValues'])
+    ).substring(0, 254);
     order.PadelSchedule = schedule;
+    order = await order.save({ transaction: request.transaction });
     const result = order['dataValues'];
     result.PadelSchedule = schedule['dataValues'];
     return result;
