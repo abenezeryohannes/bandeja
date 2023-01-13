@@ -874,8 +874,10 @@ export class PadelsService {
       padelScheduleDto.applyForAllDays != null &&
       padelScheduleDto.applyForAllDays
     ) {
-      const hour = moment(schedule.startTime).subtract(3, 'hours').hours();
-      const minute = moment(schedule.startTime).subtract(3, 'hours').minutes();
+      const hour = moment(schedule.startTime).hours();
+      const minute = moment(schedule.startTime).minutes();
+      // const hour = moment(schedule.startTime).subtract(3, 'hours').hours();
+      // const minute = moment(schedule.startTime).subtract(3, 'hours').minutes();
 
       const result = await this.padelScheduleRepository.update(
         {
