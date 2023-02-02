@@ -101,8 +101,6 @@ export class BookingService {
 
     let payment = order.Payment;
 
-    if (payment.status.toLowerCase().startsWith('succ')) return order;
-
     if (payment == null) {
       payment = this.paymentRepository.build({
         userId: order.userId,
@@ -110,7 +108,6 @@ export class BookingService {
       });
     } else {
       payment = await this.paymentRepository.findByPk(order.Payment.id);
-      order.paymentId = payment.id;
     }
 
     if (query.Result != null) payment.status = String(query.Result).toString();
@@ -120,6 +117,8 @@ export class BookingService {
 
     if (query.payment_type != null)
       payment.paymentType = String(query.payment_type).toString();
+
+    if (query.Auth != null) payment.auth = String(query.Auth).toString();
 
     if (query.PostDate != null)
       payment.postDate = String(query.PostDate).toString();
@@ -132,6 +131,8 @@ export class BookingService {
     if (query.TranID != null) payment.tranID = String(query.TranID).toString();
 
     payment = await payment.save({ transaction: request.transaction });
+
+    order.paymentId = payment.id;
 
     order.paymentDate = moment().toDate();
 
@@ -147,12 +148,14 @@ export class BookingService {
 
     let title = 'Payment Received';
     let desc =
-      'You have successfully paid  ' +
+      'Payment of ' +
       order.amount +
-      ' KD for your reservation of ' +
+      ' KD Received from ' +
+      request.user.fullName +
+      ' for ' +
       padel.name +
-      ' court on ' +
-      moment(Date.parse(order.createdAt)).format('MMM MMMM hh:mm A') +
+      ' court Reservation on ' +
+      moment(schedule.startTime).format('ddd MMMM hh:mm A') +
       '.';
 
     await this.notificationService.SendMessage(
@@ -167,18 +170,13 @@ export class BookingService {
     );
 
     title = 'Payment Approved';
-
     desc =
-      'Payment of ' +
+      'You have successfully paid  ' +
       order.amount +
-      ' KD Received from ' +
-      request.user.fullName +
-      ' for ' +
-      padel.name +
-      ' court Reservation on ' +
-      moment(Date.parse(order.createdAt)).format('MMM MMMM hh:mm A') +
+      ' KD for your reservation ' +
+      ' on ' +
+      moment(schedule.startTime).format('ddd MMMM hh:mm A') +
       '.';
-
     await this.notificationService.SendMessage(
       request,
       new NotificationDto({
@@ -264,14 +262,14 @@ export class BookingService {
     const result = order['dataValues'];
     result.PadelSchedule = schedule['dataValues'];
 
-    const title = ' New Reservation';
+    const title = 'New Reservation';
 
     const desc =
       request.user.fullName +
       ' has made a reservation for ' +
       padel.name +
-      ' court at ' +
-      moment(Date.parse(order.createdAt)).format('MMM MMMM hh:mm A') +
+      ' court on ' +
+      moment(Date.parse(order.createdAt)).format('ddd MMMM hh:mm A') +
       '.';
 
     await this.notificationService.SendMessage(
@@ -335,8 +333,6 @@ export class BookingService {
         'Sorry, court is not free at this time!',
       );
     }
-    schedule.booked = true;
-    schedule.status = 'booked';
     schedule = await schedule.save({ transaction: request.transaction });
     // order = await order.save({ transaction: request.transaction });
 
@@ -348,30 +344,6 @@ export class BookingService {
     const result = order['dataValues'];
     result.PadelSchedule = schedule['dataValues'];
 
-    const title = ' Reservation';
-
-    const desc =
-      request.user.fullName +
-      ' has made a reservation for ' +
-      padel.name +
-      ' court ' +
-      moment(Date.parse(order.createdAt)).format('MMM MMMM hh:mm A') +
-      '.';
-
-    console.log('title: ' + title);
-    console.log('desc: ' + desc);
-
-    await this.notificationService.SendMessage(
-      request,
-      new NotificationDto({
-        title: title,
-        desc: desc,
-        seen: false,
-        userId: padel.userId,
-      }),
-      true,
-    );
-
     return result;
   }
 
@@ -380,6 +352,10 @@ export class BookingService {
       where: {
         padelScheduleId: Number(body.padelScheduleId),
         userId: request.user.id,
+        [Op.or]: [
+          { status: { [Op.like]: 'Payment-Approved' } },
+          { status: { [Op.like]: 'confirmed' } },
+        ],
       },
       include: [
         { model: User, required: false },

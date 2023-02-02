@@ -36,6 +36,9 @@ export class Payment extends Model {
   @Column({ type: DataType.STRING })
   ref: string;
 
+  @Column({ type: DataType.STRING })
+  auth: string;
+
   @Default('unknown')
   @Column({ type: DataType.STRING })
   paymentType: string;

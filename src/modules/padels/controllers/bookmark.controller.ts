@@ -29,7 +29,7 @@ export class BookmarkController {
   }
 
   @Roles(ROLE.ADMIN, ROLE.OWNER, ROLE.USER)
-  @Get('isBookmark')
+  @Post('isBookmark')
   async isBookmark(@Request() request) {
     try {
       const result = await this.bookmarkService.isBookmark(request);
