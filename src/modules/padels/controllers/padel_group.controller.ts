@@ -49,6 +49,7 @@ export class PadelGroupController {
       return WrapperDto.figureOutTheError(error);
     }
   }
+
   @Roles(ROLE.ADMIN)
   @Get(':id')
   async findOne(@Param() query) {

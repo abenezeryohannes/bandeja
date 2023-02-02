@@ -12,10 +12,13 @@ export class PadelEditDto {
   @IsNotEmpty({ message: 'Court id is required!' })
   @Min(1)
   @IsInt()
-  readonly id: number;
+  id: number;
 
   @IsOptional()
   readonly name: string;
+
+  @IsOptional()
+  readonly userId: number;
 
   @IsOptional()
   readonly indoor: boolean;
@@ -63,20 +66,28 @@ export class PadelEditDto {
   constructor(data: any) {
     this.id = Number(data['id']);
     this.name = data['name'];
-    this.indoor = data['indoor'] == 'true' ? true : false;
+    this.userId = Number(data['userId']);
+    this.indoor = data['indoor'] || data['indoor'] == 'true';
     this.padelGroupIds = data['padelGroupId'];
-    this.addressId = Number(data['addressId']);
+    this.addressId = Number.isNaN(Number(data['addressId']))
+      ? null
+      : Number(data['addressId']);
     this.startTime = data['startTime'];
     this.endTime = data['endTime'];
-    this.durationId = Number(data['durationId']);
+    this.durationId = Number.isNaN(Number(data['durationId']))
+      ? null
+      : Number(data['durationId']);
     this.price = Number(data['price']);
-    this.approved = data['approved'] == 'true';
+    this.approved = data['approved'] || data['approved'] == 'true';
     if (data['padelFeatureDto'] != null || data['padelFeatureDto'] != undefined)
       this.padelFeatureDto = JSON.parse(data['padelFeatureDto']);
-    this.onlyLadies = data['onlyLadies'] == 'true' ? true : false;
+    this.onlyLadies =
+      data['onlyLadies'] == null
+        ? null
+        : data['onlyLadies'] || data['onlyLadies'] == 'true';
     if (data['padelSchedules'] != null || data['padelSchedules'] != undefined)
       this.padelSchedules = JSON.parse(data['padelSchedules']);
-    this.enabled = data['enabled'] == 'true' ? true : false;
+    this.enabled = data['enabled'] || data['enabled'] == 'true';
     if (data['locationDto'] != null || data['locationDto'] != undefined)
       this.locationDto = JSON.parse(data['locationDto']);
   }

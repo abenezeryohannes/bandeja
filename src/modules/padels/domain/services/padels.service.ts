@@ -33,6 +33,9 @@ import { PadelPadelGroup } from '../entities/padel.padel.group';
 import { PadelGroupService } from './padel_group.service';
 import { PadelGroup } from '../entities/padel.group.entity';
 import { Bookmark } from '../entities/bookmark.entity';
+import { isNumber } from 'class-validator';
+import { LocationDto } from '../../../users/infrastructure/dto/location.dto';
+import { AppVisit } from '../../../users/domain/entities/app.visit.entity';
 
 @Injectable()
 export class PadelsService {
@@ -267,6 +270,20 @@ export class PadelsService {
     });
   }
 
+  async getVisits(
+    userId: number | null,
+    padelId: number | null,
+  ): Promise<AppVisit[]> {
+    return await this.userService.getPadelVisits(userId, padelId);
+  }
+
+  async getVisitsCount(
+    userId: number | null,
+    padelId: number | null,
+  ): Promise<number> {
+    return await this.userService.getPadelVisitsCount(userId, padelId);
+  }
+
   async findOneWithPeriod(request: any): Promise<Padel> {
     const startTime = moment(
       request.query.startTime == null ? Date() : request.query.startTime,
@@ -461,6 +478,7 @@ export class PadelsService {
   }
 
   async editPadel(request: any, padelDto: PadelEditDto): Promise<Padel> {
+    let updatePrice = false;
     let padel = await this.padelsRepository.findByPk(padelDto.id, {
       include: [Address],
     });
@@ -474,6 +492,14 @@ export class PadelsService {
 
     if (padelDto.name != null) {
       padel.name = padelDto.name;
+    }
+
+    if (
+      padelDto.userId != null &&
+      isNumber(padelDto.userId) &&
+      padelDto.userId > 0
+    ) {
+      padel.userId = padelDto.userId;
     }
 
     if (padelDto.enabled != null) {
@@ -580,18 +606,19 @@ export class PadelsService {
       !isNaN(padelDto.price) &&
       padelDto.price > 0
     ) {
+      updatePrice = padel.price != padelDto.price;
       padel.price = padelDto.price;
     }
 
     //START TIME
     if (padelDto.startTime != null) {
       // padel.startTime = padelDto.startTime; //new Date(padelDto.startTime);
-      padel.startTime = moment(padelDto.startTime).toDate();
+      padel.startTime = moment.utc(padelDto.startTime).toDate();
     }
     //END TIME
     if (padelDto.endTime != null) {
       // padel.endTime = padelDto.startTime; //new Date(padelDto.endTime);
-      padel.endTime = moment(padelDto.endTime).toDate();
+      padel.endTime = moment.utc(padelDto.endTime).toDate();
     }
     //PADEL Location
     if (
@@ -599,7 +626,20 @@ export class PadelsService {
       padelDto.locationDto.latitude != null &&
       padelDto.locationDto.longitude != null
     ) {
-      await this.userService.editLocation(padelDto.locationDto);
+      if (padel.locationId == null && padelDto.locationDto.id == null) {
+        const location = await this.userService.addLocation(
+          padelDto.locationDto,
+        );
+        padel.locationId = location.id;
+      } else {
+        const dto = new LocationDto({
+          id: padel.locationId,
+          latitude: padelDto.locationDto.latitude,
+          longitude: padelDto.locationDto.longitude,
+          address: padelDto.locationDto.address,
+        });
+        await this.userService.editLocation(dto);
+      }
     }
 
     //AVATAR
@@ -697,7 +737,8 @@ export class PadelsService {
                   : schedule.booked
                 : false,
             price:
-              isNaN(schedule.price) && (schedule.applyForAllDays || i == 0)
+              (updatePrice && !isNaN(schedule.price)) ||
+              (isNaN(schedule.price) && (schedule.applyForAllDays || i == 0))
                 ? padel.price
                 : schedule.price,
             startTime: moment(schedule.startTime).add(i, 'days').toDate(),
@@ -780,6 +821,7 @@ export class PadelsService {
       { transaction: request.transaction },
     );
   }
+
   async getPromoCode(request: any): Promise<PromoCode> {
     if (request.query.padelId == undefined || request.query.code == undefined)
       throw Error('Invalid Promo Code');
@@ -858,7 +900,11 @@ export class PadelsService {
       padelScheduleDto.price != null &&
       padelScheduleDto.price != schedule.price
     ) {
-      if (!schedule.booked) schedule.price = padelScheduleDto.price;
+      if (
+        !schedule.booked ||
+        (schedule.booked && schedule.status == 'reserved')
+      )
+        schedule.price = padelScheduleDto.price;
       else
         throw Error(
           'Sorry, Changing court price while it is booked is no allowed.',

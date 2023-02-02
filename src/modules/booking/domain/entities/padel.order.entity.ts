@@ -5,6 +5,7 @@ import {
   Default,
   ForeignKey,
   Model,
+  HasOne,
   Table,
 } from 'sequelize-typescript';
 import { Padel } from '../../../padels/domain/entities/padel.entity';
@@ -15,6 +16,15 @@ import { Payment } from './payment.entity';
 
 @Table
 export class PadelOrder extends Model {
+  hasPayed() {
+    return (
+      (this.paymentId != null &&
+        (this.status.toLowerCase().includes('payed') ||
+          this.status.toLowerCase().includes('paid') ||
+          this.status.toLowerCase().includes('approved'))) ||
+      this.status.toLowerCase().includes('confirmed')
+    );
+  }
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;

@@ -292,9 +292,35 @@ export class UsersService {
     });
   }
 
+  async getPadelVisits(userId: number, padelId: number): Promise<AppVisit[]> {
+    const whereCondition = padelId == null ? {} : { padelId: padelId };
+    const userCondition = userId == null ? {} : { userId: userId };
+
+    return await AppVisit.findAll({
+      where: whereCondition,
+      include: { model: Padel, where: userCondition, required: true },
+    });
+  }
+  async getPadelVisitsCount(userId: number, padelId: number): Promise<number> {
+    const whereCondition = padelId == null ? {} : { padelId: padelId };
+    const userCondition = userId == null ? {} : { userId: userId };
+
+    return await AppVisit.count({
+      where: whereCondition,
+      include: { model: Padel, where: userCondition, required: true },
+    });
+  }
+
   async visitStart(request: any): Promise<AppVisit> {
+    const padelId = isNumber(request.body.padelId)
+      ? Number(request.body.padelId)
+      : -1;
+
+    if (padelId < 0) return;
+
     return await AppVisit.create({
       userId: request.user.id,
+      padelId: padelId,
       startTime: moment().toDate(),
       endTime: moment().add(1, 'minutes').toDate(),
     });

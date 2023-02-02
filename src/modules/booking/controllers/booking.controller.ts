@@ -30,6 +30,17 @@ export class BookingController {
     }
   }
 
+  @UseInterceptors(TransactionInterceptor)
+  @Get('notifyPayment')
+  async notifyPayment(@Request() request, @Query() query) {
+    try {
+      const response = await this.bookingService.notify(request, query);
+      return WrapperDto.successfull(response);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
   @Roles(ROLE.USER)
   @Post('order')
   @UseInterceptors(TransactionInterceptor)
@@ -44,6 +55,48 @@ export class BookingController {
       try {
         await request.transaction.rollback();
       } catch (e) {}
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.USER)
+  @Post('editOrder')
+  @UseInterceptors(TransactionInterceptor)
+  async editBook(@Request() request) {
+    try {
+      const orderDto = new OrderDto(request.body);
+      await validateOrReject(orderDto);
+
+      const result = await this.bookingService.editBook(request, orderDto);
+      return WrapperDto.successfullCreated(result);
+    } catch (error) {
+      try {
+        await request.transaction.rollback();
+      } catch (e) {}
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @Roles(ROLE.USER)
+  @Post('checkIfMyReservation')
+  @UseInterceptors(TransactionInterceptor)
+  async checkIfMyReservation(@Request() request) {
+    try {
+      const result = await this.bookingService.checkIfMyReservation(
+        request,
+        request.body,
+      );
+      return WrapperDto.successfull(result);
+    } catch (error) {
+      return WrapperDto.figureOutTheError(error);
+    }
+  }
+
+  @UseInterceptors(TransactionInterceptor)
+  async cleanCorruptedBooking(@Request() request) {
+    try {
+      return await this.bookingService.cleanCorruptedBooking(request);
+    } catch (error) {
       return WrapperDto.figureOutTheError(error);
     }
   }
@@ -66,7 +119,10 @@ export class BookingController {
   @Get('ownerWeeklyStats')
   async ownerWeeklystats(@Request() request) {
     try {
-      const result = await this.bookingService.ownerWeeklyStat(request.user);
+      const result = await this.bookingService.ownerWeeklyStat(
+        request.user,
+        request.query,
+      );
       return WrapperDto.successfull(result);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

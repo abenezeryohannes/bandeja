@@ -109,6 +109,7 @@ export class PadelsController {
         request,
         scheduleDto,
       );
+
       return WrapperDto.paginate(result, query);
     } catch (error) {
       return WrapperDto.figureOutTheError(error);

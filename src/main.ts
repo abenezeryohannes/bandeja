@@ -8,6 +8,8 @@ import { ValidateInputPipe } from './core/pipes/validate.pipe';
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
 
+process.env.TZ = '+0:00';
+
 const CORS_OPTIONS = {
   origin: ['http://127.0.0.1:5173'], // or '*' or whatever is required
   allowedHeaders: [
@@ -22,6 +24,15 @@ const CORS_OPTIONS = {
   credentials: true,
   methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
 };
+
+// Date.prototype.toJSON = function () {
+//   return subtractHours(this, 3).toLocaleString();
+// };
+
+// function subtractHours(date, hours) {
+//   date.setHours(date.getHours() - hours);
+//   return date;
+// }
 
 async function bootstrap() {
   const adapter = new FastifyAdapter();

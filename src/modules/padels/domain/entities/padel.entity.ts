@@ -12,6 +12,7 @@ import {
 import { Address } from '../../../../modules/users/domain/entities/address.entity';
 import { Location } from '../../../../modules/users/domain/entities/location.entity';
 import { User } from '../../../../modules/users/domain/entities/user.entity';
+import { AppVisit } from '../../../users/domain/entities/app.visit.entity';
 import { Bookmark } from './bookmark.entity';
 import { Duration } from './duration.entity';
 import { Feature } from './feature.entity';
@@ -78,6 +79,9 @@ export class Padel extends Model {
 
   @BelongsToMany(() => Feature, () => PadelFeature)
   Features: Feature[];
+
+  @HasMany(() => AppVisit)
+  AppVisit: AppVisit;
 
   @BelongsTo(() => Location)
   Location: Location;
