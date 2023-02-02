@@ -1,18 +1,23 @@
+import 'dart:math';
+
+import 'package:bandeja/src/core/domain/ads/entities/ad.dart';
 import 'package:bandeja/src/core/domain/padels/entities/padel.group.dart';
 import 'package:bandeja/src/core/error/failure.dart';
+import 'package:bandeja/src/main/core/presentations/widgets/ad.banner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/domain/posts/entities/post.dart';
 import '../../../../core/presentation/widgets/show.error.dart';
-import '../../../../core/presentation/widgets/sizable.pageview.dart';
+import '../../../../core/utils/util.dart';
 import '../../../presentation/home/widget/padel.card.with.avatar.dart';
 import '../../../presentation/home/widget/post.avatar.dart';
 import '../../../presentation/home/widget/scrollable_tab_bar.dart';
 import '../../../presentation/padels/pages/padel.page.dart';
 import '../../../presentation/posts/widget/post.bottom.sheet.dart';
 import '../controllers/home.controller.dart';
+import '../widgets/ad.banner.card.dart';
 
 class HomePageMain extends StatefulWidget {
   const HomePageMain({Key? key}) : super(key: key);
@@ -87,12 +92,13 @@ class _HomePageMainState extends State<HomePageMain> {
                   c.getItemGroup();
                   c.getFeaturedAds();
                   c.getFeaturedPadelItems();
+                  c.getAds();
                 },
                 child: ListView(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 20.0, top: 20, bottom: 10),
+                          left: 20.0, top: 20, bottom: 16),
                       child: Row(
                         children: [
                           Obx(() => c.featuredPedalItems.value.when(
@@ -102,7 +108,7 @@ class _HomePageMainState extends State<HomePageMain> {
                                     textAlign: TextAlign.left,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleSmall!
+                                        .titleLarge!
                                         .copyWith(fontWeight: FontWeight.w400),
                                   ),
                               loadedState: (x) =>
@@ -112,7 +118,7 @@ class _HomePageMainState extends State<HomePageMain> {
                                           textAlign: TextAlign.left,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .titleSmall!
+                                              .titleLarge!
                                               .copyWith(
                                                   fontWeight: FontWeight.w400),
                                         )
@@ -123,7 +129,7 @@ class _HomePageMainState extends State<HomePageMain> {
                     ),
                     Center(
                       child: SizedBox(
-                        height: Get.height * (7 / 15),
+                        height: Get.height * (7 / 17),
                         child: Obx(() =>
                             c.featuredPedalItems.value.when(emptyState: () {
                               return const SizedBox();
@@ -152,56 +158,46 @@ class _HomePageMainState extends State<HomePageMain> {
                             })),
                       ),
                     ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //       left: 20.0, top: 20, bottom: 16),
+                    //   child: Row(
+                    //     children: [
+                    //       Obx(() => c.featuredAds.value.when(
+                    //           emptyState: () => const SizedBox(),
+                    //           loadingState: (_) => Text(
+                    //                 'Player Posts!',
+                    //                 textAlign: TextAlign.left,
+                    //                 style: Theme.of(context)
+                    //                     .textTheme
+                    //                     .titleLarge!
+                    //                     .copyWith(fontWeight: FontWeight.w400),
+                    //               ),
+                    //           loadedState: (x) =>
+                    //               (x as List<PostModel>).isNotEmpty
+                    //                   ? Text(
+                    //                       'Player Posts!',
+                    //                       textAlign: TextAlign.left,
+                    //                       style: Theme.of(context)
+                    //                           .textTheme
+                    //                           .titleLarge!
+                    //                           .copyWith(
+                    //                               fontWeight: FontWeight.w400),
+                    //                     )
+                    //                   : const SizedBox(),
+                    //           errorState: (_) => const SizedBox())),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, top: 20, bottom: 10),
-                      child: Row(
-                        children: [
-                          Obx(() => c.featuredAds.value.when(
-                              emptyState: () => const SizedBox(),
-                              loadingState: (_) => Text(
-                                    'Padels Posts!',
-                                    textAlign: TextAlign.left,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall!
-                                        .copyWith(fontWeight: FontWeight.w400),
-                                  ),
-                              loadedState: (x) =>
-                                  (x as List<PostModel>).isNotEmpty
-                                      ? Text(
-                                          'Padels Posts!',
-                                          textAlign: TextAlign.left,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w400),
-                                        )
-                                      : const SizedBox(),
-                              errorState: (_) => const SizedBox())),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: Obx(() => c.featuredAds.value.when(emptyState: () {
-                            return const SizedBox();
-                          }, errorState: (failure) {
-                            return const SizedBox();
-                            // return ShowError(failure: failure);
-                          }, loadedState: (value) {
-                            return _featuredOffers(value);
-                          }, loadingState: (_) {
-                            return _featuredOffers(
-                                [null, null, null, null, null, null]);
-                          })),
-                    ),
+                      padding:
+                          const EdgeInsets.only(top: 14, left: 14, right: 14),
+                      child: _featuredAds(),
+                    )
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 24)
           ],
         ),
       ),
@@ -209,33 +205,35 @@ class _HomePageMainState extends State<HomePageMain> {
   }
 
   Widget _featuredPadelList(List<PadelModel?> value) {
-    return SizablePageView(
-        bodies: value
-            .map((e) => Padding(
-                  padding: EdgeInsets.only(
-                      right: value.indexOf(e) == value.length - 1 ? 20 : 0,
-                      left: value.indexOf(e) > 0 ? 20 : 20),
-                  child: PadelCardWithAvatar(
-                    item: e,
-                    avatarBorderColor: Colors.white,
-                    avatarRadius: 40,
-                    onClick: (_, __) {
-                      if (e != null) {
-                        Navigator.of(context).push(PageRouteBuilder(
-                            opaque: false, // set to false
-                            pageBuilder: (_, __, ___) => PadelPage(
-                                  padel: e,
-                                )));
-                      }
-                    },
-                    avatarHeroTag: "avatarHeroTag",
-                    cardHeroTag: "cardHeroTag",
-                    avatarMargins:
-                        const EdgeInsets.only(left: 16, right: 4, bottom: 2),
-                  ),
-                ))
-            .toList(),
-        viewFraction: 0.85);
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      children: value
+          .map((e) => Container(
+                // color: Colors.red,
+                padding: EdgeInsets.only(
+                    right: value.indexOf(e) == value.length - 1 ? 20 : 0,
+                    left: value.indexOf(e) > 0 ? 20 : 20),
+                child: PadelCardWithAvatar(
+                  item: e,
+                  avatarBorderColor: Colors.white,
+                  avatarRadius: 26,
+                  onClick: (_, __) {
+                    if (e != null) {
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false, // set to false
+                          pageBuilder: (_, __, ___) => PadelPage(
+                                padel: e,
+                              )));
+                    }
+                  },
+                  avatarHeroTag: "avatarHeroTag",
+                  cardHeroTag: "cardHeroTag",
+                  avatarMargins:
+                      const EdgeInsets.only(left: 16, right: 10, bottom: 2),
+                ),
+              ))
+          .toList(),
+    );
   }
 
   Widget _featuredOffers(List<PostModel?> value) {
@@ -269,5 +267,33 @@ class _HomePageMainState extends State<HomePageMain> {
             ),
           );
         });
+  }
+
+  Widget _featuredAds({height: int}) {
+    return Obx(() => c.ads.value.when(
+        emptyState: () => const SizedBox(),
+        loadingState: (_) => AdBannerCard(
+            ad: null, index: 0, height: Get.height * (5 / 23), onClick: () {}),
+        loadedState: (value) {
+          int index = ((value as List<AdModel?>).isNotEmpty)
+              ? (Random().nextInt(value.length))
+              : -1;
+          return index >= 0
+              ? AdBannerCard(
+                  ad: value[index],
+                  index: 0,
+                  height: Get.height * (5 / 23),
+                  onClick: () {
+                    Util.launchUrI(Uri.parse(value[index]!.link));
+                  })
+              : const SizedBox();
+        },
+        errorState: (failure) =>
+            (failure.runtimeType == UnAuthorizedFailure().runtimeType)
+                ? const SizedBox()
+                : ShowError(
+                    failure: failure,
+                    errorShowType: ErrorShowType.vertical,
+                  )));
   }
 }

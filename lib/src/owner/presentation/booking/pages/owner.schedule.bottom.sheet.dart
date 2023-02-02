@@ -1,4 +1,5 @@
 import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
+import 'package:bandeja/src/core/presentation/widgets/big.outline.text.button.dart';
 import 'package:bandeja/src/core/presentation/widgets/toggle.form.dart';
 import 'package:bandeja/src/owner/data/bookings/dto/padel.schedule.dto.dart';
 import 'package:bandeja/src/owner/presentation/booking/controllers/owner.shcedule.bottom.sheet.controller.dart';
@@ -9,13 +10,18 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/presentation/widgets/big.text.button.dart';
+import '../../../../core/utils/util.dart';
 
 class OwnerScheduleBottomSheet extends StatefulWidget {
   const OwnerScheduleBottomSheet(
-      {Key? key, required this.padelSchedule, this.save = true})
+      {Key? key,
+      required this.padelSchedule,
+      this.save = true,
+      this.canRemove = false})
       : super(key: key);
   final PadelScheduleModel padelSchedule;
   final bool save;
+  final bool canRemove;
   @override
   State<OwnerScheduleBottomSheet> createState() =>
       _OwnerScheduleBottomSheetState();
@@ -144,29 +150,67 @@ class _OwnerScheduleBottomSheetState extends State<OwnerScheduleBottomSheet> {
                             ),
                           ))),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Obx(() => items(
-                          img: 'assets/icons/setting-black-background.png',
-                          title: 'Apply for all days',
-                          value: SizedBox(
-                            height: 30,
-                            child: ToggleForm(
-                              activeBackgroundColor: Colors.black,
-                              inActiveBackgroundColor: Colors.grey.shade200,
-                              enabled: controller.padelOrder.value == null,
-                              onChange: (bool val) {
-                                controller.padelSchduleDto.value
-                                    .applyForAllDays = val;
-                                controller.padelSchduleDto.refresh();
+                    if (!widget.canRemove)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Obx(() => items(
+                            img: 'assets/icons/setting-black-background.png',
+                            title: 'Apply for all days',
+                            value: SizedBox(
+                              height: 30,
+                              child: ToggleForm(
+                                activeBackgroundColor: Colors.black,
+                                inActiveBackgroundColor: Colors.grey.shade200,
+                                enabled: controller.padelOrder.value == null,
+                                onChange: (bool val) {
+                                  controller.padelSchduleDto.value
+                                      .applyForAllDays = val;
+                                  controller.padelSchduleDto.refresh();
+                                },
+                                value: controller.padelSchduleDto.value
+                                        .applyForAllDays ??
+                                    false,
+                              ),
+                            ))),
+                      ),
+                    if (widget.canRemove)
+                      BigOutlineTextButton(
+                        onClick: () {
+                          Get.dialog(Util.showDialog(
+                              context: context,
+                              height: Get.height / 3,
+                              title: 'Are you sure?',
+                              desc:
+                                  'This will delete this schedule from the list.',
+                              yes: 'Yes, am sure',
+                              no: 'No',
+                              onNo: () {
+                                Get.back();
                               },
-                              value: controller
-                                      .padelSchduleDto.value.applyForAllDays ??
-                                  false,
-                            ),
-                          ))),
-                    ),
+                              onYes: () {
+                                Get.back();
+                                controller.padelSchduleDto.value.remove = true;
+                                controller.padelSchduleDto.refresh();
+
+                                if (!widget.save) {
+                                  Get.back<PadelScheduleDto>(
+                                      result: controller.padelSchduleDto.value);
+                                } else {
+                                  controller.saveSchedule();
+                                }
+                              }));
+                        },
+                        enabled: controller.padelOrder.value == null,
+                        cornerRadius: 10,
+                        isLoading: controller.loading.value,
+                        horizontalMargin:
+                            const EdgeInsets.only(left: 30, right: 30, top: 14),
+                        borderColor: Colors.red,
+                        backgroudColor: Colors.grey.shade50,
+                        textColor: Colors.red,
+                        text: "Delete",
+                      ),
                   ]),
                   if (MediaQuery.of(context).viewInsets.bottom == 0)
                     Obx(() => BigTextButton(
@@ -174,16 +218,20 @@ class _OwnerScheduleBottomSheetState extends State<OwnerScheduleBottomSheet> {
                             if (!widget.save) {
                               Get.back<PadelScheduleDto>(
                                   result: controller.padelSchduleDto.value);
+                            } else {
+                              controller.saveSchedule();
                             }
-                            controller.saveSchedule();
                           },
                           enabled: controller.padelOrder.value == null,
                           cornerRadius: 10,
+                          isLoading: controller.loading.value,
                           padding: const EdgeInsets.symmetric(
                             vertical: 10,
                           ),
-                          horizontalMargin: const EdgeInsets.only(
-                              left: 30, right: 30, top: 20),
+                          horizontalMargin: EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                              top: (widget.canRemove) ? 10 : 20),
                           text: "Save",
                         ))
                 ],

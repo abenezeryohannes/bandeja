@@ -47,7 +47,7 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
         child: Column(
           children: [
             Card(
@@ -62,7 +62,12 @@ class _PadelSearchResultCardState extends State<PadelSearchResultCard> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            PadelCard(item: widget.user?.getPadels()[index]),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 10),
+                              child: PadelCard(
+                                  item: widget.user?.getPadels()[index]),
+                            ),
                             SchedulesCard(
                               schedules: widget.user == null
                                   ? [null]

@@ -53,7 +53,9 @@ class _AdminMainPageState extends State<AdminMainPage> {
           bottomNavigationBar: Obx(() => AnimatedBottomNavigationBar.builder(
                 itemCount: 4,
                 tabBuilder: (int index, bool isActive) {
-                  final color = isActive ? Colors.blueAccent : Colors.grey;
+                  final color = isActive
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,

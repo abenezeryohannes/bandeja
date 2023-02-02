@@ -9,6 +9,7 @@ class BigOutlineTextButton extends StatefulWidget {
     this.textColor = Colors.white,
     this.backgroudColor = Colors.blueAccent,
     required this.onClick,
+    this.borderColor = Colors.blueAccent,
     this.elevation = 1,
     this.fontSize = 14,
     this.enabled = true,
@@ -24,6 +25,7 @@ class BigOutlineTextButton extends StatefulWidget {
   final String? text;
   final Widget? textWidget;
   final Color textColor;
+  final Color borderColor;
   final bool isExpanded;
   final bool isLoading;
   final Color backgroudColor;
@@ -70,7 +72,9 @@ class _BigOutlineTextButtonState extends State<BigOutlineTextButton> {
         style: ButtonStyle(
             elevation: MaterialStateProperty.all(widget.elevation),
             side: MaterialStateProperty.all(BorderSide(
-                color: Colors.blue, width: 1.0, style: BorderStyle.solid)),
+                color: widget.borderColor,
+                width: 1.0,
+                style: BorderStyle.solid)),
             backgroundColor: MaterialStateProperty.all(widget.enabled
                 ? widget.backgroudColor
                 : widget.backgroudColor.withOpacity(0.6)),

@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/domain/authentication/entities/user.dart';
@@ -39,13 +40,17 @@ abstract class IPadelRepository {
     int? page,
     int? limit,
     bool indoor,
+    DurationModel? duration,
     PadelGroupModel? padelGroup,
     AddressModel? address,
     required String date,
     DateTime? timeOfDay,
   });
+
   Future<Either<Failure, PadelModel>?>? findPadel(
       {required int padelId, DateTime? date});
+
+  Future<Either<Failure, List<DurationModel>>?>? findAllDurations();
 
   Future<Either<Failure, PadelModel>?>? findPadelWithPeriod(
       {required int padelId,

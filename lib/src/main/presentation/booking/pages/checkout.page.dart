@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/booking/entities/padel.order.dart';
 import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
 import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
 import 'package:bandeja/src/main/presentation/booking/controllers/checkout.page.controller.dart';
@@ -5,16 +6,19 @@ import 'package:bandeja/src/owner/presentation/promo_code/widgets/owner.promo.co
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_upayments/flutter_upayments.dart';
 
 import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/presentation/widgets/text.input.form.dart';
 import '../../../core/presentations/widgets/padel.card.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({Key? key, required this.padel, required this.schedule})
+  const CheckoutPage(
+      {Key? key, required this.padel, required this.schedule, this.givenOrder})
       : super(key: key);
   final PadelModel padel;
   final PadelScheduleModel schedule;
+  final PadelOrderModel? givenOrder;
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
 }
@@ -24,9 +28,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void initState() {
-    controller = Get.put(CheckoutPageController(widget.padel, widget.schedule));
+    controller = Get.put(CheckoutPageController(widget.padel, widget.schedule,
+        givenOrder: widget.givenOrder));
     controller.loading.value = false;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<CheckoutPageController>();
+    super.dispose();
   }
 
   @override
@@ -52,7 +63,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        PadelCard(item: widget.padel),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 10),
+                          child: PadelCard(item: widget.padel),
+                        ),
                         const SizedBox(
                           height: 40,
                         ),
@@ -141,16 +156,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context)
+              .textTheme
+              .caption!
+              .copyWith(fontWeight: FontWeight.w400, fontSize: 14),
         ),
         const SizedBox(
-          height: 5,
+          height: 10,
         ),
         Text(
           value,
           style: Theme.of(context)
               .textTheme
-              .subtitle1!
+              .caption!
               .copyWith(color: Theme.of(context).colorScheme.secondary),
         )
       ],
@@ -161,7 +179,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return AppBar(
       title: Text(
         "Checkout",
-        style: Theme.of(context).textTheme.titleMedium,
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(fontWeight: FontWeight.w400),
       ),
       centerTitle: true,
       backgroundColor: Colors.transparent,
@@ -190,6 +211,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       height: 80,
       decoration: BoxDecoration(
+          color: Colors.grey.shade50,
           border:
               Border(top: BorderSide(width: 1, color: Colors.grey.shade400))),
       child: Row(
@@ -242,7 +264,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
           Obx(() => BigTextButton(
                 onClick: () {
-                  controller.book();
+                  controller.book(context);
                 },
                 isLoading: controller.loading.value,
                 isExpanded: false,
@@ -259,7 +281,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             .titleMedium!
                             .copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                                color: const Color(0xFFFFFF00))),
                     const SizedBox(width: 10),
                     const Icon(Icons.arrow_forward),
                   ],

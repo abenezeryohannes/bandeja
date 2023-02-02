@@ -8,7 +8,6 @@ import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/presentation/widgets/big.text.button.dart';
 import '../../../../main/core/presentations/widgets/feature.card.dart';
 import '../../../../main/core/presentations/widgets/schedules.card.dart';
-import '../../../../main/presentation/booking/pages/checkout.page.dart';
 import '../../../../main/presentation/padels/widgets/padel.date.picker.dart';
 import '../controllers/admin.padel.page.controller.dart';
 
@@ -58,7 +57,8 @@ class _AdminPadelPageBodyState extends State<AdminPadelPageBody> {
               Obx(() => Center(
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.secondary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(40)),
                             padding: const EdgeInsets.symmetric(

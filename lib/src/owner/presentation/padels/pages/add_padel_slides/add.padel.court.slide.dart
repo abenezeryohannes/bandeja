@@ -86,7 +86,7 @@ class _AddPadelCourtSlideState extends State<AddPadelCourtSlide> {
                             child: DropDownForm(
                               value:
                                   widget.controller.addressPicked.value?.name,
-                              placeholder: 'Click to choose the court location',
+                              placeholder: 'choose court location',
                               onChange: (_, dynamic value) {
                                 widget.controller.addressPicked.value =
                                     (value as AddressModel);
@@ -96,7 +96,7 @@ class _AddPadelCourtSlideState extends State<AddPadelCourtSlide> {
                               options: (value as List<AddressModel>)
                                   .map((e) => {e.name: e})
                                   .toList(),
-                              label: 'Cour Location',
+                              label: 'Court Location',
                               elevation: 1,
                               radius: 14,
                             ),

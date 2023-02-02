@@ -12,6 +12,7 @@ import '../../../../core/presentation/widgets/loading.bar.dart';
 import '../../../../core/presentation/widgets/show.error.dart';
 import '../../../../core/presentation/widgets/toggle.form.dart';
 import '../../../../main/presentation/profile/widgets/user.avatar.dart';
+import '../../../presentation/padels/pages/add.padel.page.dart';
 
 class OwnerProfilePage extends StatefulWidget {
   const OwnerProfilePage({Key? key}) : super(key: key);
@@ -39,17 +40,22 @@ class _OwnerProfilePageState extends State<OwnerProfilePage> {
               height: 10,
             ),
             Center(
-              child: UserAvatar(
-                userDto: controller.userWrapper.value,
-                size: 100,
-                onUpload: (x) {
-                  controller.userDto.value.localImage = x;
-                  controller.saveUser(controller.userDto.value);
-                },
-                isLoading: (loading) {
-                  controller.loading.value = loading;
-                },
-                localImage: controller.userDto.value.localImage,
+              child: Obx(
+                () => UserAvatar(
+                  userDto: controller.userWrapper.value,
+                  size: 100,
+                  onUpload: (x) {
+                    controller.userDto.value.localImage = x;
+                    setState(() {
+                      controller.avatar.value = x;
+                    });
+                    controller.saveUser(controller.userDto.value);
+                  },
+                  isLoading: (loading) {
+                    controller.loading.value = loading;
+                  },
+                  localImage: controller.avatar.value,
+                ),
               ),
             ),
             Padding(
@@ -121,7 +127,7 @@ class _OwnerProfilePageState extends State<OwnerProfilePage> {
                     activeBackgroundColor:
                         Theme.of(context).colorScheme.secondary,
                     inActiveBackgroundColor: Colors.grey.shade200,
-                    onChange: (bool val) {
+                    onChange: (bool val) async {
                       UserDto temp = controller.userDto.value;
                       temp.faceId = val;
                       controller.saveUser(temp);
@@ -142,10 +148,44 @@ class _OwnerProfilePageState extends State<OwnerProfilePage> {
                       onRefresh: () {},
                     ),
                 loadedState: (value) {
-                  return RecentOwnerPadels(
-                    padel: (value as List<PadelModel?>),
-                    onRefresh: () => controller.loadMyPadels(),
-                  );
+                  if ((value as List<PadelModel?>).isEmpty) {
+                    return Container(
+                      padding: const EdgeInsets.only(top: 40),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/icons/empty-owner-padel.png",
+                              height: 100),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextButton(
+                              onPressed: () async {
+                                final result =
+                                    await Get.to(() => const AddPadelPage());
+                                if (result != null) {
+                                  controller.loadMyPadels();
+                                }
+                              },
+                              child: Text(
+                                'Add new court?',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.blue),
+                              ))
+                        ],
+                      ),
+                    );
+                  } else {
+                    return RecentOwnerPadels(
+                      padel: value,
+                      onRefresh: () => controller.loadMyPadels(),
+                    );
+                  }
                 },
                 errorState: (failure) => ShowError(failure: failure)))
           ]),
@@ -218,8 +258,6 @@ class _OwnerProfilePageState extends State<OwnerProfilePage> {
                             )),
                         TextButton(
                             onPressed: () {
-                              // Get.back();
-
                               controller.logout();
                             },
                             child: Text(

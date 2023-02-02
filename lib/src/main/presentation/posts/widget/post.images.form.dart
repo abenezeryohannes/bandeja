@@ -44,7 +44,7 @@ class _PostImagesFromState extends State<PostImagesFrom> {
                 localImage: pI.localImg,
                 width: 100,
                 height: 100,
-                elevation: 2,
+                elevation: 0,
                 radius: 12,
                 placeholder: Image.asset(
                   widget.placeholder,
@@ -64,7 +64,7 @@ class _PostImagesFromState extends State<PostImagesFrom> {
       child: ImageForm(
         backgroundColor: Colors.grey.shade100,
         radius: 12,
-        elevation: 2,
+        elevation: 0,
         width: 100,
         height: 100,
         validator: widget.validator,

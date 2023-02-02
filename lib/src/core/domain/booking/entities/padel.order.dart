@@ -39,7 +39,15 @@ class PadelOrderModel with _$PadelOrderModel {
 
 extension PadelOrderModelX on PadelOrderModel {
   UserModel getUser() {
-    return this.User ?? UserModel(fullName: '    ');
+    return User ?? UserModel(fullName: '    ');
+  }
+
+  bool hasPayed() {
+    return (paymentId != null &&
+            (status.toLowerCase().startsWith('payed') ||
+                status.toLowerCase().startsWith('approved') ||
+                status.toLowerCase().startsWith('paid'))) ||
+        status.toLowerCase().startsWith('confirmed');
   }
 
   PaymentModel getPayment() {

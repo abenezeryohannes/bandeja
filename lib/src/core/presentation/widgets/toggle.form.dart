@@ -10,6 +10,7 @@ class ToggleForm extends StatefulWidget {
       this.enabled = true,
       this.inactiveText,
       this.activeText,
+      this.width = 60,
       this.activeBackgroundColor = Colors.black,
       this.inActiveBackgroundColor})
       : super(key: key);
@@ -18,6 +19,7 @@ class ToggleForm extends StatefulWidget {
   final String? inactiveText;
   final String? activeText;
   final bool enabled;
+  final double width;
   final Color activeBackgroundColor;
   final Color? inActiveBackgroundColor;
   final Function(bool) onChange;
@@ -33,7 +35,8 @@ class _ToggleFormState extends State<ToggleForm> {
       toggleSize: 16,
       valueFontSize: 14,
       disabled: !widget.enabled,
-      width: 60,
+      width: widget.width,
+      padding: 5,
       activeColor: widget.activeBackgroundColor,
       activeText: widget.activeText,
       inactiveText: widget.inactiveText,

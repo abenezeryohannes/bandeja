@@ -1,10 +1,10 @@
 import 'package:bandeja/src/core/domain/padels/entities/padel.dart';
 import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
 import 'package:bandeja/src/owner/presentation/booking/pages/owner.schedule.bottom.sheet.dart';
+import 'package:bandeja/src/owner/presentation/padels/widgets/owner.padel.card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../main/core/presentations/widgets/padel.card.dart';
 import '../../../../main/core/presentations/widgets/schedules.card.dart';
 
 class OwnerPadelWithScheduleCard extends StatefulWidget {
@@ -36,7 +36,7 @@ class _OwnerPadelWithScheduleCardState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PadelCard(item: widget.padel),
+            OwnerPadelCard(item: widget.padel),
             if (widget.padel == null ||
                 (widget.padel != null &&
                     widget.padel!.getSchedules().isNotEmpty))

@@ -55,6 +55,8 @@ extension UserModelX on UserModel {
         role: role,
         avatar: avatar,
         emailAddress: emailAddress,
+        faceId: Setting?.faceId ?? false,
+        bookingNotification: Setting?.bookingNotification ?? false,
         enabled: enabled);
   }
 }

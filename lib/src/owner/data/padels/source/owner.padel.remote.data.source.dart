@@ -11,6 +11,7 @@ import 'package:bandeja/src/owner/data/padels/dto/padel.dto.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
 
 import '../../../../core/dto/response.dto.dart';
@@ -325,6 +326,13 @@ class OwnerPadelRemoteDataSource {
           }
         }
       });
+      var formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+      if (padelDto.startTime != null) {
+        request.fields['startTime'] = formatter.format(padelDto.startTime!);
+      }
+      if (padelDto.endTime != null) {
+        request.fields['endTime'] = formatter.format(padelDto.endTime!);
+      }
 
       request.headers.addAll(Api.multipartHeader(GetStorage().read('token'))!);
       final streamedResponse = await request.send();

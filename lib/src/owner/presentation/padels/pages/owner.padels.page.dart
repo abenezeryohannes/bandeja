@@ -17,7 +17,9 @@ class OwnerPadelsPage extends StatefulWidget {
 }
 
 class _OwnerPadelsPageState extends State<OwnerPadelsPage> {
+  bool newPadel = false;
   final c = Get.put(OwnerPadelsPageController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +43,7 @@ class _OwnerPadelsPageState extends State<OwnerPadelsPage> {
                     border: Border.all(width: 1, color: Colors.grey.shade600)),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.back(result: 'saved');
                   },
                   child: const Icon(
                     Icons.chevron_left,
@@ -103,8 +105,17 @@ class _OwnerPadelsPageState extends State<OwnerPadelsPage> {
                               ],
                             ),
                         itemBuilder: (context, item, index) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10),
+                              padding: EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  top: 10,
+                                  bottom: (index ==
+                                          (c.pagingController.itemList
+                                                      ?.length ??
+                                                  0) -
+                                              1)
+                                      ? 80
+                                      : 10),
                               child: InkWell(
                                   onTap: () async {
                                     if (item != null) {
@@ -112,6 +123,7 @@ class _OwnerPadelsPageState extends State<OwnerPadelsPage> {
                                         padel: item,
                                       ));
                                       if (result != null) {
+                                        newPadel = true;
                                         c.pagingController.refresh();
                                       }
                                     }

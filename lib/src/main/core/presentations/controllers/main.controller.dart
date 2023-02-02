@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-import '../pages/bookmark.page.dart';
 import '../pages/home.page.dart';
-import '../pages/posts.page.dart';
 import '../pages/profile.page.dart';
 
 class MainController extends GetxController with GetTickerProviderStateMixin {
@@ -14,8 +12,8 @@ class MainController extends GetxController with GetTickerProviderStateMixin {
 
   List<String> iconList = <String>[
     "assets/icons/home",
-    "assets/icons/bookmark",
-    "assets/icons/marketing",
+    // "assets/icons/bookmark",
+    // "assets/icons/marketing",
     "assets/icons/account"
   ].obs;
 
@@ -81,7 +79,6 @@ class MainController extends GetxController with GetTickerProviderStateMixin {
           hideBottomBarAnimationController.forward();
           fabAnimationController.reverse(from: 1);
           showFab.value = false;
-
           break;
         case ScrollDirection.idle:
           break;
@@ -95,11 +92,11 @@ class MainController extends GetxController with GetTickerProviderStateMixin {
       case 0:
         return const HomePageMain();
       case 1:
-        return const BookmarkPage();
-      case 2:
-        return const PostsPage();
-      case 3:
         return const ProfilePage();
+      // case 2:
+      //   return const PostsPage();
+      // case 3:
+      //   return const ProfilePage();
       default:
         return const HomePageMain();
     }

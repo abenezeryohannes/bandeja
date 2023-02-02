@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -21,15 +22,6 @@ import '../../../../domain/core/entities/location.dart';
 class PadelRemoteDataSource {
   late http.Client client;
   PadelRemoteDataSource({required this.client});
-
-  Future<List<PadelModel>>? getFilteredPadels(
-      {int? page,
-      PadelGroupModel? itemGroup,
-      AddressModel? address,
-      required DateTime date,
-      DateTime? timeOfDay}) async {
-    return loadPadelsFromLocalJson(await fixture("padels.json"));
-  }
 
   Future<List<PadelModel>>? getFeaturedPadels(
     int? page,
@@ -85,6 +77,7 @@ class PadelRemoteDataSource {
 
   Future<List<UserModel>>? getFilterPadels(
       {int? page,
+      DurationModel? duration,
       PadelGroupModel? padelGroup,
       AddressModel? address,
       bool indoor = false,
@@ -94,6 +87,10 @@ class PadelRemoteDataSource {
     Map<String, String> query = {'date': date, 'indoor': indoor.toString()};
 
     query.addEntries({'page': "${page ?? 1}"}.entries);
+
+    if (duration != null) {
+      query.addEntries({"durationId": duration.id.toString()}.entries);
+    }
 
     if (address != null) {
       query.addEntries({"addressId": address.id.toString()}.entries);
@@ -205,12 +202,34 @@ class PadelRemoteDataSource {
     }
   }
 
-  Future<List<PadelModel>>? getMyPadels(int? page) async {
-    return loadPadelsFromLocalJson(await fixture("padels.json"));
+  Future<PadelModel> getPadel(int id) async {
+    Response response = await client.get(Api.request("padels/$id"),
+        headers: Api.getHeader(GetStorage().read('token')));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      PadelModel padel = PadelModel.fromJson(responseDto.data);
+      return padel;
+    } else {
+      throw Failure.AssignFailureType(responseDto);
+    }
   }
 
-  Future<PadelModel>? getPadel(int id) async {
-    return PadelModel.fromJson(json.decode(await fixture("padel.json")));
+  Future<List<DurationModel>> getDurations() async {
+    Response response = await client.get(Api.request("padels/durations"),
+        headers: Api.getHeader(GetStorage().read('token')));
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      List<DurationModel> durations =
+          await loadDurationsFromLocalJson(responseDto.data);
+      return durations;
+    } else {
+      throw Failure.AssignFailureType(responseDto);
+    }
+  }
+
+  Future<List<DurationModel>> loadDurationsFromLocalJson(Iterable l) async {
+    return List<DurationModel>.from(
+        l.map((model) => DurationModel.fromJson(model)));
   }
 
   Future<List<PadelModel>> loadPadelsFromLocalJson(String x) async {

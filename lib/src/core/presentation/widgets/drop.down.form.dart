@@ -89,8 +89,13 @@ class _DropDownFormState extends State<DropDownForm> {
           value: widget.value == null
               ? null
               : widget.options
-                  .where((element) => element.keys.first == widget.value)
-                  .first[widget.value]),
+                      .firstWhere(
+                          (element) => element.keys.first == widget.value)
+                      .isEmpty
+                  ? null
+                  : widget.options
+                      .where((element) => element.keys.first == widget.value)
+                      .first[widget.value]),
     );
   }
 }

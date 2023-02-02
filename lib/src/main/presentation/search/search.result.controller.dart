@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
 import 'package:bandeja/src/main/domain/core/entities/address.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -12,7 +13,10 @@ import '../../domain/padels/repositories/i.padel.repository.dart';
 
 class SearchResultController extends GetxController {
   SearchResultController(
-      {required this.address, required this.padelGroup, required this.date});
+      {required this.address,
+      required this.duration,
+      required this.padelGroup,
+      required this.date});
 
   static const pageSize = 25;
   RxBool indoor = true.obs;
@@ -22,6 +26,7 @@ class SearchResultController extends GetxController {
   Rx<DateTime> pickeddate = Rx<DateTime>(DateTime.now());
   Rxn<DateTime> pickedTime = Rxn<DateTime>();
   final AddressModel? address;
+  final DurationModel? duration;
   final PadelGroupModel? padelGroup;
   var filterOwners = Rx<WrapperDto<List<UserModel>>>(EmptyState());
 
@@ -47,11 +52,14 @@ class SearchResultController extends GetxController {
   filter({int? page}) async {
     filterOwners.value = WrapperDto<List<UserModel>>.loadingState();
     String date = pickedTime.value != null
-        ? pickedTime.value!.toIso8601String()
+        ? pickedTime.value!.subtract(Duration(hours: 3)).toIso8601String()
         : DateFormat('yyyy-MM-dd').format(pickeddate.value);
     final result = await padelRepository.getFilterPadels(
         page: page,
         address: address,
+        duration: (duration?.minute ?? 0) > 0 && ((duration?.id ?? 0) > 0)
+            ? duration
+            : null,
         padelGroup: padelGroup,
         date: date,
         limit: pageSize,

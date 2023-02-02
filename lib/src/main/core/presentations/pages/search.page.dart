@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/domain/padels/entities/duration.dart';
 import '../../../../core/domain/padels/entities/padel.group.dart';
 import '../../../../core/dto/wrapper.dto.dart';
 import '../../../../core/presentation/widgets/show.error.dart';
@@ -22,6 +23,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final c = Get.put(SearchController());
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,104 +40,110 @@ class _SearchPageState extends State<SearchPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: _appBar(),
-          body: Column(
-            children: [
-              SizedBox(
-                height: Get.height * 9 / 12,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Obx(() => c.padelGroups.value.when(emptyState: () {
-                            return const SizedBox();
-                          }, loadingState: (_) {
-                            return LookingForSearchCard(
-                              activate: () {},
-                              active: false,
-                              onChange: (_) {},
-                              items: const [
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
-                              ],
-                              value: c.padelPicked.value,
-                            );
-                          }, loadedState: (padelGroups) {
-                            return LookingForSearchCard(
-                              activate: () {
-                                c.activeFilter.value =
-                                    ActiveSearchFilter.groupType;
-                              },
-                              active: c.activeFilter.value ==
-                                  ActiveSearchFilter.groupType,
-                              onChange: (PadelGroupModel padel) {
-                                c.padelPicked.value = padel;
-                                c.activeFilter.value =
-                                    ActiveSearchFilter.address;
-                              },
-                              items: padelGroups,
-                              value: c.padelPicked.value,
-                            );
-                          }, errorState: (error) {
-                            return Expanded(child: ShowError(failure: error));
-                          })),
-                      Obx(() => c.addresses.value.when(emptyState: () {
-                            return const SizedBox();
-                          }, loadingState: (_) {
-                            return WhereSearchCard(
-                              activate: () {},
-                              active: false,
-                              onChange: (_) {},
-                              items: const [null, null, null, null, null],
-                              value: null,
-                            );
-                          }, loadedState: (padelGroups) {
-                            return WhereSearchCard(
-                              activate: () {
-                                setState(() {
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  // height: Get.height * 9 / 12,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Obx(() => c.padelGroups.value.when(emptyState: () {
+                              return const SizedBox();
+                            }, loadingState: (_) {
+                              return LookingForSearchCard(
+                                activate: () {},
+                                active: false,
+                                onChange: (_) {},
+                                items: const [
+                                  null,
+                                  null,
+                                  null,
+                                  null,
+                                  null,
+                                  null,
+                                  null
+                                ],
+                                value: c.padelPicked.value,
+                              );
+                            }, loadedState: (padelGroups) {
+                              return LookingForSearchCard(
+                                activate: () {
+                                  c.activeFilter.value =
+                                      ActiveSearchFilter.groupType;
+                                },
+                                active: c.activeFilter.value ==
+                                    ActiveSearchFilter.groupType,
+                                onChange: (PadelGroupModel padel) {
+                                  c.padelPicked.value = padel;
                                   c.activeFilter.value =
                                       ActiveSearchFilter.address;
-                                });
+                                },
+                                items: padelGroups,
+                                value: c.padelPicked.value,
+                              );
+                            }, errorState: (error) {
+                              return Expanded(child: ShowError(failure: error));
+                            })),
+                        Obx(() => c.addresses.value.when(emptyState: () {
+                              return const SizedBox();
+                            }, loadingState: (_) {
+                              return WhereSearchCard(
+                                activate: () {},
+                                active: false,
+                                onChange: (_) {},
+                                items: const [null, null, null, null, null],
+                                value: null,
+                              );
+                            }, loadedState: (padelGroups) {
+                              return WhereSearchCard(
+                                activate: () {
+                                  setState(() {
+                                    c.activeFilter.value =
+                                        ActiveSearchFilter.address;
+                                  });
+                                },
+                                active: c.activeFilter.value ==
+                                    ActiveSearchFilter.address,
+                                onChange: (addressModelitem) {
+                                  c.addressPicked.value = addressModelitem;
+                                  setState(() {
+                                    c.activeFilter.value =
+                                        ActiveSearchFilter.time;
+                                  });
+                                },
+                                items: padelGroups,
+                                value: c.addressPicked.value,
+                              );
+                            }, errorState: (error) {
+                              return Expanded(child: ShowError(failure: error));
+                            })),
+                        Obx(() => WhenSearchCard(
+                              activate: () {
+                                c.activeFilter.value = ActiveSearchFilter.time;
                               },
                               active: c.activeFilter.value ==
-                                  ActiveSearchFilter.address,
-                              onChange: (addressModelitem) {
-                                c.addressPicked.value = addressModelitem;
-                                setState(() {
-                                  c.activeFilter.value =
-                                      ActiveSearchFilter.time;
-                                });
+                                  ActiveSearchFilter.time,
+                              onChange: (date) {
+                                c.datePicked.value = date;
                               },
-                              items: padelGroups,
-                              value: c.addressPicked.value,
-                            );
-                          }, errorState: (error) {
-                            return Expanded(child: ShowError(failure: error));
-                          })),
-                      Obx(() => WhenSearchCard(
-                            activate: () {
-                              c.activeFilter.value = ActiveSearchFilter.time;
-                            },
-                            active:
-                                c.activeFilter.value == ActiveSearchFilter.time,
-                            onChange: (date) {
-                              c.datePicked.value = date;
-                            },
-                            value: c.datePicked.value,
-                            startDate: DateTime.now()
-                                .subtract(const Duration(hours: 12)),
-                            endDate:
-                                DateTime.now().add(const Duration(days: 365)),
-                          )),
-                    ],
+                              value: c.datePicked.value,
+                              startDate: DateTime.now()
+                                  .subtract(const Duration(hours: 12)),
+                              endDate:
+                                  DateTime.now().add(const Duration(days: 365)),
+                              durations: c.durations.value,
+                              durationValue: c.durationPicked.value,
+                              onDurationChange: (x) =>
+                                  c.durationPicked.value = x,
+                            )),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              _next(context)
-            ],
+                _next(context)
+              ],
+            ),
           ),
         ),
       ),
@@ -172,8 +180,12 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _next(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 14, bottom: 10),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.4)),
+      height: 65,
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      decoration: const BoxDecoration(color: Colors.white),
       alignment: Alignment.center,
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,6 +196,12 @@ class _SearchPageState extends State<SearchPage> {
                   setState(() {
                     c.activeFilter.value = ActiveSearchFilter.groupType;
                     c.datePicked.value = DateTime.now();
+                    c.durationPicked.value = null;
+                    if (c.durationPicked.value.runtimeType ==
+                        LoadedState<List<DurationModel>>(value: [])
+                            .runtimeType) {
+                      c.durationPicked.value = null;
+                    }
                     if (c.padelGroups.value.runtimeType ==
                         LoadedState<List<PadelGroupModel>>(value: [])
                             .runtimeType) {
@@ -192,29 +210,29 @@ class _SearchPageState extends State<SearchPage> {
                     if (c.addresses.value.runtimeType ==
                         LoadedState<List<AddressModel>>(value: [])
                             .runtimeType) {
-                      c.padelPicked.value = null;
+                      c.addressPicked.value = null;
                     }
                   });
                 },
                 child: Text("Clear All",
-                    style: Theme.of(context).textTheme.bodyText1)),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: Colors.grey.shade500,
+                          fontSize: 15,
+                          decoration: TextDecoration.underline,
+                        ))),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10)),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      opaque: false, // set to false
-                      pageBuilder: (_, __, ___) => SearchResultPage(
-                          addressModel: c.addressPicked.value,
-                          padelGroupModel: c.padelPicked.value,
-                          date: c.datePicked.value),
-                    ),
-                  );
+                  Get.off(() => SearchResultPage(
+                      addressModel: c.addressPicked.value,
+                      padelGroupModel: c.padelPicked.value,
+                      duration: c.durationPicked.value,
+                      date: c.datePicked.value));
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

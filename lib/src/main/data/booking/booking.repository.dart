@@ -38,6 +38,24 @@ class BookingRepository extends IBookingRepository {
   }
 
   @override
+  Future<Either<Failure, PadelOrderModel>?>? editBooking(
+      {required PadelOrderDto order}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.editBooking(order: order);
+        if (response == null) throw UnExpectedFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<PadelOrderModel>>?>? myBooking(
       {int? page, int? limit}) async {
     try {
@@ -58,4 +76,59 @@ class BookingRepository extends IBookingRepository {
       return Left(Failure.unExpectedFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, PadelOrderModel>?>? checkIfMyReservation(
+      {required int padelScheduleId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.checkIfMyReservation(
+            padelScheduleId: padelScheduleId);
+        if (response == null) throw UnExpectedFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PadelOrderModel>?>? notifyPayment(
+      {required data}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.notifyPayment(data: data);
+        if (response == null) throw UnExpectedFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  // @override
+  // Future<Either<Failure, PadelOrderModel>?>? pay(
+  //     {required PadelOrderDto order}) async {
+  //   try {
+  //     if (await networkInfo.isConnected) {
+  //       final response = await remoteDataSource.pay(order: order);
+  //       if (response == null) throw UnExpectedFailure();
+  //       return Right(response);
+  //     } else {
+  //       throw NetworkFailure();
+  //     }
+  //   } on Failure catch (e) {
+  //     return Left(e);
+  //   } catch (e) {
+  //     return Left(Failure.unExpectedFailure(message: e.toString()));
+  //   }
+  // }
 }

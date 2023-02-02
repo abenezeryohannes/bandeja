@@ -66,10 +66,13 @@ class OwnerScheduleBottomSheetController extends GetxController {
         ),
         message: UnExpectedFailure().message,
       ));
+      loading.value = false;
     } else {
       result.fold((l) {
+        loading.value = false;
         AppSnackBar.failure(failure: l);
       }, (r) {
+        loading.value = false;
         Get.back(result: r);
       });
     }

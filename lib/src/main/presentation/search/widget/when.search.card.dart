@@ -1,6 +1,12 @@
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
+import 'package:bandeja/src/core/dto/wrapper.dto.dart';
+import 'package:bandeja/src/core/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/presentation/widgets/show.error.dart';
+import '../../../../core/presentation/widgets/tab.bar.dart';
 
 class WhenSearchCard extends StatefulWidget {
   const WhenSearchCard(
@@ -9,13 +15,19 @@ class WhenSearchCard extends StatefulWidget {
       required this.startDate,
       required this.endDate,
       required this.onChange,
+      required this.durations,
+      required this.durationValue,
       required this.active,
-      required this.activate})
+      required this.activate,
+      required this.onDurationChange})
       : super(key: key);
   final bool active;
   final DateTime? value;
+  final WrapperDto<List<DurationModel>> durations;
+  final DurationModel? durationValue;
   final Function(DateTime d) onChange;
-  final Function() activate;
+  final Function activate;
+  final Function onDurationChange;
   final DateTime startDate;
   final DateTime endDate;
 
@@ -32,7 +44,7 @@ class _WhenSearchCardState extends State<WhenSearchCard> {
       child: Container(
           margin: const EdgeInsets.only(left: 20, top: 16, right: 20),
           padding:
-              const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 0),
+              const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             boxShadow: [
@@ -53,7 +65,8 @@ class _WhenSearchCardState extends State<WhenSearchCard> {
                   widget.activate();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 10, left: 20, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -85,19 +98,75 @@ class _WhenSearchCardState extends State<WhenSearchCard> {
               ),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: widget.active ? 289 : 0,
+                  height: widget.active ? 340 : 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     opacity: widget.active ? 1 : 0,
-                    child: DayPicker.single(
-                        selectedDate: widget.value == null
-                            ? DateTime.now()
-                            : widget.value!,
-                        onChanged: (d) {
-                          widget.onChange(d);
-                        },
-                        firstDate: widget.startDate,
-                        lastDate: widget.endDate),
+                    child: SizedBox(
+                      height: widget.active ? 360 : 0,
+                      child: Column(
+                        children: [
+                          Flexible(
+                            child: DayPicker.single(
+                                selectedDate: widget.value == null
+                                    ? DateTime.now()
+                                    : widget.value!,
+                                onChanged: (d) {
+                                  widget.onChange(d);
+                                },
+                                firstDate: widget.startDate,
+                                lastDate: widget.endDate),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            height: 50,
+                            child: widget.durations.when(
+                                emptyState: () => const SizedBox(
+                                      height: 40,
+                                    ),
+                                loadingState: (_) => SizedBox(
+                                      height: 40,
+                                      child: CircularTabBar(
+                                        onItemClick: (int index) {},
+                                        tabs: [null, null, null]
+                                            .map((e) => CircularTab(
+                                                text: null, radius: 100))
+                                            .toList(),
+                                        value: -1,
+                                      ),
+                                    ),
+                                loadedState: (value) => SizedBox(
+                                      height: 50,
+                                      child: CircularTabBar(
+                                        onItemClick: (int index) {
+                                          widget.onDurationChange((value
+                                              as List<DurationModel>)[index]);
+                                        },
+                                        tabs: (value as List<DurationModel>)
+                                            .map((e) => CircularTab(
+                                                text: (e.minute <= 0)
+                                                    ? 'Anytime'
+                                                    : Util.getDurationIn(
+                                                        e.minute,
+                                                        showIn: 'M'),
+                                                radius: 100))
+                                            .toList(),
+                                        value: widget.durationValue != null
+                                            ? (value)
+                                                .indexOf(widget.durationValue!)
+                                            : 0,
+                                      ),
+                                    ),
+                                errorState: (failure) => SizedBox(
+                                      height: 40,
+                                      child: ShowError(failure: failure),
+                                    )
+                                // ShowError(failure: failure)
+                                ),
+                          )
+                        ],
+                      ),
+                    ),
                   )),
             ],
           )),

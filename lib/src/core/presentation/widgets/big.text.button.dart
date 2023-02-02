@@ -7,7 +7,7 @@ class BigTextButton extends StatefulWidget {
     this.text,
     this.textWidget,
     this.textColor = Colors.white,
-    this.backgroudColor = Colors.blueAccent,
+    this.backgroudColor = const Color(0xFF2395FF),
     required this.onClick,
     this.elevation = 1,
     this.fontSize = 14,

@@ -62,27 +62,23 @@ class _ScrollableTabBarState extends State<ScrollableTabBar> {
       elevation: 0.25,
       child: SizedBox(
         height: widget.height,
-        child: MediaQuery.removePadding(
-          context: context,
-          removeLeft: true,
-          child: SnappyListView(
-            controller: controller,
-            itemCount: widget.tabs.length,
-            snapAlignment: SnapAlignment.moveAcross(),
-            visualisation: ListVisualisation.normal(),
-            snapOnItemAlignment: SnapAlignment.moveAcross(),
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (final index, final pageSize) {
-              setState(() => this.index = index);
-              if (widget.tabs[index].label == null) return;
-              widget.onSelected(index);
-            },
-            physics: const RangeMaintainingScrollPhysics(),
-            overscrollPhysics:
-                const PageOverscrollPhysics(velocityPerOverscroll: 750),
-            itemSnapping: true,
-            itemBuilder: itemBuilder,
-          ),
+        child: SnappyListView(
+          controller: controller,
+          itemCount: widget.tabs.length,
+          snapAlignment: SnapAlignment.moveAcross(),
+          visualisation: ListVisualisation.normal(),
+          snapOnItemAlignment: SnapAlignment.moveAcross(),
+          scrollDirection: Axis.horizontal,
+          onPageChanged: (final index, final pageSize) {
+            setState(() => this.index = index);
+            if (widget.tabs[index].label == null) return;
+            widget.onSelected(index);
+          },
+          physics: const RangeMaintainingScrollPhysics(),
+          overscrollPhysics:
+              const PageOverscrollPhysics(velocityPerOverscroll: 750),
+          itemSnapping: false,
+          itemBuilder: itemBuilder,
         ),
       ),
     );

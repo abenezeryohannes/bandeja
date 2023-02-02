@@ -24,7 +24,7 @@ class _RecentOwnerPadelsState extends State<RecentOwnerPadels> {
 
   @override
   void initState() {
-    currentPosition = widget.padel.length > 2 ? 2 : 0;
+    currentPosition = widget.padel.length > 2 ? 1 : 0;
 
     _scrollAmount = (currentPosition).toDouble();
 
@@ -61,12 +61,15 @@ class _RecentOwnerPadelsState extends State<RecentOwnerPadels> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                          opaque: false, // set to false
-                          pageBuilder: (_, __, ___) => const OwnerPadelsPage()),
-                    );
+                  onPressed: () async {
+                    await Get.to(const OwnerPadelsPage());
+                    widget.onRefresh();
+
+                    // Navigator.of(context).push(
+                    //   PageRouteBuilder(
+                    //       opaque: false, // set to false
+                    //       pageBuilder: (_, __, ___) => const OwnerPadelsPage()),
+                    // );
                   },
                   child: Text(
                     'View All',
@@ -78,38 +81,42 @@ class _RecentOwnerPadelsState extends State<RecentOwnerPadels> {
             ],
           ),
         ),
-        ExpandablePageView.builder(
-            controller: _pageController,
-            itemCount: widget.padel.length,
-            itemBuilder: (context, index) {
-              return RecentOwnerPadelCard(
-                  scrollAmount: _scrollAmount,
-                  padel: widget.padel[index],
-                  height: 180,
-                  index: index,
-                  onPowerClick: () {
-                    if (widget.padel[index] == null) return;
-                  },
-                  onEditClick: () async {
-                    if (widget.padel[index] == null) return;
-                    final result =
-                        await Get.to(AddPadelPage(padel: widget.padel[index]));
-                    if (result != null) {
-                      widget.onRefresh();
-                    }
-                  },
-                  onClick: () {
-                    if (widget.padel[index] == null) return;
-                    // Navigator.of(context).push(
-                    //   PageRouteBuilder(
-                    //     opaque: false,
-                    //     pageBuilder: (_, __, ___) => PadelPage(
-                    //       padel: widget.padel[index]!,
-                    //     ),
-                    //   ),
-                    // );
-                  });
-            })
+        SizedBox(
+          height: 200,
+          child: PageView.builder(
+              controller: _pageController,
+              itemCount: widget.padel.length,
+              itemBuilder: (context, index) {
+                return RecentOwnerPadelCard(
+                    scrollAmount: _scrollAmount,
+                    padel: widget.padel[index],
+                    height: 200,
+                    length: widget.padel.length,
+                    index: index,
+                    onPowerClick: () {
+                      if (widget.padel[index] == null) return;
+                    },
+                    onEditClick: () async {
+                      if (widget.padel[index] == null) return;
+                      final result = await Get.to(
+                          AddPadelPage(padel: widget.padel[index]));
+                      if (result != null) {
+                        widget.onRefresh();
+                      }
+                    },
+                    onClick: () {
+                      if (widget.padel[index] == null) return;
+                      // Navigator.of(context).push(
+                      //   PageRouteBuilder(
+                      //     opaque: false,
+                      //     pageBuilder: (_, __, ___) => PadelPage(
+                      //       padel: widget.padel[index]!,
+                      //     ),
+                      //   ),
+                      // );
+                    });
+              }),
+        )
       ],
     );
   }

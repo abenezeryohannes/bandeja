@@ -1,6 +1,7 @@
 import 'package:bandeja/src/core/data/authentication/dto/location.dto.dart';
 import 'package:bandeja/src/core/data/authentication/source/auth.local.data.source.dart';
 import 'package:bandeja/src/core/data/authentication/source/auth.remote.datasource.dart';
+import 'package:bandeja/src/core/domain/authentication/entities/system.variable.dart';
 import 'package:dartz/dartz.dart';
 import 'package:bandeja/src/core/error/failure.dart';
 import 'package:injectable/injectable.dart';
@@ -143,10 +144,10 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>?>? onAppVisit() async {
+  Future<Either<Failure, bool>?>? onAppVisit({required int padelId}) async {
     try {
       if (await networkInfo.isConnected) {
-        final response = await remoteDataSource.onAppVisit();
+        final response = await remoteDataSource.onAppVisit(padelId: padelId);
         return Right(response);
       } else {
         throw NetworkFailure();
@@ -159,10 +160,10 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>?>? onAppVisitEnd() async {
+  Future<Either<Failure, bool>?>? onAppVisitEnd({required int padelId}) async {
     try {
       if (await networkInfo.isConnected) {
-        final response = await remoteDataSource.onAppVisitEnd();
+        final response = await remoteDataSource.onAppVisitEnd(padelId: padelId);
         return Right(response);
       } else {
         throw NetworkFailure();
@@ -181,6 +182,42 @@ class UserRepository implements IUserRepository {
       if (await networkInfo.isConnected) {
         final response =
             await remoteDataSource.editLocation(locationDto: locationDto);
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String?>?>? getSystemVariable(
+      {required String key}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.getSysVar(key: key);
+        if (response == null) return Left(UnExpectedFailure());
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SystemVariableModel>?>? setSystemVariable(
+      {required String key, required String val}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.setSysVar(key: key, value: val);
+        if (response == null) return Left(UnExpectedFailure());
         return Right(response);
       } else {
         throw NetworkFailure();

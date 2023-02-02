@@ -17,6 +17,11 @@ class _MainPageState extends State<MainPage> {
   final MainController c = Get.put(MainController());
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -59,9 +64,11 @@ class _MainPageState extends State<MainPage> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: Obx(() => AnimatedBottomNavigationBar.builder(
-                itemCount: 4,
+                itemCount: 2,
                 tabBuilder: (int index, bool isActive) {
-                  final color = isActive ? Colors.blueAccent : Colors.grey;
+                  final color = isActive
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,

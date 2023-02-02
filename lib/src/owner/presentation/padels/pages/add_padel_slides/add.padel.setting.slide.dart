@@ -75,7 +75,7 @@ class _AddPadelSettingSlideState extends State<AddPadelSettingSlide> {
                       spacing: 16,
                       runSpacing: 10,
                       direction: Axis.horizontal,
-                      alignment: WrapAlignment.center,
+                      alignment: WrapAlignment.start,
                       children: _featureItems(value as List<FeatureModel?>)),
                   errorState: (failure) => ShowError(failure: failure))),
             ),
@@ -98,7 +98,7 @@ class _AddPadelSettingSlideState extends State<AddPadelSettingSlide> {
                       spacing: 16,
                       runSpacing: 10,
                       direction: Axis.horizontal,
-                      alignment: WrapAlignment.center,
+                      alignment: WrapAlignment.start,
                       children: _durationItems(value as List<DurationModel?>)),
                   errorState: (failure) => ShowError(failure: failure))),
             ),
@@ -138,7 +138,7 @@ class _AddPadelSettingSlideState extends State<AddPadelSettingSlide> {
               setState(() {});
             },
             child: Container(
-              width: 70,
+              width: 64,
               padding: const EdgeInsets.only(
                   left: 10, right: 10, top: 10, bottom: 10),
               decoration: BoxDecoration(
@@ -157,7 +157,7 @@ class _AddPadelSettingSlideState extends State<AddPadelSettingSlide> {
                           ? Api.getMedia(features[index]!.icon)
                           : 'img/placeholder.jpg',
                       width: 30,
-                      height: 30,
+                      height: 24,
                       color: selected
                           ? Theme.of(context).colorScheme.secondary
                           : Colors.grey,

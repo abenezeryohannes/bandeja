@@ -35,17 +35,17 @@ android {
         main {
             dimension "flavor-type"
             applicationId "com.konrad.bandeja"
-            resValue "string", "app_name", "bandeja"
+            resValue "string", "app_name", "Yabelah"
         }
         admin {
             dimension "flavor-type"
             applicationId "com.konrad.bandeja.admin"
-            resValue "string", "app_name", "Bandeja Admin"
+            resValue "string", "app_name", "Yabelah Admin"
         }
         owner {
             dimension "flavor-type"
             applicationId "com.konrad.bandeja.owner"
-            resValue "string", "app_name", "Bandeja Court Owner"
+            resValue "string", "app_name", "Yabelah Court Owner"
         }
     }
 

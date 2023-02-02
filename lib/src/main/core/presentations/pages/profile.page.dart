@@ -3,10 +3,9 @@ import 'package:bandeja/src/core/domain/booking/entities/padel.order.dart';
 import 'package:bandeja/src/core/error/failure.dart';
 import 'package:bandeja/src/core/presentation/widgets/show.error.dart';
 import 'package:bandeja/src/main/core/presentations/controllers/profile.controller.dart';
+import 'package:bandeja/src/main/core/presentations/pages/bookmark.page.dart';
 import 'package:bandeja/src/main/presentation/booking/widgets/recent.bookings.dart';
 import 'package:bandeja/src/main/presentation/notification/pages/notification.page.dart';
-import 'package:bandeja/src/main/presentation/posts/pages/my.posts.page.dart';
-import 'package:bandeja/src/main/presentation/profile/pages/contact.us.page.dart';
 import 'package:bandeja/src/main/presentation/profile/widgets/user.avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +13,7 @@ import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 import '../../../../core/presentation/widgets/custom.shimmer.dart';
 import '../../../../core/presentation/widgets/image.form.dart';
 import '../../../../core/presentation/widgets/loading.bar.dart';
+import '../../../../core/utils/util.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.only(top: 50),
                             child: InkWell(
                               onTap: () {
-                                Get.to(() => const MyPostPage());
+                                Get.to(() => const BookmarkPage());
                               },
                               child: Padding(
                                 padding:
@@ -122,15 +122,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       width: 40,
                                     ),
                                     Image.asset(
-                                      "assets/icons/marketing_active.png",
-                                      height: 20,
-                                      color: Colors.grey.shade400,
-                                      width: 20,
+                                      "assets/icons/bookmark_active.png",
+                                      height: 22,
+                                      color: Colors.grey.shade500,
+                                      width: 22,
                                     ),
                                     const SizedBox(
                                       width: 40,
                                     ),
-                                    Text("My Ads",
+                                    Text("My Bookmark",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText2),
@@ -143,7 +143,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.only(top: 0),
                             child: InkWell(
                               onTap: () {
-                                Get.to(() => const ContactUsPage());
+                                if (controller.contactUsLink.value != null) {
+                                  Util.openwhatsapp(
+                                      (controller.contactUsLink.value!));
+                                } else {
+                                  controller.loadSys(true);
+                                }
                               },
                               child: Padding(
                                 padding:
@@ -155,8 +160,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     Image.asset(
                                       "assets/icons/contact.png",
-                                      height: 20,
-                                      width: 20,
+                                      color: Colors.grey.shade500,
+                                      height: 22,
+                                      width: 22,
                                     ),
                                     const SizedBox(
                                       width: 40,
@@ -181,13 +187,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 return ((value as List<PadelOrderModel?>)
                                         .isNotEmpty)
                                     ? RecentBooking(padelOrders: (value))
-                                    : ShowError(
-                                        failure: NoDataFailure(
-                                          message:
-                                              'Your recent booking will be shown here.',
-                                        ),
-                                        errorShowType: ErrorShowType.vertical,
-                                      );
+                                    : const SizedBox(); // : ShowError(
+                                //     failure: NoDataFailure(
+                                //       message:
+                                //           'Your recent booking will be shown here.',
+                                //     ),
+                                //     errorShowType: ErrorShowType.vertical,
+                                //   );
                               },
                               errorState: (failure) => ShowError(
                                     failure: failure,
@@ -213,7 +219,11 @@ class _ProfilePageState extends State<ProfilePage> {
       elevation: 0,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       centerTitle: true,
-      title: Text("My Profile", style: Theme.of(context).textTheme.titleMedium),
+      title: Text("My Profile",
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(fontWeight: FontWeight.w400)),
       actions: [
         Stack(alignment: Alignment.center, children: [
           Align(

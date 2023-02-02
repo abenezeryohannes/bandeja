@@ -1,4 +1,5 @@
 import 'package:bandeja/src/core/domain/booking/entities/padel.order.dart';
+import 'package:bandeja/src/flavors.dart';
 import 'package:bandeja/src/main/presentation/booking/controllers/my.booking.page.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -76,7 +77,7 @@ class My_BookingPageState extends State<MyBookingPage> {
   AppBar _appBar() {
     return AppBar(
       title: Text(
-        "My Booking",
+        FF.appFlavor == Flavor.main ? "My Booking" : "Booking",
         style: Theme.of(context).textTheme.titleMedium,
       ),
       centerTitle: true,

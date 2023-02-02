@@ -1,12 +1,14 @@
 import 'package:bandeja/main/injection/injector.dart';
+import 'package:bandeja/src/app.dart';
 import 'package:bandeja/src/core/data/authentication/repositories/auth.repository.dart';
-import 'package:bandeja/src/core/data/authentication/repositories/user.repository.dart';
 import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
+import 'package:bandeja/src/main/core/presentations/pages/main.page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../admin/presentation/authentication/pages/admin.landing.page.dart';
 import '../../../flavors.dart';
+import '../../../main/presentation/authentication/page/signup.page.dart';
 import '../../../main/presentation/authentication/page/user.landing.page.dart';
 import '../../../owner/presentation/authentication/pages/owner.landing.page.dart';
 import '../../domain/authentication/repositories/i.user.repository.dart';
@@ -19,9 +21,13 @@ class ShowError extends StatefulWidget {
       {Key? key,
       required this.failure,
       this.errorShowType = ErrorShowType.textOnly,
-      this.onRetry})
+      this.onRetry,
+      this.img,
+      this.imgSize})
       : super(key: key);
   final Failure failure;
+  final String? img;
+  final double? imgSize;
   final Function? onRetry;
   final ErrorShowType errorShowType;
 
@@ -39,16 +45,12 @@ class _ShowErrorState extends State<ShowError> {
 
   @override
   Widget build(BuildContext context) {
+    // print('build show error ' + widget.failure.runtimeType.toString());
     switch (widget.errorShowType) {
       case ErrorShowType.textOnly:
         return Center(
             child: Column(
-          children: [
-            _text(),
-            if ((widget.failure.runtimeType ==
-                UnAuthorizedFailure().runtimeType))
-              loginOption()
-          ],
+          children: [_text(), if (isItForbidden()) loginOption()],
         ));
       case ErrorShowType.horizontal:
         return Center(
@@ -58,7 +60,8 @@ class _ShowErrorState extends State<ShowError> {
           children: [
             _img(),
             const SizedBox(height: 40),
-            Flexible(child: _text())
+            Flexible(child: _text()),
+            if (isItForbidden()) loginOption()
           ],
         ));
       default:
@@ -71,9 +74,7 @@ class _ShowErrorState extends State<ShowError> {
             _img(),
             const SizedBox(height: 40),
             Flexible(child: _text()),
-            if ((widget.failure.runtimeType ==
-                UnAuthorizedFailure().runtimeType))
-              loginOption()
+            if (isItForbidden()) loginOption()
           ],
         ));
     }
@@ -98,7 +99,11 @@ class _ShowErrorState extends State<ShowError> {
             Get.offAll(const OwnerLandingPage());
             break;
           default:
-            Get.offAll(const UserLandingPage());
+            Get.offAll(SignupPage(
+              onAuthentication: () {
+                Get.offAll(() => const MainPage());
+              },
+            ));
             break;
         }
       },
@@ -115,26 +120,30 @@ class _ShowErrorState extends State<ShowError> {
   }
 
   Widget _img() {
-    if ((widget.failure.runtimeType == UnAuthorizedFailure().runtimeType)) {
+    if (isItForbidden()) {
       return Image.asset(
-        "assets/icons/no_connection.png",
-        height: (widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100,
+        widget.img ?? "assets/icons/LostConnection.png",
+        height: widget.imgSize ??
+            ((widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100),
       );
     } else if (widget.failure.runtimeType == CacheFailure().runtimeType ||
         widget.failure.runtimeType == NetworkFailure().runtimeType) {
       return Image.asset(
-        "assets/icons/no_connection.png",
-        height: (widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100,
+        widget.img ?? "assets/icons/LostConnection.png",
+        height: widget.imgSize ??
+            ((widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100),
       );
     } else if (widget.failure.runtimeType == NoDataFailure().runtimeType) {
       return Image.asset(
-        "assets/icons/empty.png",
-        height: (widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100,
+        widget.img ?? "assets/icons/empty.png",
+        height: widget.imgSize ??
+            ((widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100),
       );
     } else {
       return Image.asset(
-        "assets/icons/error.png",
-        height: (widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100,
+        widget.img ?? "assets/icons/error.png",
+        height: widget.imgSize ??
+            ((widget.errorShowType == ErrorShowType.horizontal) ? 50 : 100),
       );
     }
   }
@@ -166,5 +175,13 @@ class _ShowErrorState extends State<ShowError> {
         ],
       );
     }
+  }
+
+  bool isItForbidden() {
+    return ((widget.failure.runtimeType == UnAuthorizedFailure().runtimeType) ||
+        (widget.failure.message
+                ?.toLowerCase()
+                .startsWith('forbidden resource') ??
+            false));
   }
 }

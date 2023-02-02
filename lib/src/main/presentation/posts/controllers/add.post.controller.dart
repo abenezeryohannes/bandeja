@@ -74,6 +74,13 @@ class AddPostController extends GetxController {
     postDto.value.id = -1;
     postDto.value.featured = false;
     postDto.value.enabled = true;
+
+    postDto.value.phoneNumber =
+        ('+965${postDto.value.phoneNumber?.substring((postDto.value.phoneNumber?.length ?? 0) - 8, postDto.value.phoneNumber?.length)}');
+
+    postDto.value.whatsApp =
+        ('+965${postDto.value.whatsApp?.substring((postDto.value.whatsApp?.length ?? 0) - 8, postDto.value.whatsApp?.length)}');
+
     final result =
         await postRepository.addPost(imagePaths: images, post: postDto.value);
 
@@ -92,8 +99,12 @@ class AddPostController extends GetxController {
 
   String? phoneValidation(String? input) {
     if (input == null) return null;
-    String? validation =
-        GetUtils.isPhoneNumber(input) ? null : 'Not valid phone number!';
+    if (input.length < 8) return 'Not valid phone number!';
+
+    String? validation = GetUtils.isPhoneNumber(
+            ('+965${input.substring(input.length - 8, input.length)}'))
+        ? null
+        : 'Not valid phone number!';
     return validation;
   }
 

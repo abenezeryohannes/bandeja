@@ -1,8 +1,6 @@
 import 'package:bandeja/src/admin/presentation/booking/page/admin.booking.page.dart';
 import 'package:bandeja/src/admin/presentation/booking/widgets/admin.booking.card.dart';
 import 'package:bandeja/src/admin/presentation/notification/pages/notification.bottom.sheet.dart';
-import 'package:bandeja/src/owner/presentation/booking/pages/owner.qr.modal.dart';
-import 'package:bandeja/src/owner/presentation/padels/pages/qr.scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -76,6 +74,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               padding: EdgeInsets.zero,
               builderDelegate: PagedChildBuilderDelegate<PadelOrderModel?>(
                   firstPageErrorIndicatorBuilder: (_) => ShowError(
+                      errorShowType: ErrorShowType.vertical,
                       failure: controller.pagingController.error as Failure),
                   firstPageProgressIndicatorBuilder: (_) => ListView(
                         shrinkWrap: true,

@@ -1,4 +1,5 @@
 import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
+import 'package:bandeja/src/flavors.dart';
 import 'package:bandeja/src/main/presentation/authentication/controllers/auth.state.dart';
 import 'package:bandeja/src/main/presentation/authentication/widgets/fill.user.form.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
@@ -214,21 +215,20 @@ class _SignupPageState extends State<SignupPage> {
       leadingWidth: 56,
       backgroundColor: Colors.grey.shade50,
       elevation: 0,
-      leading: Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 14, left: 25),
-          // decoration: BoxDecoration(
-          //     borderRadius: const BorderRadius.all(Radius.circular(10)),
-          //     border: Border.all(width: 1, color: Colors.grey.shade600)),
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back,
-              size: 32,
-              color: Colors.black,
-            ),
-          )),
+      leading: (FF.appFlavor == Flavor.main)
+          ? null
+          : Container(
+              margin: const EdgeInsets.only(top: 14, bottom: 14, left: 25),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.arrow_back,
+                  size: 32,
+                  color: Colors.black,
+                ),
+              )),
     );
   }
 }

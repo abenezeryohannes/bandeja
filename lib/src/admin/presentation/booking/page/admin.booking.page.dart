@@ -66,12 +66,12 @@ class _AdminBookingPageState extends State<AdminBookingPage> {
             child: PadelAvatar(
                 item: widget.order.getPadel(),
                 borderColor: Colors.transparent,
-                radius: 42,
+                radius: 34,
                 margins: EdgeInsets.zero,
                 hero: '',
                 onClick: () {})),
         const SizedBox(
-          height: 5,
+          height: 3,
         ),
         Center(
           child: Text(
@@ -80,7 +80,7 @@ class _AdminBookingPageState extends State<AdminBookingPage> {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         ),
         Center(
           child: Text(
@@ -100,7 +100,7 @@ class _AdminBookingPageState extends State<AdminBookingPage> {
                 borderRadius: BorderRadius.all(Radius.circular(14))),
             color: (widget.order.paymentId != null ||
                     widget.order.status == 'confirmed')
-                ? Colors.green.shade400
+                ? const Color(0xFF4FCF4D)
                 : Colors.amber,
             child: Padding(
               padding:

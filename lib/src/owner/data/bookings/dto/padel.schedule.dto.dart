@@ -12,31 +12,32 @@ class PadelScheduleDto {
   DateTime? startTime;
   DateTime? endTime;
   bool? applyForAllDays;
+  bool? remove = false;
   double? price;
 
-  PadelScheduleDto.empty({
-    this.id = -1,
-    this.padelId = -1,
-    this.reason,
-    this.status = 'free',
-    this.booked,
-    this.applyForAllDays = false,
-    this.startTime,
-    this.endTime,
-    this.price,
-  });
+  PadelScheduleDto.empty(
+      {this.id = -1,
+      this.padelId = -1,
+      this.reason,
+      this.status = 'free',
+      this.booked,
+      this.applyForAllDays = false,
+      this.startTime,
+      this.endTime,
+      this.price,
+      this.remove = false});
 
   PadelScheduleDto(
-    this.id,
-    this.padelId,
-    this.reason,
-    this.status,
-    this.applyForAllDays,
-    this.booked,
-    this.startTime,
-    this.endTime,
-    this.price,
-  );
+      this.id,
+      this.padelId,
+      this.reason,
+      this.status,
+      this.applyForAllDays,
+      this.booked,
+      this.startTime,
+      this.endTime,
+      this.price,
+      this.remove);
 
   Map<String, dynamic> toJson() => _$PadelScheduleDtoToJson(this);
 

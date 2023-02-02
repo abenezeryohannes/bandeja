@@ -129,6 +129,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                             temp.bookingNotification = val;
                             controller.saveUser(temp);
                           },
+                          width: 50,
                           value: controller
                                   .user.value.Setting?.bookingNotification ??
                               false,
@@ -177,6 +178,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                             temp.faceId = val;
                             controller.saveUser(temp);
                           },
+                          width: 50,
                           value: controller.user.value.Setting?.faceId ?? false,
                           activeText: '',
                           inactiveText: '',

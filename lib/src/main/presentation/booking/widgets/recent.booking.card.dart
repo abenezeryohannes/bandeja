@@ -13,7 +13,9 @@ class RecentBookingCard extends StatefulWidget {
       {Key? key,
       this.padelOrder,
       required this.height,
+      required this.width,
       this.scrollAmount = 1,
+      this.length = 1,
       required this.index,
       required this.onClick,
       required this.onQrClick,
@@ -24,6 +26,8 @@ class RecentBookingCard extends StatefulWidget {
   final Function onQrClick;
   final Function onLocationClick;
   final double height;
+  final int length;
+  final double width;
   final int index;
   final double scrollAmount;
   @override
@@ -41,7 +45,8 @@ class _RecentBookingCardState extends State<RecentBookingCard> {
 
     // offset = Offset(0.0, 128.0 * clampedDifference);
 
-    scale = lerpDouble(1, 0.8, clampedDifference.abs())!;
+    scale =
+        lerpDouble(1, widget.length > 1 ? 0.8 : 1, clampedDifference.abs())!;
 
     return Transform.scale(
       scaleY: scale,
@@ -51,6 +56,7 @@ class _RecentBookingCardState extends State<RecentBookingCard> {
         },
         child: SizedBox(
           height: widget.height,
+          width: widget.width,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Stack(

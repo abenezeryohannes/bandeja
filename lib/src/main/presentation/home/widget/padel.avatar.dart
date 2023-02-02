@@ -11,12 +11,14 @@ class PadelAvatar extends StatefulWidget {
       this.item,
       required this.borderColor,
       required this.radius,
+      this.gap = 10,
       required this.margins,
-      this.hero ='',
+      this.hero = '',
       required this.onClick})
       : super(key: key);
 
   final PadelModel? item;
+  final double gap;
   final Color borderColor;
   final String hero;
   final double radius;
@@ -65,8 +67,8 @@ class _PadelAvatarState extends State<PadelAvatar> {
                   widget.onClick();
                 },
                 child: Container(
-                  width: (widget.radius * 2) + 10,
-                  height: (widget.radius * 2) + 10,
+                  width: (widget.radius * 2) + widget.gap,
+                  height: (widget.radius * 2) + widget.gap,
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(100),

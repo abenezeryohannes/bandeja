@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
 import 'package:bandeja/src/core/presentation/widgets/app.snack.bar.dart';
+import 'package:bandeja/src/main/presentation/booking/pages/checkout.page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -13,6 +16,7 @@ import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/api.dart';
 import '../../../../core/utils/util.dart';
+import '../../../../flavors.dart';
 import '../../home/widget/padel.avatar.dart';
 import '../widgets/triangle.painter.dart';
 
@@ -28,32 +32,46 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   GlobalKey globalKey = GlobalKey();
   bool loading = false;
+  bool takingScreenShot = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
       backgroundColor: Theme.of(context).primaryColor,
-      body: RepaintBoundary(
-        key: globalKey,
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: _reciept(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _appBar(),
+            RepaintBoundary(
+              key: globalKey,
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: _reciept(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        triangle(),
+                        triangle(),
+                        triangle(),
+                        triangle()
+                      ],
+                    )
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [triangle(), triangle(), triangle(), triangle()],
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -81,12 +99,12 @@ class _BookingPageState extends State<BookingPage> {
             child: PadelAvatar(
                 item: widget.padel,
                 borderColor: Colors.transparent,
-                radius: 42,
+                radius: 34,
                 margins: EdgeInsets.zero,
                 hero: '',
                 onClick: () {})),
         const SizedBox(
-          height: 5,
+          height: 2,
         ),
         Center(
           child: Text(
@@ -95,7 +113,7 @@ class _BookingPageState extends State<BookingPage> {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         ),
         Center(
           child: Text(
@@ -106,23 +124,44 @@ class _BookingPageState extends State<BookingPage> {
         const SizedBox(
           height: 20,
         ),
-        // if (widget.order.status.endsWith('confirmed') ||
-        //     widget.order.status.endsWith('paid') ||
-        //     widget.order.status.endsWith('payed'))
         Center(
           child: Card(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            color: Colors.green.shade400,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 26.0),
-              child: Text(
-                widget.order.status,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Colors.white),
+            elevation: widget.order.hasPayed() || takingScreenShot ? 1 : 5,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(widget.order.hasPayed() ? 15 : 10))),
+            color: widget.order.hasPayed()
+                ? const Color(0xFF4FCF4D)
+                : Colors.grey.shade100,
+            child: InkWell(
+              onTap: () {
+                if (!widget.order.hasPayed() && !takingScreenShot) {
+                  Get.off(CheckoutPage(
+                      padel: widget.padel,
+                      schedule: widget.order.getSchedule()));
+                }
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 26.0),
+                child: widget.order.hasPayed()
+                    ? Text(
+                        widget.order.status,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      )
+                    : Text(
+                        !takingScreenShot
+                            ? 'Complete Payment ?'
+                            : 'Complete Payment ?',
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: Colors.red,
+                            decoration: !takingScreenShot
+                                ? TextDecoration.none
+                                : TextDecoration.none),
+                      ),
               ),
             ),
           ),
@@ -157,7 +196,8 @@ class _BookingPageState extends State<BookingPage> {
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: Colors.amber,
+                backgroundColor: Colors.amber,
+                elevation: 0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 padding:
@@ -249,71 +289,70 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 
-  AppBar _appBar() {
-    return AppBar(
-      title: Text(
-        "Your Booking",
-        style: Theme.of(context)
-            .textTheme
-            .titleMedium!
-            .copyWith(color: Colors.white),
-      ),
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
-      leadingWidth: 56,
-      elevation: 0,
-      leading: Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(width: 1, color: Colors.white)),
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.close,
-              size: 24,
-              color: Colors.black,
-            ),
-          )),
-      actions: [
-        IconButton(
-            onPressed: () async {
-              if (widget.order == null) return;
-              if (widget.order.getPadel().Location == null) {
+  Widget _appBar() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              margin: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
+              padding:
+                  const EdgeInsets.only(top: 3, bottom: 3, left: 3, right: 3),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border: Border.all(width: 1, color: Colors.white)),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.close,
+                  size: 24,
+                  color: Colors.black,
+                ),
+              )),
+          Text(
+            FF.appFlavor == Flavor.main ? "Your Booking" : "Booking",
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Colors.white),
+          ),
+          InkWell(
+            onTap: () async {
+              if (widget.padel.Location == null) {
                 return;
               }
               try {
-                await Util.launchUrI(
-                    Api.mapUrI(widget.order!.getPadel().Location!));
+                await Util.launchUrI(Api.mapUrI(widget.padel.Location!));
               } on Failure catch (f) {
                 AppSnackBar.failure(failure: f);
               }
             },
-            icon: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/icons/location.png',
-                  width: 24,
-                  height: 24,
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Flexible(
-                  child: Text('Location',
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/icons/location.png',
+                    width: 24,
+                    height: 24,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Text('Location',
                       style: Theme.of(context)
                           .textTheme
                           .caption!
-                          .copyWith(color: Colors.white, fontSize: 9)),
-                )
-              ],
-            ))
-      ],
-    );
+                          .copyWith(color: Colors.white, fontSize: 10)),
+                ],
+              ),
+            ),
+          )
+        ]);
   }
 }

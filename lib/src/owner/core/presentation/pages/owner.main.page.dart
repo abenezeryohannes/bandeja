@@ -15,8 +15,14 @@ class OwnerMainPage extends StatefulWidget {
 class _OwnerMainPageState extends State<OwnerMainPage> {
   final OwnerMainPageController c = Get.put(OwnerMainPageController());
 
+  void test() async {
+    DateTime dateTime = DateTime.now();
+    print('time zone ' + dateTime.timeZoneName);
+  }
+
   @override
   Widget build(BuildContext context) {
+    test();
     return WillPopScope(
       onWillPop: () async {
         if (c.stack.isEmpty) {
@@ -54,7 +60,9 @@ class _OwnerMainPageState extends State<OwnerMainPage> {
           bottomNavigationBar: Obx(() => AnimatedBottomNavigationBar.builder(
                 itemCount: 4,
                 tabBuilder: (int index, bool isActive) {
-                  final color = isActive ? Colors.blueAccent : Colors.grey;
+                  final color = isActive
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,

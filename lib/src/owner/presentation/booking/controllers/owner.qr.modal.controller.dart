@@ -47,6 +47,7 @@ class OwnerQrModalController extends GetxController {
         order.value = WrapperDto.errorState(failure: l);
         AppSnackBar.failure(failure: l);
       }, (r) {
+        order.value = WrapperDto.loadedState(value: r);
         AppSnackBar.success(message: "The order has been confirmed!");
         Get.back<String?>(result: 'saved');
       });

@@ -5,7 +5,6 @@ import 'package:bandeja/src/owner/presentation/padels/pages/owner.booking.page.d
 import 'package:bandeja/src/owner/presentation/padels/pages/qr.scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
@@ -92,7 +91,7 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                   itemBuilder: (context, item, index) => _item(index, item)),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -115,11 +114,17 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
                   fontWeight: FontWeight.w900),
             ),
           ),
-        OwnerBookingCard(
-            order: item,
-            onClick: (order) {
-              Get.to(OwnerBookingPage(order: order));
-            }),
+        Padding(
+          padding: index !=
+                  (controller.pagingController.value.itemList?.length ?? 1) - 1
+              ? const EdgeInsets.all(0.0)
+              : const EdgeInsets.only(bottom: 100),
+          child: OwnerBookingCard(
+              order: item,
+              onClick: (order) {
+                Get.to(OwnerBookingPage(order: order));
+              }),
+        ),
       ],
     );
   }
@@ -173,6 +178,8 @@ class _OwnerHomePageState extends State<OwnerHomePage> {
           fontWeight: FontWeight.bold,
         ),
         keyboardType: TextInputType.phone,
+        maxLines: 1,
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,

@@ -18,10 +18,15 @@ import '../../../presentation/authentication/pages/owner.landing.page.dart';
 
 class OwnerProfileController extends GetxController {
   final userRepository = getIt<IUserRepository>();
+
   RxBool loading = false.obs;
+
   static const pageSize = 12;
 
+  RxnString avatar = RxnString();
+
   Rx<UserDto> userDto = Rx<UserDto>(UserDto(role: FF.env.name));
+
   Rx<UserModel> user = Rx<UserModel>(UserModel());
 
   Rx<WrapperDto<UserModel>> userWrapper =
@@ -86,6 +91,7 @@ class OwnerProfileController extends GetxController {
 
   void saveUser(UserDto dto) async {
     loading.value = true;
+    avatar.value = dto.localImage;
     final result = await userRepository.editUser(user: dto);
     if (result == null) {
       loading.value = false;
@@ -112,8 +118,9 @@ class OwnerProfileController extends GetxController {
       loading.value = false;
       user.value = r;
       userDto.value = r.getDTO();
+      userDto.refresh();
       userWrapper.value = WrapperDto.loadedState(value: r);
-      AppSnackBar.success(message: "Profile updated !");
+      AppSnackBar.success(message: "Profile updated!");
     });
   }
 

@@ -7,6 +7,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/domain/authentication/entities/user.dart';
+import '../../../core/domain/padels/entities/duration.dart';
 import '../../../core/domain/padels/entities/padel.group.dart';
 import '../../../core/error/failure.dart';
 import '../../../core/presentation/widgets/show.error.dart';
@@ -16,8 +17,13 @@ import '../../../core/utils/util.dart';
 
 class SearchResultPage extends StatefulWidget {
   const SearchResultPage(
-      {Key? key, this.addressModel, this.padelGroupModel, required this.date})
+      {Key? key,
+      this.addressModel,
+      this.padelGroupModel,
+      required this.date,
+      this.duration})
       : super(key: key);
+  final DurationModel? duration;
   final AddressModel? addressModel;
   final PadelGroupModel? padelGroupModel;
   final DateTime date;
@@ -36,6 +42,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     times.insert(0, DateTime(0, 0, 0));
     controller = Get.put(SearchResultController(
         address: widget.addressModel,
+        duration: widget.duration,
         date: widget.date,
         padelGroup: widget.padelGroupModel));
     super.initState();
@@ -81,25 +88,6 @@ class _SearchResultPageState extends State<SearchResultPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        // Obx(() => controller.filterOwners.value.when(
-        //     emptyState: () => const SizedBox(),
-        //     loadingState: (_) => const SizedBox(),
-        //     loadedState: (value) {
-        //       if ((value as List<UserModel>)
-        //           .where((element) => element.getPadels().isNotEmpty)
-        //           .isEmpty) {
-        //         return Padding(
-        //           padding: const EdgeInsets.only(top: 100.0),
-        //           child: ShowError(
-        //             failure: NoDataFailure(
-        //                 message: 'Sorry, No open Courts at this time yet.'),
-        //             errorShowType: ErrorShowType.vertical,
-        //           ),
-        //         );
-        //       }
-        //       return const SizedBox();
-        //     },
-        //     errorState: (_) => const SizedBox())),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
@@ -113,6 +101,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
                   noItemsFoundIndicatorBuilder: (context) => Padding(
                         padding: const EdgeInsets.only(top: 100.0),
                         child: ShowError(
+                          img: 'assets/icons/NoSearchResult.png',
+                          imgSize: 200,
                           failure: Failure.noDataFailure(
                               message:
                                   'Sorry, No open Courts at this time yet.'),
@@ -141,8 +131,17 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     if ((item).getPadels().isEmpty) {
                       return const SizedBox();
                     }
-                    return PadelSearchResultCard(
-                      user: item,
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          bottom: (index + 1 >=
+                                  (controller
+                                          .pagingController.itemList?.length ??
+                                      0))
+                              ? 50
+                              : 0),
+                      child: PadelSearchResultCard(
+                        user: item,
+                      ),
                     );
                   }),
             ),
@@ -153,12 +152,14 @@ class _SearchResultPageState extends State<SearchResultPage> {
   }
 
   Widget _tabBar() {
-    var tt =
-        times.map((e) => CircularTab(text: DateFormat.jm().format(e))).toList();
+    var tt = times
+        .map((e) =>
+            CircularTab(text: DateFormat.jm().format(e), color: Colors.white))
+        .toList();
     tt.removeAt(0);
-    tt.insert(0, CircularTab(text: 'Anytime'));
+    tt.insert(0, CircularTab(text: 'Anytime', color: Colors.white));
     return Container(
-      height: 50,
+      height: 55,
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Center(
         child: CircularTabBar(
@@ -206,11 +207,13 @@ class _SearchResultPageState extends State<SearchResultPage> {
           )),
       actions: [
         Container(
-          margin: const EdgeInsets.only(top: 14, bottom: 14, right: 20),
+          width: 86,
+          margin: const EdgeInsets.only(top: 14, bottom: 14, right: 10),
           child: ToggleForm(
               value: controller.indoor.value,
-              inactiveText: "Out",
-              activeText: "In",
+              inactiveText: "Outdoor",
+              activeText: "Indoor",
+              width: 86,
               onChange: (val) {
                 setState(() {
                   controller.indoor.value = val;

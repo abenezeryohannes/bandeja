@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bandeja/src/admin/data/notification/dto/notification.dto.dart';
 import 'package:bandeja/src/core/data/authentication/dto/location.dto.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +11,7 @@ import 'package:mime/mime.dart';
 import '../../../../core/dto/response.dto.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/api.dart';
+import '../../../domain/authentication/entities/system.variable.dart';
 import '../../../domain/authentication/entities/user.dart';
 import '../dto/user.dto.dart';
 
@@ -159,11 +159,13 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<bool> onAppVisit() async {
+  Future<bool> onAppVisit({required int padelId}) async {
     String? token = GetStorage().read('token');
+    Map<String, String> body = <String, String>{};
+    body.addEntries({'padelId': '$padelId'}.entries);
     if (token == null) return true;
     http.Response response = await client.post(Api.request("users/visitStart"),
-        headers: Api.postHeader(token));
+        headers: Api.postHeader(token), body: body);
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       return true;
@@ -172,11 +174,13 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<bool> onAppVisitEnd() async {
+  Future<bool> onAppVisitEnd({required int padelId}) async {
     String? token = GetStorage().read('token');
+    Map<String, String> body = <String, String>{};
+    body.addEntries({'padelId': '$padelId'}.entries);
     if (token == null) return true;
     http.Response response = await client.post(Api.request("users/visitEnd"),
-        headers: Api.postHeader(token));
+        headers: Api.postHeader(token), body: body);
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       return true;
@@ -197,6 +201,35 @@ class AuthRemoteDataSource {
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       return true;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<String>? getSysVar({required String key}) async {
+    Map<String, String> body = <String, String>{};
+    body.addEntries({'key': key}.entries);
+
+    http.Response response =
+        await client.post(Api.request("users/getSysVar"), body: body);
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      return responseDto.data as String;
+    } else {
+      throw ServerFailure(message: responseDto.message);
+    }
+  }
+
+  Future<SystemVariableModel>? setSysVar(
+      {required String key, required String value}) async {
+    Map<String, String> body = <String, String>{};
+    body.addEntries({'key': key, 'val': value, 'value': value}.entries);
+    http.Response response = await client.post(Api.request("users/setSysVar"),
+        headers: Api.postHeader(GetStorage().read('token')), body: body);
+    ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
+    if (responseDto.success) {
+      SystemVariableModel sys = SystemVariableModel.fromJson(responseDto.data);
+      return sys;
     } else {
       throw ServerFailure(message: responseDto.message);
     }

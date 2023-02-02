@@ -1,4 +1,3 @@
-import 'package:bandeja/src/core/dto/wrapper.dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../dto/response.dto.dart';
@@ -39,6 +38,7 @@ class Failure with _$Failure implements Exception {
   factory Failure.unauthorized(
       {@Default("Not authorized, please signup or login and try again.")
           final String? message}) = UnAuthorizedFailure;
+
   static Failure AssignFailureType(ResponseDto responseDto) {
     if (responseDto.statusCode == 403) {
       return UnAuthorizedFailure(message: responseDto.message);

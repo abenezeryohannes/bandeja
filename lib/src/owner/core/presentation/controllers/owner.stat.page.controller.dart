@@ -93,8 +93,12 @@ class OwnerStatPageController extends GetxController {
       result.fold((l) {
         ownerWeeklyStatDto.value = WrapperDto.errorState(failure: l);
       }, (r) {
-        ownerWeeklyStatDto.value =
-            WrapperDto<List<OwnerWeeklyStatDto>>.loadedState(value: r);
+        if (r.isEmpty) {
+          ownerWeeklyStatDto.value = EmptyState();
+        } else {
+          ownerWeeklyStatDto.value =
+              WrapperDto<List<OwnerWeeklyStatDto>>.loadedState(value: r);
+        }
       });
     }
   }
@@ -114,6 +118,9 @@ class OwnerStatPageController extends GetxController {
       result.fold((l) {
         ownerMonthlyStatDto.value = WrapperDto.errorState(failure: l);
       }, (r) {
+        r.totalVisit = r.totalVisit ?? 0;
+        r.totalincome = r.totalincome ?? 0;
+        r.totalHours = r.totalHours ?? 0;
         ownerMonthlyStatDto.value =
             WrapperDto<OwnerMonthlyStatDto>.loadedState(value: r);
       });

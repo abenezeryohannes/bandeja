@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../../../main/injection/injector.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
@@ -63,155 +60,138 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    clampedDifference = (widget.scrollAmount - widget.index).clamp(-1, 1);
-
-    offset = Offset(0.0, 128.0 * clampedDifference);
-
-    scale = lerpDouble(1.0, 0.8, clampedDifference.abs())!;
-
-    return Transform.scale(
-        scale: scale,
-        child: GestureDetector(
-            onTapDown: (_) {
-              widget.onClick(widget.avatarHeroTag, widget.cardHeroTag);
-            },
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                CustomShimmer(
+    return InkWell(
+        onTap: () {
+          widget.onClick(widget.avatarHeroTag, widget.cardHeroTag);
+        },
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * (60 / 100),
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              CustomShimmer(
+                show: widget.item == null,
+                child: CachedImageProvider(
+                    borderRadius: widget.cornerRadius,
+                    height: double.infinity,
+                    width: double.infinity,
+                    image: Api.getMedia(widget.item == null
+                        ? '/img/placeholder.jpg'
+                        : widget.item!.banner)),
+              ),
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
+                      colors: widget.item == null
+                          ? [Colors.grey.shade200, Colors.grey.shade300]
+                          : [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ],
+                    )),
+              ),
+              Align(
+                alignment: const Alignment(1, -1),
+                child: CustomShimmer(
                   show: widget.item == null,
-                  child: CachedImageProvider(
-                      borderRadius: widget.cornerRadius,
-                      image: Api.getMedia(widget.item == null
-                          ? '/img/placeholder.jpg'
-                          : widget.item!.banner)),
-                ),
-                // CustomShimmer(
-                //   show: widget.item == null,
-                //   child: IconButton(
-                //       onPressed: () async {
-                //         if (widget.item == null) return;
-                //         final result = await padelRepository.setBookmark(
-                //             padelId: widget.item!.id);
-                //         result!.fold((l) {
-                //           Get.snackbar('Error', l.message ?? '',
-                //               backgroundColor: Colors.red,
-                //               colorText: Colors.white);
-                //         }, (r) {
-                //           setState(() {
-                //             if (r) {
-                //               bookmarked = !bookmarked;
-                //             }
-                //           });
-                //         });
-                //       },
-                //       icon: Icon(
-                //         bookmarked ? Icons.bookmark : Icons.bookmark_outline,
-                //         size: 32,
-                //         color: Colors.white,
-                //       )),
-                // ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      gradient: LinearGradient(
-                        begin: Alignment.center,
-                        end: Alignment.bottomCenter,
-                        colors: widget.item == null
-                            ? [Colors.grey.shade200, Colors.grey.shade300]
-                            : [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.8),
-                              ],
-                      )),
-                ),
-                Align(
-                  alignment: const Alignment(1, -1),
-                  child: CustomShimmer(
-                    show: widget.item == null,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 16),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 7, horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.80)),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Text(
-                          widget.item == null
-                              ? ''
-                              : widget.item!.Address == null
-                                  ? ''
-                                  : widget.item!.Address!.name,
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        const Icon(
-                          Icons.location_on,
-                          size: 16,
-                        )
-                      ]),
-                    ),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 14, horizontal: 14),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(0.80)),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text(
+                        widget.item == null
+                            ? ''
+                            : widget.item!.Address == null
+                                ? ''
+                                : widget.item!.Address!.name,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      const Icon(
+                        Icons.location_on,
+                        size: 14,
+                      )
+                    ]),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        if (widget.showAvatar)
-                          PadelAvatar(
-                            hero: widget.avatarHeroTag,
-                            item: widget.item,
-                            borderColor: widget.avatarBorderColor,
-                            radius: widget.avatarRadius,
-                            margins: widget.avatarMargins,
-                            onClick: () {
-                              widget.onClick(
-                                  widget.avatarHeroTag, widget.cardHeroTag);
-                            },
-                          ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.showCourtNo)
-                              Text(
-                                widget.item == null ? '' : widget.item!.name,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 15),
-                              ),
-                            const SizedBox(
-                              height: 5,
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      if (widget.showAvatar)
+                        PadelAvatar(
+                          hero: widget.avatarHeroTag,
+                          item: widget.item,
+                          borderColor: widget.avatarBorderColor,
+                          radius: widget.avatarRadius,
+                          margins: widget.avatarMargins,
+                          onClick: () {
+                            widget.onClick(
+                                widget.avatarHeroTag, widget.cardHeroTag);
+                          },
+                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (widget.showCourtNo)
+                            Text(
+                              widget.item == null ? '' : widget.item!.name,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
                             ),
-                            if (widget.showName)
-                              Flexible(
-                                child: Text(
-                                  widget.item == null
-                                      ? ''
-                                      : widget.item!.getUser().fullName,
-                                  overflow: TextOverflow.ellipsis,
-                                  textDirection: TextDirection.rtl,
-                                  style: TextStyle(
-                                      color: Theme.of(context).cardColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18),
-                                ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          if (widget.showName)
+                            Flexible(
+                              child: Text(
+                                widget.item == null
+                                    ? ''
+                                    : (widget.item!.getUser().fullName.length >
+                                            8)
+                                        // ignore: prefer_interpolation_to_compose_strings
+                                        ? widget.item!
+                                                .getUser()
+                                                .fullName
+                                                .substring(0, 7) +
+                                            '...'
+                                        : widget.item!.getUser().fullName,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
+                                style: TextStyle(
+                                    color: Theme.of(context).cardColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 24),
                               ),
-                          ],
-                        )
-                      ],
-                    ),
+                            ),
+                        ],
+                      )
+                    ],
                   ),
-                )
-              ],
-            )));
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

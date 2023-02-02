@@ -27,7 +27,7 @@ class _RecentBookingState extends State<RecentBooking> {
 
   @override
   void initState() {
-    currentPosition = widget.padelOrders.length > 2 ? 2 : 0;
+    currentPosition = widget.padelOrders.length > 2 ? 1 : 0;
 
     _scrollAmount = (currentPosition).toDouble();
 
@@ -51,81 +51,91 @@ class _RecentBookingState extends State<RecentBooking> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'My Last booking',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                          opaque: false, // set to false
-                          pageBuilder: (_, __, ___) => const MyBookingPage()),
-                    );
-                  },
+    return SizedBox(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Text(
-                    'View All',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: Colors.grey.shade600),
-                  ))
-            ],
+                    'My Last booking',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                            opaque: false, // set to false
+                            pageBuilder: (_, __, ___) => const MyBookingPage()),
+                      );
+                    },
+                    child: Text(
+                      'View All',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: Colors.grey.shade400),
+                    ))
+              ],
+            ),
           ),
-        ),
-        ExpandablePageView.builder(
-            controller: _pageController,
-            itemCount: widget.padelOrders.length,
-            itemBuilder: (context, index) {
-              return RecentBookingCard(
-                  scrollAmount: _scrollAmount,
-                  padelOrder: widget.padelOrders[index],
-                  height: 220,
-                  index: index,
-                  onQrClick: () {
-                    if (widget.padelOrders[index] == null) return;
-                    Get.dialog(Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: Get.height * 1 / 6),
-                        child: Center(
-                            child: QrModal(
-                                padelOrder: widget.padelOrders[index]!))));
-                  },
-                  onLocationClick: () async {
-                    if (widget.padelOrders[index] == null) return;
-                    if (widget.padelOrders[index]!.getPadel().Location ==
-                        null) {
-                      return;
-                    }
-                    try {
-                      await Util.launchUrI(Api.mapUrI(
-                          widget.padelOrders[index]!.getPadel().Location!));
-                    } on Failure catch (f) {
-                      AppSnackBar.failure(failure: f);
-                    }
-                  },
-                  onClick: () {
-                    if (widget.padelOrders[index] == null) return;
-                    Navigator.of(context).push(
-                      PageRouteBuilder(
-                        opaque: false, // set to false
-                        pageBuilder: (_, __, ___) => BookingPage(
-                          padel: widget.padelOrders[index]!.getPadel(),
-                          order: widget.padelOrders[index]!,
-                        ),
-                      ),
-                    );
-                  });
-            })
-      ],
+          SizedBox(
+            height: 230,
+            child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.padelOrders.length,
+                itemBuilder: (context, index) {
+                  return RecentBookingCard(
+                      scrollAmount: _scrollAmount,
+                      padelOrder: widget.padelOrders[index],
+                      height: 220,
+                      length: widget.padelOrders.length,
+                      width: Get.width * (4 / 3),
+                      index: index,
+                      onQrClick: () {
+                        if (widget.padelOrders[index] == null) return;
+                        Get.dialog(Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: Get.height * 1 / 6),
+                            child: Center(
+                                child: QrModal(
+                                    padelOrder: widget.padelOrders[index]!))));
+                      },
+                      onLocationClick: () async {
+                        if (widget.padelOrders[index] == null) return;
+                        if (widget.padelOrders[index]!.getPadel().Location ==
+                            null) {
+                          return;
+                        }
+                        try {
+                          await Util.launchUrI(Api.mapUrI(
+                              widget.padelOrders[index]!.getPadel().Location!));
+                        } on Failure catch (f) {
+                          AppSnackBar.failure(failure: f);
+                        }
+                      },
+                      onClick: () {
+                        if (widget.padelOrders[index] == null) return;
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            opaque: false, // set to false
+                            pageBuilder: (_, __, ___) => BookingPage(
+                              padel: widget.padelOrders[index]!.getPadel(),
+                              order: widget.padelOrders[index]!,
+                            ),
+                          ),
+                        );
+                      });
+                }),
+          )
+        ],
+      ),
     );
   }
 }

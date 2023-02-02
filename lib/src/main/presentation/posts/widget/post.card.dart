@@ -40,7 +40,7 @@ class _PostCardState extends State<PostCard> {
                   img: widget.post == null
                       ? "img/placeholder.jpg"
                       : widget.post!.coverImage(),
-                  height: 120,
+                  height: MediaQuery.of(context).size.width * (4 / 12) - 10,
                 ),
               ),
               const SizedBox(
@@ -105,7 +105,7 @@ class _PostCardState extends State<PostCard> {
                                 ? Colors.grey.shade300
                                 : Colors.transparent,
                             color: widget.post != null && widget.post!.offer
-                                ? Colors.greenAccent
+                                ? const Color(0xFF109825)
                                 : Colors.redAccent)),
                   )
                 ],

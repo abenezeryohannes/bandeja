@@ -28,9 +28,13 @@ class _WhereSearchCardState extends State<WhereSearchCard> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.fastOutSlowIn,
       child: Container(
-          margin: const EdgeInsets.only(left: 20, top: 16, right: 20),
+          margin: const EdgeInsets.only(
+            left: 20,
+            top: 16,
+            right: 20,
+          ),
           padding:
-              const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
+              const EdgeInsets.only(left: 0, top: 10, right: 20, bottom: 20),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             boxShadow: [
@@ -54,7 +58,8 @@ class _WhereSearchCardState extends State<WhereSearchCard> {
                   widget.activate();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                  padding:
+                      const EdgeInsets.only(left: 20, top: 10.0, bottom: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -90,11 +95,12 @@ class _WhereSearchCardState extends State<WhereSearchCard> {
                           widget.onChange(widget.items[index]!);
                         },
                         tabs: widget.items
-                            .map((e) => CircularTab(text: e?.name, radius: 100))
+                            .map((e) => CircularTab(
+                                text: e?.name, radius: 100, width: 110))
                             .toList(),
                         value: widget.value != null
-                            ? widget.items.indexOf(widget.value!)
-                            : -1,
+                            ? (widget.items.indexOf(widget.value!))
+                            : 0,
                       ),
                     ),
                   ),

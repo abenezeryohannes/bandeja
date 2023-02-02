@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
 import 'package:bandeja/src/core/domain/padels/entities/padel.schedule.dart';
 import 'package:bandeja/src/owner/data/bookings/dto/padel.schedule.dto.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _AddPadelTimingSlideState extends State<AddPadelTimingSlide> {
                           setState(() {});
                         },
                         options: Util.getTimesOfADay(
-                            widget.controller.pickedDuration.value!),
+                            DurationModel(id: -1, minute: 30)),
                         label: 'Start',
                         validator: (_) {
                           String? val = Util.validateNoEmpty(widget
@@ -78,6 +79,10 @@ class _AddPadelTimingSlideState extends State<AddPadelTimingSlide> {
                       )),
                 ],
               ),
+              // Text(
+              //   DateFormat.jm()
+              //       .format(widget.controller.padelDto.value.endTime!),
+              // ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 30,
                 child: DropDownForm(
@@ -100,8 +105,9 @@ class _AddPadelTimingSlideState extends State<AddPadelTimingSlide> {
                         widget.controller.padelDto.value.startTime,
                         widget.controller.padelDto.value.endTime);
                   },
-                  options: Util.getTimesOfADay(
-                      widget.controller.pickedDuration.value!),
+                  options: Util.getEndTime(
+                      widget.controller.pickedDuration.value!,
+                      widget.controller.padelDto.value.startTime),
                   label: 'End',
                   elevation: 1,
                   radius: 14,
@@ -141,6 +147,7 @@ class _AddPadelTimingSlideState extends State<AddPadelTimingSlide> {
                 child: SchedulesCard(
                   selectable: false,
                   schedules: widget.controller.padelScheduleDtos.value
+                      .where((element) => !(element.remove ?? false))
                       .map((e) => PadelScheduleModel(
                           padelId: -1,
                           startTime: e.startTime!,
@@ -150,9 +157,12 @@ class _AddPadelTimingSlideState extends State<AddPadelTimingSlide> {
                       .toList(),
                   date: DateTime.now(),
                   onClick: (PadelScheduleModel schedule) async {
-                    dynamic value = await Get.bottomSheet(
-                        OwnerScheduleBottomSheet(
-                            padelSchedule: schedule, save: false));
+                    dynamic value =
+                        await Get.bottomSheet(OwnerScheduleBottomSheet(
+                      padelSchedule: schedule,
+                      save: false,
+                      canRemove: true,
+                    ));
                     if (value == null) return;
                     widget.controller.updateSchdule(value as PadelScheduleDto);
                     setState(() {});

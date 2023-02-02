@@ -1,4 +1,3 @@
-import 'package:bandeja/src/core/domain/authentication/entities/user.dart';
 import 'package:bandeja/src/owner/core/presentation/controllers/owner.padels.schedules.page.controller.dart';
 import 'package:bandeja/src/owner/presentation/padels/widgets/owner.padel.with.schedule.card.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +148,7 @@ class _OwnerPadelsSchedulePageState extends State<OwnerPadelsSchedulePage> {
   AppBar _appBar() {
     return AppBar(
       title: Text(
-        "Near By",
+        "My Courts",
         style: Theme.of(context).textTheme.titleLarge,
       ),
       centerTitle: true,

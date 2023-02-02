@@ -1,7 +1,6 @@
 import 'package:bandeja/firebase/admin/firebase_options.dart' as FirebaseAdmin;
 import 'package:bandeja/firebase/owner/firebase_options.dart' as FirebaseOwner;
 import 'package:bandeja/firebase/main/firebase_options.dart';
-import 'package:bandeja/src/core/domain/authentication/repositories/i.user.repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +132,9 @@ Future<void> preRunApp() async {
   });
   await configureDependencies(FF.env);
   await GetStorage.init();
-  await (getIt<IUserRepository>()).onAppVisit();
+
+  // PAYMENT-INTEGRATION
+  // MFSDK.init("Put API Key here", MFCountry.KUWAIT, MFEnvironment.TEST);
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

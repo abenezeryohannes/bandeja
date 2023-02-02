@@ -79,7 +79,7 @@ class _OwnerPromoCodeCardState extends State<OwnerPromoCodeCard> {
                           CustomShimmer(
                             show: widget.promo == null,
                             child: Text(
-                              "${widget.promo == null ? 0 : widget.promo!.leftForBooking} Booking Promo",
+                              "${widget.promo == null ? 0 : widget.promo!.leftForBooking} Promo Left",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!

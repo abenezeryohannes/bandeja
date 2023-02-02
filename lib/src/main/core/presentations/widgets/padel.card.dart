@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 
 import '../../../../../main/injection/injector.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/presentation/widgets/app.snack.bar.dart';
 import '../../../../core/presentation/widgets/cached.image.dart';
 import '../../../../core/utils/util.dart';
 import '../../../domain/padels/repositories/i.padel.repository.dart';
@@ -93,50 +95,65 @@ class _PadelCardState extends State<PadelCard> {
                       });
                     },
                     icon: Icon(
-                      bookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                      Icons.bookmark,
                       size: 32,
-                      color: Colors.white,
+                      color: bookmarked
+                          ? Theme.of(context).colorScheme.secondary
+                          : Colors.white,
                     )),
               ),
               Align(
                 alignment: const Alignment(1, -1),
                 child: CustomShimmer(
                   show: widget.item == null,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white.withOpacity(0.80)),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text(
-                        widget.item == null
-                            ? " "
-                            : widget.item!.getAddress().name,
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      const Icon(
-                        Icons.location_on,
-                        size: 16,
-                      )
-                    ]),
+                  child: InkWell(
+                    onTap: () async {
+                      if (widget.item?.Location != null) {
+                        try {
+                          await Util.launchUrI(
+                              Api.mapUrI(widget.item!.Location!));
+                        } on Failure catch (f) {
+                          AppSnackBar.failure(failure: f);
+                        }
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(0.80)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(
+                          widget.item == null
+                              ? " "
+                              : widget.item!.getAddress().name,
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        const Icon(
+                          Icons.location_on,
+                          size: 16,
+                        )
+                      ]),
+                    ),
                   ),
                 ),
               ),
               Align(
-                alignment: const Alignment(-1, 1.9),
+                alignment: const Alignment(-1, 1.77),
                 child: PadelAvatar(
                   borderColor: Colors.white,
                   hero: '',
+                  gap: 0,
                   item: widget.item,
                   margins: const EdgeInsets.only(left: 20),
                   onClick: () {},
-                  radius: 40,
+                  radius: 36,
                 ),
               ),
               Align(

@@ -25,6 +25,24 @@ class _BookmarkPageState extends State<BookmarkPage> {
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             elevation: 0,
             centerTitle: true,
+            leading: Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 12, left: 22),
+                padding:
+                    const EdgeInsets.only(top: 3, bottom: 3, left: 3, right: 3),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border.all(width: 1, color: Colors.grey)),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.chevron_left,
+                    size: 24,
+                    color: Colors.black,
+                  ),
+                )),
             title: Text(
               "Saved",
               style: Theme.of(context).textTheme.titleLarge,
@@ -103,7 +121,14 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  padding: EdgeInsets.only(
+                                      bottom: (index ==
+                                              (c.pagingController.itemList
+                                                          ?.length ??
+                                                      0) -
+                                                  1)
+                                          ? 100.0
+                                          : 10),
                                   child: PadelCard(
                                     item: item,
                                     onBookmarkChanged: () {

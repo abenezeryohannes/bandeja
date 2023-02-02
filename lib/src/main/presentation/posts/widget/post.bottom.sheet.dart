@@ -89,7 +89,7 @@ class _PostBottomSheetState extends State<PostBottomSheet> {
                                     .caption!
                                     .copyWith(
                                         color: widget.post.offer
-                                            ? Colors.greenAccent
+                                            ? const Color(0xFF109825)
                                             : Colors.redAccent),
                               )
                             ],

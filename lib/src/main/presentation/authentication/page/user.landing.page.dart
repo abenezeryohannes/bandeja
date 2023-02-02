@@ -1,8 +1,6 @@
 import 'package:bandeja/src/core/presentation/widgets/big.text.button.dart';
 import 'package:bandeja/src/main/core/presentations/pages/main.page.dart';
 import 'package:bandeja/src/main/presentation/authentication/page/signup.page.dart';
-import 'package:bandeja/src/owner/presentation/authentication/pages/owner.login.page.dart';
-import 'package:bandeja/src/owner/presentation/authentication/pages/owner.signup.page.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';

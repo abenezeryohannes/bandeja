@@ -39,7 +39,12 @@ class NotificationPageController extends GetxController {
       notificationWrapper.value = WrapperDto.errorState(failure: l);
       pagingController.error = UnExpectedFailure();
     }, (r) async {
-      notificationWrapper.value = WrapperDto.loadedState(value: r);
+      if (r.isNotEmpty) {
+        notificationWrapper.value = WrapperDto.loadedState(value: r);
+      } else {
+        notificationWrapper.value = WrapperDto.emptyState();
+      }
+
       if (r.length < pageSize) {
         pagingController.appendLastPage(r);
       } else {
@@ -60,7 +65,11 @@ class NotificationPageController extends GetxController {
       notificationWrapper.value = WrapperDto.errorState(failure: l);
       pagingController.error = UnExpectedFailure();
     }, (r) {
-      notificationWrapper.value = WrapperDto.loadedState(value: r);
+      if (r.isNotEmpty) {
+        notificationWrapper.value = WrapperDto.loadedState(value: r);
+      } else {
+        notificationWrapper.value = WrapperDto.emptyState();
+      }
       pagingController.refresh();
     });
   }

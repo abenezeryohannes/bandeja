@@ -1,4 +1,3 @@
-import 'package:bandeja/src/core/presentation/widgets/cached.image.dart';
 import 'package:bandeja/src/core/presentation/widgets/custom.shimmer.dart';
 import 'package:flutter/material.dart';
 
@@ -26,47 +25,52 @@ class _SearchItemGroupCardState extends State<SearchItemGroupCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      // height: (MediaQuery.of(context).size.width * (3 / 12)),
       child: Column(
         children: [
-          InkWell(
-            onTap: () {
-              widget.onClick();
-            },
-            child: CustomShimmer(
-              show: widget.icon == null,
-              child: AnimatedContainer(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.grey.shade400),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: widget.title == null
-                          ? Colors.grey.shade300
-                          : widget.active
-                              ? Theme.of(context).colorScheme.secondary
-                              : Theme.of(context).cardColor),
-                  duration: const Duration(seconds: 1),
-                  child: widget.icon == null
-                      ? const SizedBox(
-                          height: 42,
-                          width: 42,
-                        )
-                      : Image.network(
-                          Api.getMedia(widget.icon!),
-                          height: 42,
-                          width: 42,
-                          color: widget.active ? Colors.white : null,
-                        )
-                  // child: CachedImage(
-                  //   height: 42,
-                  //   width: 42,
-                  //   color: widget.active ? Colors.white : null,
-                  //   imageLink: Api.getMedia(widget.icon == null
-                  //       ? 'img/placeholder.jpg'
-                  //       : widget.icon!),
-                  // )
-                  ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                widget.onClick();
+              },
+              child: CustomShimmer(
+                show: widget.icon == null,
+                child: AnimatedContainer(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 1, color: Colors.grey.shade400),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: widget.title == null
+                            ? Colors.grey.shade300
+                            : widget.active
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).cardColor),
+                    duration: const Duration(seconds: 1),
+                    child: widget.icon == null
+                        ? const SizedBox(
+                            height: double.infinity,
+                            width: double.infinity,
+                          )
+                        : Image.network(
+                            Api.getMedia(widget.icon!),
+                            height: double.infinity,
+                            width: double.infinity,
+                            color: widget.active ? Colors.white : null,
+                          )
+                    // child: CachedImage(
+                    //   height: 42,
+                    //   width: 42,
+                    //   color: widget.active ? Colors.white : null,
+                    //   imageLink: Api.getMedia(widget.icon == null
+                    //       ? 'img/placeholder.jpg'
+                    //       : widget.icon!),
+                    // )
+                    ),
+              ),
             ),
           ),
           Padding(

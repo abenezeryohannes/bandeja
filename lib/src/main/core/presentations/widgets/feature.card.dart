@@ -5,10 +5,11 @@ import '../../../../core/domain/padels/entities/feature.dart';
 import '../../../../core/network/api.dart';
 
 class FeatureCard extends StatefulWidget {
-  const FeatureCard({Key? key, this.feature, this.big = false})
+  const FeatureCard({Key? key, this.feature, this.big = false, this.iconColor})
       : super(key: key);
   final FeatureModel? feature;
   final bool big;
+  final Color? iconColor;
   @override
   State<FeatureCard> createState() => _FeatureCardState();
 }
@@ -20,7 +21,7 @@ class _FeatureCardState extends State<FeatureCard> {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          width: widget.big ? 44 : 30,
+          width: widget.big ? 34 : 30,
           height: widget.big ? 30 : 28,
           child: Stack(
             alignment: const Alignment(1, 1),
@@ -33,9 +34,11 @@ class _FeatureCardState extends State<FeatureCard> {
                       Api.getMedia(widget.feature == null
                           ? "img/placeholder.jpg"
                           : widget.feature!.icon),
-                      color: widget.big ? Colors.grey.shade700 : Colors.black,
-                      height: widget.big ? 24 : 20,
-                      width: widget.big ? 24 : 20),
+                      color: widget.big
+                          ? Colors.grey.shade500
+                          : Colors.grey.shade600,
+                      height: widget.big ? 20 : 20,
+                      width: widget.big ? 20 : 20),
                 ),
               ),
               if (widget.feature == null
@@ -63,6 +66,7 @@ class _FeatureCardState extends State<FeatureCard> {
             child: Text(widget.feature == null ? '' : widget.feature!.name,
                 style: Theme.of(context).textTheme.caption!.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: widget.big ? Colors.grey : Colors.grey.shade600,
                     fontSize: widget.big ? 14 : 10)))
       ],
     );

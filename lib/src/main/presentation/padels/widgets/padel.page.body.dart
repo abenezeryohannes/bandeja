@@ -47,6 +47,7 @@ class _PadelPageBodyState extends State<PadelPageBody> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: FeatureCard(
                             feature: widget.padel.getFeatures()[index],
+                            iconColor: Colors.grey.shade400,
                             big: true),
                       );
                     })),
@@ -57,7 +58,8 @@ class _PadelPageBodyState extends State<PadelPageBody> {
               Obx(() => Center(
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.secondary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(40)),
                             padding: const EdgeInsets.symmetric(
@@ -113,16 +115,12 @@ class _PadelPageBodyState extends State<PadelPageBody> {
                     loadedState: (value) => SchedulesCard(
                           schedules: (value as PadelModel).PadelSchedules ?? [],
                           cols: 3,
-                          onClick: (PadelScheduleModel scheduleModel) {
-                            if (scheduleModel.booked) return;
-                            // DateTime temp = DateTime(
-                            //     widget.controller.date.value.year,
-                            //     widget.controller.date.value.month,
-                            //     widget.controller.date.value.day,
-                            //     scheduleModel.startTime.hour,
-                            //     scheduleModel.startTime.minute);
-
-                            // widget.controller.date.value = temp;
+                          onClick: (PadelScheduleModel scheduleModel) async {
+                            if (scheduleModel.booked) {
+                              widget.controller.checkIfMyReservation(
+                                  context, scheduleModel.id);
+                              return;
+                            }
                             widget.controller.schedule.value = scheduleModel;
                           },
                           date: widget.controller.schedule.value?.startTime ??
@@ -151,6 +149,7 @@ class _PadelPageBodyState extends State<PadelPageBody> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
+          color: Colors.grey.shade50,
           border:
               Border(top: BorderSide(width: 1, color: Colors.grey.shade400))),
       child: Row(
@@ -169,20 +168,21 @@ class _PadelPageBodyState extends State<PadelPageBody> {
               const SizedBox(
                 width: 10,
               ),
-              Text(
-                '${widget.controller.schedule.value?.price ?? widget.controller.initPadel.value?.price ?? '-'} KD',
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              ),
+              Obx(() => Text(
+                    '${widget.controller.schedule.value?.price ?? widget.controller.initPadel.value?.price ?? '-'} KD',
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                  )),
             ],
           ),
           BigTextButton(
             onClick: () async {
               if (widget.controller.schedule.value == null) return;
               await Get.to(CheckoutPage(
-                  padel: widget.padel,
-                  schedule: widget.controller.schedule.value!));
+                padel: widget.padel,
+                schedule: widget.controller.schedule.value!,
+              ));
               widget.controller.loadPadel();
             },
             isExpanded: false,
@@ -194,7 +194,8 @@ class _PadelPageBodyState extends State<PadelPageBody> {
               children: [
                 Text("Pay Now",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFFFFFF00))),
                 const SizedBox(width: 10),
                 const Icon(Icons.arrow_forward),
               ],

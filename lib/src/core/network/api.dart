@@ -9,8 +9,11 @@ import '../error/failure.dart';
 import '../utils/util.dart';
 
 class Api {
+  static bool isProduction() =>
+      dotenv.env['ENV']?.toLowerCase().startsWith('prod') ?? false;
+
   static String? hostUrl() =>
-      "${dotenv.env['HOST_URL']}/${dotenv.env['HOST_URL_PREFIX']}";
+      "${isProduction() ? dotenv.env['HOST_URL'] : dotenv.env['DEBUG_HOST_URL']}/${dotenv.env['HOST_URL_PREFIX']}";
 
   static Uri request(String path) => Uri.parse("${hostUrl()}/$path");
   static Uri getRequestWithParams(String path, Map<String, dynamic> query) =>
@@ -50,8 +53,11 @@ class Api {
   }
 
   static Uri mapUrI(LocationModel location) {
-    final url = 'geo:${location.latitude},${location.longitude}';
-    return Uri.parse(url);
+    // final url = 'geo:${location.latitude},${location.longitude}';
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}';
+
+    return Uri.parse(googleUrl);
   }
 
   static Future<MultipartRequest> addImage(

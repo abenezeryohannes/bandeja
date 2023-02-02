@@ -18,6 +18,7 @@ class RecentOwnerPadelCard extends StatefulWidget {
       this.padel,
       required this.height,
       this.scrollAmount = 1,
+      this.length = 1,
       required this.index,
       required this.onClick,
       required this.onPowerClick,
@@ -29,6 +30,7 @@ class RecentOwnerPadelCard extends StatefulWidget {
   final Function onEditClick;
   final double height;
   final int index;
+  final int length;
   final double scrollAmount;
   @override
   State<RecentOwnerPadelCard> createState() => _RecentOwnerPadelCardState();
@@ -40,19 +42,21 @@ class _RecentOwnerPadelCardState extends State<RecentOwnerPadelCard> {
   late double clampedDifference;
   late PadelModel? _padel;
   bool loading = false;
+
   @override
   void initState() {
-    _padel = widget.padel;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _padel = widget.padel;
     clampedDifference = (widget.scrollAmount - widget.index).clamp(-1, 1);
 
     // offset = Offset(0.0, 128.0 * clampedDifference);
 
-    scale = lerpDouble(1, 0.8, clampedDifference.abs())!;
+    scale =
+        lerpDouble(1, widget.length > 1 ? 0.8 : 1, clampedDifference.abs())!;
 
     return Transform.scale(
       scaleY: scale,
@@ -114,8 +118,8 @@ class _RecentOwnerPadelCardState extends State<RecentOwnerPadelCard> {
                                   .textTheme
                                   .bodyText1!
                                   .copyWith(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
                                       color: Colors.white),
                             ),
                           ),

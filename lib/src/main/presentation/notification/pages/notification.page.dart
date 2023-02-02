@@ -29,20 +29,103 @@ class _NotificationPageState extends State<NotificationPage> {
                   primary: true,
                   pinned: true,
                   backgroundColor: Colors.grey.shade50,
-                  expandedHeight: 200,
+                  expandedHeight: 140,
                   actions: [
-                    TextButton(
-                        onPressed: () {
-                          controller.clearNotifications();
-                        },
-                        child: Text(
-                          'Clear',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
+                    Obx(() => controller.notificationWrapper.value.when(
+                          emptyState: () => const SizedBox(),
+                          loadingState: (_) => const SizedBox(),
+                          loadedState: (val) => TextButton(
+                              onPressed: () {
+                                controller.clearNotifications();
+                              },
+                              child: TextButton(
+                                  onPressed: () {
+                                    Get.dialog(Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 40,
+                                          vertical: Get.height / 3),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 20),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Are You sure?',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6,
+                                              ),
+                                              const SizedBox(
+                                                height: 24,
+                                              ),
+                                              Text(
+                                                'This will delete all of your saved notifications!',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                  child: Text(
+                                                    'No.',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1,
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                    controller
+                                                        .clearNotifications();
+                                                  },
+                                                  child: Text(
+                                                    'Yes, I am sure.',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1!
+                                                        .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .secondary),
+                                                  )),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                                  },
+                                  child: Text(
+                                    'Clear',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                  ))),
+                          errorState: (_) => const SizedBox(),
                         ))
                   ],
                   leading: Container(
@@ -80,63 +163,6 @@ class _NotificationPageState extends State<NotificationPage> {
               padding: const EdgeInsets.only(bottom: 0.0, top: 10),
               child: body(),
             )));
-    // drawer: Drawer(),
-    // body: CustomScrollView(
-    //   slivers: <Widget>[
-    //     SliverAppBar(
-    //       primary: true,
-    //       pinned: true,
-    //       expandedHeight: 500,
-    //       actions: [
-    //         TextButton(
-    //             onPressed: () {
-    //               controller.clearNotifications();
-    //             },
-    //             child: Text(
-    //               'Clear',
-    //               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-    //                   color: Theme.of(context).colorScheme.secondary),
-    //             ))
-    //       ],
-    //       leading: Container(
-    //           margin: const EdgeInsets.only(top: 14, bottom: 14, left: 20),
-    //           decoration: BoxDecoration(
-    //               borderRadius: const BorderRadius.all(Radius.circular(10)),
-    //               border: Border.all(width: 1, color: Colors.grey.shade600)),
-    //           child: InkWell(
-    //             onTap: () {
-    //               Navigator.pop(context);
-    //             },
-    //             child: const Icon(
-    //               Icons.chevron_left,
-    //               size: 24,
-    //               color: Colors.black,
-    //             ),
-    //           )),
-    //       flexibleSpace: FlexibleSpaceBar(
-    //         background: Container(
-    //           color: Colors.grey.shade50,
-    //         ),
-    //         title: Text(
-    //           "Notifications",
-    //           textAlign: TextAlign.left,
-    //           style: Theme.of(context).textTheme.headline5,
-    //         ),
-    //       ),
-    //     ),
-    // SliverList(
-    //   delegate: SliverChildBuilderDelegate(
-    //     (BuildContext context, int index) {
-    //       return ListTile(
-    //         title: Text("List tile $index"),
-    //       );
-    //     },
-    //     childCount: 30,
-    //   ),
-    // ),
-    //     ],
-    //   ),
-    // );
   }
 
   Widget body() {
@@ -157,13 +183,13 @@ class _NotificationPageState extends State<NotificationPage> {
                 padding: const EdgeInsets.all(0),
                 pagingController: controller.pagingController,
                 builderDelegate: PagedChildBuilderDelegate<NotificationModel?>(
-                    noItemsFoundIndicatorBuilder: (context) => Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: ShowError(
-                            failure: Failure.noDataFailure(
-                                message: 'No Notification\'s for now!'),
-                            errorShowType: ErrorShowType.vertical,
-                          ),
+                    noItemsFoundIndicatorBuilder: (context) => const Padding(
+                        padding: EdgeInsets.only(top: 0.0), child: SizedBox()
+                        // child: ShowError(
+                        //   failure: Failure.noDataFailure(
+                        //       message: 'No Notification\'s for now!'),
+                        //   errorShowType: ErrorShowType.vertical,
+                        // ),
                         ),
                     firstPageErrorIndicatorBuilder: (_) => Padding(
                           padding: const EdgeInsets.only(top: 100.0),
@@ -183,6 +209,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         ),
                     itemBuilder: (context, item, index) => Card(
                         elevation: 0,
+                        color: Colors.transparent,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
@@ -192,7 +219,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             bottom: index + 1 ==
                                     controller.pagingController.itemList?.length
                                 ? 50
-                                : 0),
+                                : 14),
                         child: InkWell(
                             onTap: () {
                               if (item != null) {}

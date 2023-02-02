@@ -80,8 +80,9 @@ class NotificationRemoteDataSource {
   }
 
   Future<List<NotificationModel>> clearNotifications() async {
-    http.Response response =
-        await client.post(Api.request("notifications/clear"));
+    http.Response response = await client.post(
+        Api.request("notifications/clear"),
+        headers: Api.postHeader(GetStorage().read('token')));
     ResponseDto responseDto = ResponseDto.fromJson(json.decode(response.body));
     if (responseDto.success) {
       List<NotificationModel> notifications =

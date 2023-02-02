@@ -8,7 +8,6 @@ import 'package:bandeja/src/main/presentation/home/widget/padel.avatar.dart';
 import 'package:bandeja/src/owner/data/padels/dto/padel.dto.dart';
 import 'package:bandeja/src/owner/domain/padels/i.owner.padel.repository.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api.dart';
 import '../../../../core/utils/util.dart';
@@ -205,7 +204,13 @@ class _AdminPadelCardState extends State<AdminPadelCard> {
                               children: [
                                 BigTextButton(
                                     isExpanded: false,
-                                    onClick: () async {},
+                                    onClick: () async {
+                                      if (widget.padel != null &&
+                                          widget.padel?.getUser() != null) {
+                                        Util.openwhatsapp(
+                                            widget.padel!.User!.phoneNumber);
+                                      }
+                                    },
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 6),
                                     cornerRadius: 10,

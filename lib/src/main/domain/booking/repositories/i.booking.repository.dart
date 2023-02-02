@@ -5,8 +5,21 @@ import '../../../../core/error/failure.dart';
 import '../../../data/dto/padel.order.dto.dart';
 
 abstract class IBookingRepository {
+  // Future<Either<Failure, PadelOrderModel>?>? pay(
+  //     {required PadelOrderDto order});
+
+  Future<Either<Failure, PadelOrderModel>?>? checkIfMyReservation(
+      {required int padelScheduleId});
+
+  Future<Either<Failure, PadelOrderModel>?>? notifyPayment(
+      {required dynamic data});
+
   Future<Either<Failure, PadelOrderModel>?>? book(
       {required PadelOrderDto order});
+
+  Future<Either<Failure, PadelOrderModel>?>? editBooking(
+      {required PadelOrderDto order});
+
   Future<Either<Failure, List<PadelOrderModel>>?>? myBooking(
       {int? page, int? limit});
 }

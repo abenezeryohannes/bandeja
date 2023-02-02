@@ -22,6 +22,8 @@ class TextInputForm extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.obscureText = false,
+    this.keybardType,
+    this.textInputAction,
   }) : super(key: key);
 
   final String? label;
@@ -37,10 +39,12 @@ class TextInputForm extends StatefulWidget {
   final String? initialValue;
   final String? suffixText;
   final String placeholder;
+  final TextInputType? keybardType;
   final Function(String val) onChanged;
   final String? error;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final TextInputAction? textInputAction;
   final double? focusedBorderWidth;
   final Color? focusedBorderColor;
 
@@ -70,7 +74,7 @@ class _TextInputFormState extends State<TextInputForm> {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
-            keyboardType: TextInputType.multiline,
+            keyboardType: widget.keybardType ?? TextInputType.multiline,
             minLines: widget.minLines,
             focusNode: widget.focusNode,
             maxLines: widget.maxLines,
@@ -80,6 +84,10 @@ class _TextInputFormState extends State<TextInputForm> {
             validator: widget.validator,
             textAlign: TextAlign.start,
             obscureText: widget.obscureText,
+            textInputAction: widget.textInputAction ??
+                (widget.maxLines > 1
+                    ? TextInputAction.newline
+                    : TextInputAction.done),
             decoration: InputDecoration(
               focusColor: Colors.grey.shade800,
               hintText: widget.placeholder,

@@ -1,3 +1,4 @@
+import 'package:bandeja/src/core/domain/padels/entities/duration.dart';
 import 'package:bandeja/src/core/domain/padels/entities/promo.code.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
@@ -108,6 +109,7 @@ class PadelRepository implements IPadelRepository {
       PadelGroupModel? padelGroup,
       int? limit,
       bool indoor = false,
+      DurationModel? duration,
       AddressModel? address,
       required String date,
       DateTime? timeOfDay}) async {
@@ -115,6 +117,7 @@ class PadelRepository implements IPadelRepository {
       if (await networkInfo.isConnected) {
         final response = await remoteDataSource.getFilterPadels(
             page: page,
+            duration: duration,
             padelGroup: padelGroup,
             address: address,
             date: date,
@@ -210,6 +213,23 @@ class PadelRepository implements IPadelRepository {
     try {
       if (await networkInfo.isConnected) {
         final response = await remoteDataSource.isBookmark(padelId: padelId);
+        if (response == null) throw Failure.serverFailure();
+        return Right(response);
+      } else {
+        throw NetworkFailure();
+      }
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(Failure.unExpectedFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DurationModel>>?>? findAllDurations() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await remoteDataSource.getDurations();
         if (response == null) throw Failure.serverFailure();
         return Right(response);
       } else {

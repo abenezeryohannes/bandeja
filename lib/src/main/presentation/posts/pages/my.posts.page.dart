@@ -186,10 +186,10 @@ class _MyPostPageState extends State<MyPostPage> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 24,
                   ),
                   Text(
-                    'This will delete you post permanently!',
+                    'This will delete this post permanently!',
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ],
@@ -202,7 +202,7 @@ class _MyPostPageState extends State<MyPostPage> {
                         Get.back();
                       },
                       child: Text(
-                        'No',
+                        'No.',
                         style: Theme.of(context).textTheme.bodyText1,
                       )),
                   TextButton(
@@ -212,7 +212,7 @@ class _MyPostPageState extends State<MyPostPage> {
                         controller.deletePost(post);
                       },
                       child: Text(
-                        'Yes, am sure',
+                        'Yes, I am sure.',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).colorScheme.secondary),
                       )),

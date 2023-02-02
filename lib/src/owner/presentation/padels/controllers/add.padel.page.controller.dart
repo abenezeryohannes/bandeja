@@ -287,7 +287,9 @@ class AddPadelPageController extends GetxController {
     padelDto.value.padelGroupId = pickedGroup.value?.id;
     padelDto.value.durationId = pickedDuration.value?.id;
     padelDto.value.padelFeatureDto = pickedFeatures.value;
-    padelDto.value.padelSchedules = padelScheduleDtos.value;
+    padelDto.value.padelSchedules = padelScheduleDtos.value
+        .where((element) => !(element.remove ?? false))
+        .toList();
 
     final result = ((padelDto.value.id) > 0)
         ? await padelRepository.editPadel(padelDto: padelDto.value)

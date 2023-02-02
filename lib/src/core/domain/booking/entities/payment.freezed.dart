@@ -22,6 +22,11 @@ PaymentModel _$PaymentModelFromJson(Map<String, dynamic> json) {
 mixin _$PaymentModel {
   int get id => throw _privateConstructorUsedError;
   int get userId => throw _privateConstructorUsedError;
+  String? get paymentId => throw _privateConstructorUsedError;
+  String? get ref => throw _privateConstructorUsedError;
+  String? get tranId => throw _privateConstructorUsedError;
+  String? get trackId => throw _privateConstructorUsedError;
+  String get paymentType => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -40,6 +45,11 @@ abstract class $PaymentModelCopyWith<$Res> {
   $Res call(
       {int id,
       int userId,
+      String? paymentId,
+      String? ref,
+      String? tranId,
+      String? trackId,
+      String paymentType,
       double amount,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -57,6 +67,11 @@ class _$PaymentModelCopyWithImpl<$Res> implements $PaymentModelCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? userId = freezed,
+    Object? paymentId = freezed,
+    Object? ref = freezed,
+    Object? tranId = freezed,
+    Object? trackId = freezed,
+    Object? paymentType = freezed,
     Object? amount = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -70,6 +85,26 @@ class _$PaymentModelCopyWithImpl<$Res> implements $PaymentModelCopyWith<$Res> {
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as int,
+      paymentId: paymentId == freezed
+          ? _value.paymentId
+          : paymentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ref: ref == freezed
+          ? _value.ref
+          : ref // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tranId: tranId == freezed
+          ? _value.tranId
+          : tranId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      trackId: trackId == freezed
+          ? _value.trackId
+          : trackId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paymentType: paymentType == freezed
+          ? _value.paymentType
+          : paymentType // ignore: cast_nullable_to_non_nullable
+              as String,
       amount: amount == freezed
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -96,6 +131,11 @@ abstract class _$$_PaymentModelCopyWith<$Res>
   $Res call(
       {int id,
       int userId,
+      String? paymentId,
+      String? ref,
+      String? tranId,
+      String? trackId,
+      String paymentType,
       double amount,
       DateTime? createdAt,
       DateTime? updatedAt});
@@ -116,6 +156,11 @@ class __$$_PaymentModelCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? userId = freezed,
+    Object? paymentId = freezed,
+    Object? ref = freezed,
+    Object? tranId = freezed,
+    Object? trackId = freezed,
+    Object? paymentType = freezed,
     Object? amount = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -129,6 +174,26 @@ class __$$_PaymentModelCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as int,
+      paymentId: paymentId == freezed
+          ? _value.paymentId
+          : paymentId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ref: ref == freezed
+          ? _value.ref
+          : ref // ignore: cast_nullable_to_non_nullable
+              as String?,
+      tranId: tranId == freezed
+          ? _value.tranId
+          : tranId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      trackId: trackId == freezed
+          ? _value.trackId
+          : trackId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paymentType: paymentType == freezed
+          ? _value.paymentType
+          : paymentType // ignore: cast_nullable_to_non_nullable
+              as String,
       amount: amount == freezed
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -151,6 +216,11 @@ class _$_PaymentModel implements _PaymentModel {
   _$_PaymentModel(
       {this.id = -1,
       required this.userId,
+      this.paymentId,
+      this.ref,
+      this.tranId,
+      this.trackId,
+      this.paymentType = 'unknown',
       this.amount = 0,
       this.createdAt,
       this.updatedAt});
@@ -164,6 +234,17 @@ class _$_PaymentModel implements _PaymentModel {
   @override
   final int userId;
   @override
+  final String? paymentId;
+  @override
+  final String? ref;
+  @override
+  final String? tranId;
+  @override
+  final String? trackId;
+  @override
+  @JsonKey()
+  final String paymentType;
+  @override
   @JsonKey()
   final double amount;
   @override
@@ -173,7 +254,7 @@ class _$_PaymentModel implements _PaymentModel {
 
   @override
   String toString() {
-    return 'PaymentModel(id: $id, userId: $userId, amount: $amount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'PaymentModel(id: $id, userId: $userId, paymentId: $paymentId, ref: $ref, tranId: $tranId, trackId: $trackId, paymentType: $paymentType, amount: $amount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -183,6 +264,12 @@ class _$_PaymentModel implements _PaymentModel {
             other is _$_PaymentModel &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.paymentId, paymentId) &&
+            const DeepCollectionEquality().equals(other.ref, ref) &&
+            const DeepCollectionEquality().equals(other.tranId, tranId) &&
+            const DeepCollectionEquality().equals(other.trackId, trackId) &&
+            const DeepCollectionEquality()
+                .equals(other.paymentType, paymentType) &&
             const DeepCollectionEquality().equals(other.amount, amount) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.updatedAt, updatedAt));
@@ -194,6 +281,11 @@ class _$_PaymentModel implements _PaymentModel {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(paymentId),
+      const DeepCollectionEquality().hash(ref),
+      const DeepCollectionEquality().hash(tranId),
+      const DeepCollectionEquality().hash(trackId),
+      const DeepCollectionEquality().hash(paymentType),
       const DeepCollectionEquality().hash(amount),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(updatedAt));
@@ -215,6 +307,11 @@ abstract class _PaymentModel implements PaymentModel {
   factory _PaymentModel(
       {final int id,
       required final int userId,
+      final String? paymentId,
+      final String? ref,
+      final String? tranId,
+      final String? trackId,
+      final String paymentType,
       final double amount,
       final DateTime? createdAt,
       final DateTime? updatedAt}) = _$_PaymentModel;
@@ -226,6 +323,16 @@ abstract class _PaymentModel implements PaymentModel {
   int get id;
   @override
   int get userId;
+  @override
+  String? get paymentId;
+  @override
+  String? get ref;
+  @override
+  String? get tranId;
+  @override
+  String? get trackId;
+  @override
+  String get paymentType;
   @override
   double get amount;
   @override

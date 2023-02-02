@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../../main/injection/injector.dart';
+import '../../../../core/domain/authentication/repositories/i.user.repository.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/network/api.dart';
@@ -91,13 +92,24 @@ class _PadelPageState extends State<PadelPage> {
                 ),
               ];
             },
-            body: Padding(
-              padding: const EdgeInsets.only(bottom: 48.0, top: 70),
-              child: PadelPageBody(
-                padel: widget.padel,
-                controller: controller,
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 4, top: 25),
+                child: PadelPageBody(
+                  padel: widget.padel,
+                  controller: controller,
+                ),
               ),
             )));
+  }
+
+  @override
+  void dispose() async {
+    _controller.dispose();
+    Get.delete<PadelPageController>();
+    controller.dispose();
+    super.dispose();
+    await (getIt<IUserRepository>()).onAppVisitEnd(padelId: widget.padel.id);
   }
 
   Widget _floatingCard() {
@@ -128,28 +140,40 @@ class _PadelPageState extends State<PadelPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 20),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondary
-                                .withOpacity(0.3)),
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text(
-                            widget.padel.getAddress().name,
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(
-                            Icons.location_on,
-                            size: 16,
-                          )
-                        ]),
+                      InkWell(
+                        onTap: () async {
+                          if (widget.padel.Location != null) {
+                            try {
+                              await Util.launchUrI(
+                                  Api.mapUrI(widget.padel.Location!));
+                            } on Failure catch (f) {
+                              AppSnackBar.failure(failure: f);
+                            }
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 20),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.3)),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            Text(
+                              widget.padel.getAddress().name,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Icon(
+                              Icons.location_on,
+                              size: 16,
+                            )
+                          ]),
+                        ),
                       ),
                     ],
                   ),
@@ -171,40 +195,37 @@ class _PadelPageState extends State<PadelPage> {
               borderColor: Colors.white,
               hero: '',
               item: widget.padel,
-              margins: const EdgeInsets.only(left: 20),
+              margins: const EdgeInsets.only(left: 20, top: 8),
               onClick: () {},
-              radius: 40,
+              radius: 34,
             ),
           ),
-          Align(
-            alignment: const Alignment(0.8, 0.5),
-            child: IconButton(
-                onPressed: () async {
-                  final result = await padelRepository.setBookmark(
-                      padelId: widget.padel.id);
-                  result!.fold((l) {
-                    AppSnackBar.failure(failure: l);
-                  }, (r) {
-                    if (mounted) {
-                      setState(() {
-                        if (r) {
-                          controller.isBookmarked.value =
-                              !(controller.isBookmarked.value);
-                        }
-                      });
-                    }
-                  });
-                },
-                icon: Icon(
-                  controller.isBookmarked.value
-                      ? Icons.bookmark
-                      : Icons.bookmark_outline,
-                  size: 32,
-                  color: controller.isBookmarked.value
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.grey,
-                )),
-          ),
+          // Align(
+          //   alignment: const Alignment(0.8, 0.5),
+          //   child: IconButton(
+          //       onPressed: () async {
+          //         final result = await padelRepository.setBookmark(
+          //             padelId: widget.padel.id);
+          //         result!.fold((l) {
+          //           AppSnackBar.failure(failure: l);
+          //         }, (r) {
+          //           if (mounted) {
+          //             setState(() {
+          //               if (r) {
+          //                 controller.isBookmarked.value =
+          //                     !(controller.isBookmarked.value);
+          //               }
+          //             });
+          //           }
+          //         });
+          //       },
+          //       icon: Icon(Icons.bookmark
+          //         size: 32,
+          //         color: controller.isBookmarked.value
+          //             ? Theme.of(context).colorScheme.secondary
+          //             : Colors.grey,
+          //       )),
+          // ),
         ],
       ),
     );

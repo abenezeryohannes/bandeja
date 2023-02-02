@@ -86,6 +86,7 @@ class _AdminBookingCardState extends State<AdminBookingCard> {
                                   .textTheme
                                   .titleMedium!
                                   .copyWith(
+                                      overflow: TextOverflow.fade,
                                       color: Colors.black,
                                       backgroundColor: widget.order == null
                                           ? Colors.grey
@@ -99,11 +100,12 @@ class _AdminBookingCardState extends State<AdminBookingCard> {
                           CustomShimmer(
                             show: widget.order == null,
                             child: Text(
-                              "${widget.order == null ? '.................' : widget.order!.barCode}",
+                              widget.order?.getUser().phoneNumber ?? '',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
                                   .copyWith(
+                                      overflow: TextOverflow.fade,
                                       color: Colors.grey.shade500,
                                       backgroundColor: widget.order == null
                                           ? Colors.grey
@@ -122,6 +124,7 @@ class _AdminBookingCardState extends State<AdminBookingCard> {
                                   .textTheme
                                   .bodyText2!
                                   .copyWith(
+                                      overflow: TextOverflow.fade,
                                       backgroundColor: widget.order == null
                                           ? Colors.grey
                                           : null,
@@ -130,29 +133,29 @@ class _AdminBookingCardState extends State<AdminBookingCard> {
                           ),
                         ],
                       ),
-                      // if (widget.order != null)
-                      CustomShimmer(
-                        show: widget.order == null,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 3, vertical: 3),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                              color: Colors.grey.shade200),
-                          child: Text(
-                            (widget.order == null ||
-                                    widget.order!.barCode == null)
-                                ? '#0000000'
-                                : widget.order!.barCode!,
-                            maxLines: 1,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(fontWeight: FontWeight.bold),
+                      if (widget.order != null)
+                        CustomShimmer(
+                          show: widget.order == null,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(5)),
+                                color: Colors.grey.shade200),
+                            child: Text(
+                              widget.order?.Payment?.amount.toString() ??
+                                  '#0000000',
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption!
+                                  .copyWith(
+                                      overflow: TextOverflow.fade,
+                                      fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

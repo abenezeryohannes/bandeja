@@ -1,13 +1,9 @@
-import 'package:bandeja/src/core/presentation/widgets/app.snack.bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/domain/booking/entities/padel.order.dart';
 import '../../../../core/domain/padels/entities/padel.dart';
-import '../../../../core/error/failure.dart';
-import '../../../../core/network/api.dart';
-import '../../../../core/utils/util.dart';
 import '../../../../main/presentation/home/widget/padel.avatar.dart';
 import '../../../../main/presentation/padels/widgets/triangle.painter.dart';
 
@@ -75,16 +71,25 @@ class _OwnerBookingPageState extends State<OwnerBookingPage> {
                 hero: '',
                 onClick: () {})),
         const SizedBox(
-          height: 5,
+          height: 3,
         ),
         Center(
           child: Text(
-            widget.order.getPadel().getUser().fullName,
+            widget.order.getUser().fullName,
             style: Theme.of(context).textTheme.headline5,
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
+        ),
+        Center(
+          child: Text(
+            widget.order.getUser().phoneNumber,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Center(
           child: Text(
@@ -120,7 +125,7 @@ class _OwnerBookingPageState extends State<OwnerBookingPage> {
           ),
         ),
         const SizedBox(
-          height: 30,
+          height: 34,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -210,32 +215,7 @@ class _OwnerBookingPageState extends State<OwnerBookingPage> {
               color: Colors.black,
             ),
           )),
-      actions: [
-        // IconButton(
-        //     onPressed: () async {
-        //       if (widget.order == null) return;
-        //       if (widget.order.getPadel().Location == null) {
-        //         return;
-        //       }
-        //       try {
-        //         await Util.launchUrI(
-        //             Api.mapUrI(widget.order.getPadel().Location!));
-        //       } on Failure catch (f) {
-        //         AppSnackBar.failure(failure: f);
-        //       }
-        //     },
-        //     icon: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         Image.asset(
-        //           'assets/icons/location.png',
-        //           width: 24,
-        //           height: 24,
-        //           color: Colors.white,
-        //         ),
-        //       ],
-        //     ))
-      ],
+      actions: [],
     );
   }
 }

@@ -21,6 +21,7 @@ PadelScheduleDto _$PadelScheduleDtoFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['endTime'] as String),
       (json['price'] as num?)?.toDouble(),
+      json['remove'] as bool?,
     );
 
 Map<String, dynamic> _$PadelScheduleDtoToJson(PadelScheduleDto instance) =>
@@ -33,5 +34,6 @@ Map<String, dynamic> _$PadelScheduleDtoToJson(PadelScheduleDto instance) =>
       'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime?.toIso8601String(),
       'applyForAllDays': instance.applyForAllDays,
+      'remove': instance.remove,
       'price': instance.price,
     };

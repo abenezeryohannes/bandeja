@@ -3,6 +3,8 @@ import 'package:bandeja/src/core/presentation/widgets/custom.shimmer.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/domain/padels/entities/padel.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/presentation/widgets/app.snack.bar.dart';
 import '../../../../core/presentation/widgets/cached.image.dart';
 import '../../../../core/utils/util.dart';
 import '../../../../main/core/presentations/widgets/feature.card.dart';
@@ -57,42 +59,57 @@ class _OwnerPadelCardState extends State<OwnerPadelCard> {
                   ),
                 ),
                 Align(
-                  alignment: const Alignment(0.9, -0.9),
+                  alignment: const Alignment(1, -1),
                   child: CustomShimmer(
                     show: widget.item == null,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.85)),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        Text(
-                          widget.item == null
-                              ? " "
-                              : widget.item!.getAddress().name,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(
-                          Icons.location_on,
-                          size: 20,
-                        )
-                      ]),
+                    child: InkWell(
+                      onTap: () async {
+                        if (widget.item?.Location != null) {
+                          try {
+                            await Util.launchUrI(
+                                Api.mapUrI(widget.item!.Location!));
+                          } on Failure catch (f) {
+                            AppSnackBar.failure(failure: f);
+                          }
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white.withOpacity(0.80)),
+                        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                          Text(
+                            widget.item == null
+                                ? " "
+                                : widget.item!.getAddress().name,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          const Icon(
+                            Icons.location_on,
+                            size: 16,
+                          )
+                        ]),
+                      ),
                     ),
                   ),
                 ),
                 Align(
-                  alignment: const Alignment(-1, 1.9),
+                  alignment: const Alignment(-1, 1.77),
                   child: PadelAvatar(
                     borderColor: Colors.white,
                     hero: '',
+                    gap: 0,
                     item: widget.item,
                     margins: const EdgeInsets.only(left: 20),
                     onClick: () {},
-                    radius: 40,
+                    radius: 36,
                   ),
                 ),
                 Align(
@@ -104,7 +121,7 @@ class _OwnerPadelCardState extends State<OwnerPadelCard> {
                         text: TextSpan(
                             text: widget.item == null
                                 ? ''
-                                : "${widget.item == null ? '-' : widget.item!.price} KD",
+                                : "${widget.item == null ? '-' : widget.item!.price} KD  ",
                             style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 16,

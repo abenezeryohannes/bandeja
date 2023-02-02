@@ -92,8 +92,12 @@ class AdminStatsPageController extends GetxController {
       result.fold((l) {
         adminWeeklyStatDto.value = WrapperDto.errorState(failure: l);
       }, (r) {
-        adminWeeklyStatDto.value =
-            WrapperDto<List<AdminWeeklyStatDto>>.loadedState(value: r);
+        if (r.isEmpty) {
+          adminWeeklyStatDto.value = EmptyState();
+        } else {
+          adminWeeklyStatDto.value =
+              WrapperDto<List<AdminWeeklyStatDto>>.loadedState(value: r);
+        }
       });
     }
   }

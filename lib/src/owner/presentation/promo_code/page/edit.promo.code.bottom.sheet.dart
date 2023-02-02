@@ -21,6 +21,8 @@ class EditPromoCodeBottomSheet extends StatefulWidget {
 
 class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
   late EditPromoCodeBottomSheetController controller;
+  FocusNode _promoCodeTextFocusNode = FocusNode();
+  FocusNode _promoCodeDiscountFocusNode = FocusNode();
   @override
   void initState() {
     controller =
@@ -85,6 +87,8 @@ class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
                           elevation: 1,
                           radius: 12,
                           enabled: false,
+                          focusNode: _promoCodeTextFocusNode,
+                          textInputAction: TextInputAction.done,
                           validator: (value) => Util.validateNoEmpty(value),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           initialValue: controller.promo.value.code,
@@ -128,6 +132,8 @@ class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
                               error: null,
                               elevation: 1,
                               radius: 12,
+                              focusNode: _promoCodeDiscountFocusNode,
+                              textInputAction: TextInputAction.done,
                               enabled: widget.promoCode.maxBooking ==
                                   widget.promoCode.leftForBooking,
                               suffixText: '%',
@@ -151,7 +157,7 @@ class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Booking',
+                            'Promos Left',
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
@@ -220,7 +226,7 @@ class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
                                                       100)))),
                                       1),
                                   child: Text(
-                                    '${controller.promo.value.maxBooking} Booking',
+                                    '${controller.promo.value.maxBooking} Promos',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1!
@@ -241,6 +247,8 @@ class _EditPromoCodeBottomSheetState extends State<EditPromoCodeBottomSheet> {
                             left: 30.0, right: 30, bottom: 10),
                         child: Obx(() => BigTextButton(
                               onClick: () {
+                                _promoCodeTextFocusNode.unfocus();
+                                _promoCodeDiscountFocusNode.unfocus();
                                 controller.addPromo();
                               },
                               padding: const EdgeInsets.symmetric(vertical: 3),

@@ -32,10 +32,29 @@ class Util {
     DateTime startTime = DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
     DateTime endTime = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day, 23, 59, 0);
+            DateTime.now().day, 00, 00, 0)
+        .add(const Duration(hours: 24));
     List<Map<String, DateTime>> result = [];
     for (DateTime index = startTime;
         index.isBefore(endTime);
+        index = index.add(Duration(minutes: duration.minute))) {
+      result.add({DateFormat.jm().format(index): index});
+    }
+    return result;
+  }
+
+  static List<Map<String, DateTime>> getEndTime(
+      DurationModel duration, DateTime? startTime) {
+    List<Map<String, DateTime>> result = [];
+    if (startTime == null) return result;
+
+    DateTime endTime = DateTime(startTime.year, startTime.month, startTime.day,
+            startTime.hour, startTime.minute, startTime.second)
+        .add(const Duration(days: 1))
+        .add(const Duration(hours: 2));
+
+    for (DateTime index = startTime.add(Duration(minutes: duration.minute));
+        index.isBefore(endTime) || index.isAtSameMomentAs(endTime);
         index = index.add(Duration(minutes: duration.minute))) {
       result.add({DateFormat.jm().format(index): index});
     }
@@ -129,8 +148,11 @@ class Util {
     return validation;
   }
 
-  static String getDurationIn(num minute, {String showIn: 'H'}) {
-    int hour = (minute / 60).toInt();
+  static String getDurationIn(num minute, {String showIn = 'H'}) {
+    if (showIn == 'M') {
+      return '$minute min';
+    }
+    int hour = minute ~/ 60;
     int minutes = (minute % 60).toInt();
     return "${hour > 0 ? hour : ''} ${hour > 1 ? 'Hours' : (hour > 0) ? 'Hour' : ''} ${minutes > 0 ? minutes : ''} ${(minutes > 1) ? 'Minutes' : (minutes > 0) ? 'Minute' : ''}";
   }
@@ -253,5 +275,68 @@ class Util {
     } catch (e) {
       AppSnackBar.error(message: e.toString());
     }
+  }
+
+  static Widget showDialog(
+      {String? title,
+      required BuildContext context,
+      String? desc,
+      String? yes,
+      String? no,
+      required Function onYes,
+      required Function onNo,
+      required double height}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 40, vertical: height),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title != null)
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              const SizedBox(
+                height: 30,
+              ),
+              if (desc != null)
+                Text(
+                  desc,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (no != null)
+                TextButton(
+                    onPressed: () => onNo(),
+                    child: Text(
+                      no,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    )),
+              if (yes != null)
+                TextButton(
+                    onPressed: () => onYes(),
+                    child: Text(
+                      yes,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary),
+                    )),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

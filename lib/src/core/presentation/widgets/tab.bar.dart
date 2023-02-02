@@ -20,7 +20,9 @@ class CircularTab {
   final String? icon;
   final String? text;
   final double? radius;
-  CircularTab({this.icon, this.text, this.radius});
+  final Color? color;
+  final double? width;
+  CircularTab({this.color, this.width, this.icon, this.text, this.radius});
 }
 
 class _CircularTabBarState extends State<CircularTabBar> {
@@ -41,6 +43,7 @@ class _CircularTabBarState extends State<CircularTabBar> {
             child: Container(
               margin: EdgeInsets.fromLTRB(index == 0 ? 16 : 10, 0,
                   index == widget.tabs.length - 1 ? 16 : 0, 0),
+              width: widget.tabs[index].width,
               child: InkWell(
                 onTap: () {
                   widget.onItemClick(index);
@@ -59,7 +62,7 @@ class _CircularTabBarState extends State<CircularTabBar> {
                           ? Theme.of(context).colorScheme.secondary
                           : widget.tabs[index].text == null
                               ? Colors.grey.shade300
-                              : Colors.transparent),
+                              : widget.tabs[index].color ?? Colors.transparent),
                   child: Text(widget.tabs[index].text ?? '            ',
                       style: TextStyle(
                           fontSize: 12,

@@ -2,5 +2,5 @@
 
 FLUTTER_TARGET=lib/main_owner.dart
 ASSET_PREFIX=owner
-BUNDLE_NAME=Bandeja Court Owner
-BUNDLE_DISPLAY_NAME=Bandeja Court Owner
+BUNDLE_NAME=Yabelah Court Owner
+BUNDLE_DISPLAY_NAME=Yabelah Court Owner

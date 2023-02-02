@@ -2,18 +2,20 @@ import 'package:bandeja/src/admin/core/presentations/pages/admin.main.page.dart'
 import 'package:bandeja/src/admin/presentation/authentication/pages/admin.landing.page.dart';
 import 'package:bandeja/src/app.controller.dart';
 import 'package:bandeja/src/core/domain/authentication/entities/user.dart';
+import 'package:bandeja/src/core/dto/wrapper.dto.dart';
+import 'package:bandeja/src/core/error/failure.dart';
 import 'package:bandeja/src/core/theme/theme.dart';
+import 'package:bandeja/src/main/presentation/authentication/page/signup.page.dart';
 import 'package:bandeja/src/owner/core/presentation/pages/owner.main.page.dart';
 import 'package:bandeja/src/owner/presentation/authentication/pages/owner.landing.page.dart';
+import 'package:bandeja/src/splash.screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'core/langs/locals.dart';
 import 'flavors.dart';
 import 'main/core/presentations/pages/main.page.dart';
-import 'main/presentation/authentication/page/user.landing.page.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -25,10 +27,11 @@ class App extends StatelessWidget {
         translations: Locals(),
         locale: const Locale('en', 'US'),
         fallbackLocale: const Locale('en', 'US'),
+        // getPages: [GetPage(name: '/home', page: () => const MainPage())],
         enableLog: kDebugMode,
         theme: BandejaThemeData.Theme(),
         themeMode: ThemeMode.light,
-        home: const GuardPage());
+        home: const SplashScreen(nextPage: GuardPage()));
   }
 }
 
@@ -44,7 +47,7 @@ class _GuardPageState extends State<GuardPage> {
 
   @override
   void initState() {
-    appController.loadUser();
+    //appController.loadUser();
     super.initState();
   }
 
@@ -66,6 +69,32 @@ class _GuardPageState extends State<GuardPage> {
           //         : (FF.appFlavor == Flavor.owner)
           //             ? const OwnerHomePage()
           //             : const MainPage()));
+          // return appController.userWrap.value.when(
+          //     emptyState: (() => const SizedBox()),
+          //     loadingState: ((_) => const SizedBox()),
+          //     errorState: (_) {
+          //       if (FF.appFlavor == Flavor.owner) {
+          //         return const OwnerLandingPage();
+          //       } else if (FF.appFlavor == Flavor.admin) {
+          //         return const AdminLandingPage();
+          //       } else {
+          //         return SignupPage(
+          //           onAuthentication: () {
+          //             Get.offAll(() => const MainPage());
+          //           },
+          //         );
+          //       }
+          //     },
+          //     loadedState: (_) {
+          //       if (FF.appFlavor == Flavor.owner) {
+          //         return const OwnerMainPage();
+          //       } else if (FF.appFlavor == Flavor.admin) {
+          //         return const AdminMainPage();
+          //       } else {
+          //         return const MainPage();
+          //       }
+          //     });
+
           return Obx(() => (showAppropriatePage(appController.user.value)));
         },
       ),
@@ -78,33 +107,36 @@ class _GuardPageState extends State<GuardPage> {
       if (user == null) {
         return const OwnerLandingPage();
       } else {
-        GetStorage().write('token', 'owner4');
+        //GetStorage().write('token', 'owner4');
         return const OwnerMainPage();
       }
     } else if (FF.appFlavor == Flavor.admin) {
       if (user == null) {
         return const AdminLandingPage();
       } else {
-        GetStorage().write('token', 'admin7');
+        //GetStorage().write('token', 'admin7');
         return const AdminMainPage();
       }
     } else {
-      if (user == null) {
-        return const UserLandingPage();
+      if (user == null &&
+          appController.userWrap.value.runtimeType ==
+              ErrorState(failure: UnExpectedFailure()).runtimeType) {
+        return SignupPage(
+          onAuthentication: () {
+            Get.offAll(() => const MainPage());
+          },
+        );
+      } else if (user == null &&
+          appController.userWrap.value.runtimeType ==
+              ErrorState(failure: UnExpectedFailure()).runtimeType) {
+        return Container(
+          color: Colors.grey.shade50,
+        );
       } else {
-        GetStorage().write('token', 'user');
+        //GetStorage().write('token', 'user');
         return const MainPage();
       }
     }
-  }
-
-  Widget SplashScreen() {
-    return Image.asset(
-      'assets/img/image.png',
-      height: Get.height,
-      width: Get.width,
-      fit: BoxFit.cover,
-    );
   }
 
   Widget _flavorBanner({

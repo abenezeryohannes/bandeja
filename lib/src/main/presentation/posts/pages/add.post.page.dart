@@ -18,7 +18,10 @@ class AddPostPage extends StatefulWidget {
 
 class _AddPostPageState extends State<AddPostPage> {
   final controller = Get.put(AddPostController());
-
+  final descFocus = FocusNode();
+  final priceFocus = FocusNode();
+  final whatsAppFocus = FocusNode();
+  final callFocus = FocusNode();
   @override
   void dispose() {
     Get.delete<AddPostController>();
@@ -30,6 +33,28 @@ class _AddPostPageState extends State<AddPostPage> {
     return Scaffold(
       appBar: _appBar(),
       backgroundColor: Colors.grey.shade50,
+      floatingActionButton: (descFocus.hasFocus ||
+                  priceFocus.hasFocus ||
+                  whatsAppFocus.hasFocus ||
+                  callFocus.hasFocus) &&
+              MediaQuery.of(context).viewInsets.bottom > 10
+          ? FloatingActionButton(
+              backgroundColor: Colors.grey.shade100,
+              mini: true,
+              onPressed: () {
+                if (descFocus.hasFocus) {
+                  descFocus.nextFocus();
+                } else if (priceFocus.hasFocus) {
+                  priceFocus.nextFocus();
+                } else if (whatsAppFocus.hasFocus) {
+                  whatsAppFocus.nextFocus();
+                } else if (callFocus.hasFocus) {
+                  callFocus.nextFocus();
+                }
+              },
+              child: const Icon(Icons.keyboard_arrow_down),
+            )
+          : null,
       body: SafeArea(
         child: Stack(
           children: [
@@ -61,9 +86,10 @@ class _AddPostPageState extends State<AddPostPage> {
                       child: TextInputForm(
                           label: 'Description',
                           minLines: 4,
+                          focusNode: descFocus,
                           maxLines: 5,
                           placeholder: 'Write the Ads Title',
-                          elevation: 1,
+                          elevation: 0,
                           radius: 12,
                           validator: (value) =>
                               controller.validateNoEmpty(value),
@@ -82,7 +108,9 @@ class _AddPostPageState extends State<AddPostPage> {
                           label: 'Booking Price',
                           placeholder: '00',
                           error: null,
-                          elevation: 1,
+                          focusNode: priceFocus,
+                          elevation: 0,
+                          keybardType: TextInputType.number,
                           radius: 12,
                           suffixText: 'KD',
                           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -104,12 +132,14 @@ class _AddPostPageState extends State<AddPostPage> {
                               child: TextInputForm(
                                   label: 'Whatsapp',
                                   placeholder: 'Add your number',
+                                  focusNode: whatsAppFocus,
                                   validator: (value) =>
                                       controller.phoneValidation(value),
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
-                                  elevation: 1,
+                                  elevation: 0,
                                   radius: 12,
+                                  keybardType: TextInputType.phone,
                                   initialValue:
                                       controller.postDto.value.whatsApp ?? '',
                                   onChanged: (change) {
@@ -123,10 +153,12 @@ class _AddPostPageState extends State<AddPostPage> {
                           child: TextInputForm(
                               label: 'Call',
                               placeholder: 'Add your number',
+                              focusNode: callFocus,
                               validator: (value) =>
                                   controller.phoneValidation(value),
-                              elevation: 1,
+                              elevation: 0,
                               radius: 12,
+                              keybardType: TextInputType.phone,
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               initialValue:
@@ -145,7 +177,7 @@ class _AddPostPageState extends State<AddPostPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            'Court Category',
+                            'Ads Category',
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -161,7 +193,7 @@ class _AddPostPageState extends State<AddPostPage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            'Type to add',
+                            'Type to ads',
                             textAlign: TextAlign.start,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -191,6 +223,7 @@ class _AddPostPageState extends State<AddPostPage> {
                         onClick: () {
                           controller.addPost(context);
                         },
+                        padding: const EdgeInsets.only(top: 14, bottom: 14),
                         isLoading: controller.isLoading.value,
                         textWidget: const Text('Save'),
                       ),
@@ -244,7 +277,7 @@ class _AddPostPageState extends State<AddPostPage> {
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(50),
                   border: Border.all(
                       color: Theme.of(context).dividerColor,
                       width: !controller.postDto.value.offer ? 0 : 1.2),
@@ -275,12 +308,12 @@ class _AddPostPageState extends State<AddPostPage> {
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(50),
                   border: Border.all(
                       color: Theme.of(context).dividerColor,
                       width: controller.postDto.value.offer ? 0 : 1.2),
                   color: controller.postDto.value.offer
-                      ? Theme.of(context).colorScheme.secondary
+                      ? const Color(0xFF109825)
                       : Colors.transparent),
               child: Text('Offered',
                   style: TextStyle(
@@ -325,7 +358,9 @@ class _AddPostPageState extends State<AddPostPage> {
 
   Widget _tabs(List<PostGroupModel?> postGroups) {
     return CircularTabBar(
-        tabs: postGroups.map((e) => CircularTab(text: e?.name)).toList(),
+        tabs: postGroups
+            .map((e) => CircularTab(text: e?.name, radius: 50))
+            .toList(),
         onItemClick: (index) {
           if (postGroups[index] == null) return;
           controller.selectedPostGroup.value = index;

@@ -99,25 +99,53 @@ class _LookingForSearchCardState extends State<LookingForSearchCard>
                 opacity: widget.active ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 14.0),
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 30,
-                    runSpacing: 10,
-                    alignment: WrapAlignment.end,
-                    children: widget.items
-                        .map((e) => SearchItemGroupCard(
-                              active: e == widget.value,
-                              title: e?.name,
-                              icon: e?.icon,
-                              onClick: () {
-                                if (e == null) return;
-                                widget.onChange(e);
-                              },
-                            ))
-                        .toList(),
-                  ),
-                ),
+                    padding: const EdgeInsets.only(top: 14.0),
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: GridView(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 100 / 120,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 10,
+                          crossAxisCount: 3,
+                        ),
+                        shrinkWrap: true,
+                        children: widget.items
+                            .map((e) => SearchItemGroupCard(
+                                  active: e == widget.value ||
+                                      (widget.items.indexOf(e) == 0 &&
+                                          widget.value == null),
+                                  title: e?.name,
+                                  icon: e?.icon,
+                                  onClick: () {
+                                    if (e == null) return;
+                                    widget.onChange(e);
+                                  },
+                                ))
+                            .toList(),
+                      ),
+                    )
+                    // child: Wrap(
+                    //   direction: Axis.horizontal,
+                    //   spacing: 30,
+                    //   runSpacing: 10,
+                    //   alignment: WrapAlignment.end,
+                    //   children: widget.items
+                    //       .map((e) => SearchItemGroupCard(
+                    //             active: e == widget.value ||
+                    //                 (widget.items.indexOf(e) == 0 &&
+                    //                     widget.value == null),
+                    //             title: e?.name,
+                    //             icon: e?.icon,
+                    //             onClick: () {
+                    //               if (e == null) return;
+                    //               widget.onChange(e);
+                    //             },
+                    //           ))
+                    //       .toList(),
+                    // ),
+                    ),
               ),
             ),
           ])),

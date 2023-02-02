@@ -1,6 +1,9 @@
 import 'package:bandeja/src/core/data/authentication/dto/user.dto.dart';
+import 'package:bandeja/src/core/domain/authentication/entities/system.variable.dart';
 import 'package:bandeja/src/core/domain/notifications/entities/notification.dart';
+import 'package:bandeja/src/core/utils/util.dart';
 import 'package:bandeja/src/flavors.dart';
+import 'package:bandeja/src/main/presentation/booking/widgets/recent.bookings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +24,8 @@ import '../../../presentation/authentication/page/user.landing.page.dart';
 class ProfileController extends GetxController {
   RxnString avatar = RxnString();
 
+  RxnString contactUsLink = RxnString();
+
   final userRepository = getIt<IUserRepository>();
 
   final bookingRepository = getIt<IBookingRepository>();
@@ -31,6 +36,9 @@ class ProfileController extends GetxController {
 
   Rx<WrapperDto<UserModel>> userWrapper =
       Rx<WrapperDto<UserModel>>(EmptyState());
+
+  Rx<WrapperDto<SystemVariableModel>> sysWrapper =
+      Rx<WrapperDto<SystemVariableModel>>(EmptyState());
 
   Rx<WrapperDto<List<NotificationModel>>> notificationWrapper =
       Rx<WrapperDto<List<NotificationModel>>>(EmptyState());
@@ -47,6 +55,7 @@ class ProfileController extends GetxController {
   void onInit() {
     loadUser();
     loadBookings();
+    loadSys(false);
     loadNotifications();
     loadNotificationCount();
     super.onInit();
@@ -101,6 +110,14 @@ class ProfileController extends GetxController {
   void loadNotificationCount() async {
     (await notificationRepository.countUnseenNotifications())
         ?.fold((_) {}, (r) => notificationCount.value = r);
+  }
+
+  void loadSys(bool open) async {
+    (await userRepository.getSystemVariable(key: 'contact_us'))?.fold((_) {},
+        (r) {
+      contactUsLink.value = r;
+      if (open && r != null) Util.openwhatsapp((r));
+    });
   }
 
   void saveUser() async {

@@ -18,6 +18,8 @@ class PromoCodeBottomSheet extends StatefulWidget {
 
 class _PromoCodeBottomSheetState extends State<PromoCodeBottomSheet> {
   final controller = Get.put(PromoCodeBottomSheetController());
+  final FocusNode _promoCodeTextFocusNode = FocusNode();
+  final FocusNode _promoCodeDiscountFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -73,7 +75,10 @@ class _PromoCodeBottomSheetState extends State<PromoCodeBottomSheet> {
                           label: 'Promo',
                           placeholder: 'write the promo code',
                           elevation: 1,
+                          maxLines: 1,
                           radius: 12,
+                          focusNode: _promoCodeTextFocusNode,
+                          textInputAction: TextInputAction.done,
                           validator: (value) => Util.validateNoEmpty(value),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           initialValue: controller.promo.value.code,
@@ -116,7 +121,10 @@ class _PromoCodeBottomSheetState extends State<PromoCodeBottomSheet> {
                               error: null,
                               elevation: 1,
                               radius: 12,
+                              textInputAction: TextInputAction.done,
+                              maxLines: 1,
                               suffixText: '%',
+                              focusNode: _promoCodeDiscountFocusNode,
                               validator: (_) => Util.validateGreaterThan(
                                   controller.promo.value.discount, 0),
                               floatingLabelBehavior:
@@ -224,6 +232,8 @@ class _PromoCodeBottomSheetState extends State<PromoCodeBottomSheet> {
                             left: 30.0, right: 30, bottom: 10),
                         child: Obx(() => BigTextButton(
                               onClick: () {
+                                _promoCodeTextFocusNode.unfocus();
+                                _promoCodeDiscountFocusNode.unfocus();
                                 controller.addPromo();
                               },
                               padding: const EdgeInsets.symmetric(vertical: 3),

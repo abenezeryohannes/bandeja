@@ -10,6 +10,11 @@ _$_PaymentModel _$$_PaymentModelFromJson(Map<String, dynamic> json) =>
     _$_PaymentModel(
       id: json['id'] as int? ?? -1,
       userId: json['userId'] as int,
+      paymentId: json['paymentId'] as String?,
+      ref: json['ref'] as String?,
+      tranId: json['tranId'] as String?,
+      trackId: json['trackId'] as String?,
+      paymentType: json['paymentType'] as String? ?? 'unknown',
       amount: (json['amount'] as num?)?.toDouble() ?? 0,
       createdAt: json['createdAt'] == null
           ? null
@@ -23,6 +28,11 @@ Map<String, dynamic> _$$_PaymentModelToJson(_$_PaymentModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
+      'paymentId': instance.paymentId,
+      'ref': instance.ref,
+      'tranId': instance.tranId,
+      'trackId': instance.trackId,
+      'paymentType': instance.paymentType,
       'amount': instance.amount,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),

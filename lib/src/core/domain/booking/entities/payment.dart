@@ -9,6 +9,11 @@ class PaymentModel with _$PaymentModel {
   factory PaymentModel({
     @Default(-1) int id,
     required int userId,
+    String? paymentId,
+    String? ref,
+    String? tranId,
+    String? trackId,
+    @Default('unknown') String paymentType,
     @Default(0) double amount,
     DateTime? createdAt,
     DateTime? updatedAt,

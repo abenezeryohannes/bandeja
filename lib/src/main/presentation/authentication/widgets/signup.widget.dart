@@ -139,40 +139,59 @@ class _SignupSlideState extends State<SignupSlide> {
   }
 
   Widget _countrySelector() {
+    Country(name: 'Kuwait', flag: 'assets/img/kuwait.png', code: '+965');
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: DropdownButton<Country>(
-        value: widget.country,
-        icon: const Icon(
-          Icons.arrow_drop_down,
-          size: 32,
-        ),
-        elevation: 16,
-        style: Theme.of(context).textTheme.bodyText2,
-        underline: null,
-        onChanged: (Country? value) {
-          widget.onCountryChange(value!);
-        },
-        items:
-            widget.countries.map<DropdownMenuItem<Country>>((Country? country) {
-          return DropdownMenuItem<Country>(
-            value: country,
-            child: Row(
-              children: [
-                Image.asset(
-                  country?.flag ?? 'assets/img/kuwait.png',
-                  width: 24,
-                  height: 16,
-                ),
-                const SizedBox(
-                  width: 3,
-                ),
-                Text(country!.code),
-              ],
-            ),
-          );
-        }).toList(),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            widget.country.flag,
+            width: 24,
+            height: 16,
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Text(widget.country.code,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
       ),
     );
+    // return Padding(
+    //   padding: const EdgeInsets.only(left: 10.0),
+    //   child: DropdownButton<Country>(
+    //     value: widget.country,
+    //     icon: const Icon(
+    //       Icons.arrow_drop_down,
+    //       size: 32,
+    //     ),
+    //     elevation: 16,
+    //     style: Theme.of(context).textTheme.bodyText2,
+    //     underline: null,
+    //     onChanged: (Country? value) {
+    //       widget.onCountryChange(value!);
+    //     },
+    //     items:
+    //         widget.countries.map<DropdownMenuItem<Country>>((Country? country) {
+    //       return DropdownMenuItem<Country>(
+    //         value: country,
+    //         child: Row(
+    //           children: [
+    //             Image.asset(
+    //               country?.flag ?? 'assets/img/kuwait.png',
+    //               width: 24,
+    //               height: 16,
+    //             ),
+    //             const SizedBox(
+    //               width: 3,
+    //             ),
+    //             Text(country!.code),
+    //           ],
+    //         ),
+    //       );
+    //     }).toList(),
+    //   ),
+    // );
   }
 }

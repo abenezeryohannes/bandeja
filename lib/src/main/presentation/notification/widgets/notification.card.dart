@@ -26,7 +26,7 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(top: 10),
+      // margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
           color: isNotSeen()
@@ -47,7 +47,7 @@ class _NotificationCardState extends State<NotificationCard> {
               widget.notification == null
                   ? ".              ."
                   : widget.notification!.title,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: isNotSeen()
                       ? Theme.of(context).colorScheme.secondary
                       : Theme.of(context).colorScheme.onBackground,
