@@ -36,7 +36,7 @@ const CORS_OPTIONS = {
 // }
 
 async function bootstrap() {
-  const adapter = new FastifyAdapter();
+  const adapter = new FastifyAdapter({ bodyLimit: 10048576 });
   adapter.enableCors(CORS_OPTIONS);
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -44,9 +44,6 @@ async function bootstrap() {
   );
   app.register(contentParser);
   app.setGlobalPrefix('api/v1');
-
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   app.useGlobalPipes(new ValidateInputPipe());
   await app.listen(process.env.PORT || 5000, '0.0.0.0');
