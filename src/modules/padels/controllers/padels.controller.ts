@@ -142,6 +142,9 @@ export class PadelsController {
           filename: editFileName,
         }),
         fileFilter: imageFileFilter,
+        limits: {
+          fieldSize: 10485760,
+        },
       },
     ),
   )
@@ -171,6 +174,9 @@ export class PadelsController {
           destination: join(process.cwd(), 'assets', 'public'),
           filename: editFileName,
         }),
+        limits: {
+          fieldSize: 10485760,
+        },
         fileFilter: imageFileFilter,
       },
     ),

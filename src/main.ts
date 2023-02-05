@@ -7,7 +7,6 @@ import { AppModule } from './app.module';
 import { ValidateInputPipe } from './core/pipes/validate.pipe';
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
-import { json, urlencoded } from 'express';
 
 process.env.TZ = '+0:00';
 

@@ -32,6 +32,9 @@ export class UsersController {
         destination: join(process.cwd(), 'assets', 'public'),
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 10485760,
+      },
       fileFilter: imageFileFilter,
     }),
   )

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { join } from 'path';
 import { FEATURE_REPOSITORY } from '../../../../core/constants';
 import { Util } from '../../../../core/utils/util';
 import { FeatureDto } from '../../infrastructure/dto/feature.dto';
@@ -59,6 +60,14 @@ export class FeatureService {
 
     if (body.name != null) feature.name = body.name;
 
+    //ICON
+    if (
+      request.files != null &&
+      request.files.icon != null &&
+      request.files.icon.length > 0
+    )
+      feature.icon = join('public', request.files.icon[0].filename);
+
     return await feature.save({ transaction: request.transaction });
   }
 
@@ -75,6 +84,13 @@ export class FeatureService {
     });
 
     if (body.enabled != null) feature.enabled = body.enabled;
+    //ICON
+    if (
+      request.files != null &&
+      request.files.icon != null &&
+      request.files.icon.length > 0
+    )
+      feature.icon = join('public', request.files.icon[0].filename);
 
     return await feature.save({ transaction: request.transaction });
   }

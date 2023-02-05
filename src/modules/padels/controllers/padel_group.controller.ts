@@ -70,6 +70,9 @@ export class PadelGroupController {
         destination: join(process.cwd(), 'assets', 'img'),
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 10485760,
+      },
       fileFilter: imageFileFilter,
     }),
   )
@@ -97,6 +100,9 @@ export class PadelGroupController {
         destination: join(process.cwd(), 'assets', 'img'),
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 10485760,
+      },
       fileFilter: imageFileFilter,
     }),
   )

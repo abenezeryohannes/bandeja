@@ -22,13 +22,13 @@ export class Payment extends Model {
   amount: number;
 
   @Column({ type: DataType.STRING })
-  paymentID: string;
+  paymentId: string;
 
   @Column({ type: DataType.STRING })
-  tranID: string;
+  tranId: string;
 
   @Column({ type: DataType.STRING })
-  trackID: string;
+  trackId: string;
 
   @Column({ type: DataType.STRING })
   postDate: string;

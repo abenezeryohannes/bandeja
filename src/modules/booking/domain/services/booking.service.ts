@@ -113,7 +113,7 @@ export class BookingService {
     if (query.Result != null) payment.status = String(query.Result).toString();
 
     if (query.PaymentID != null)
-      payment.paymentID = String(query.PaymentID).toString();
+      payment.paymentId = String(query.PaymentID).toString();
 
     if (query.payment_type != null)
       payment.paymentType = String(query.payment_type).toString();
@@ -124,11 +124,11 @@ export class BookingService {
       payment.postDate = String(query.PostDate).toString();
 
     if (query.TrackID != null)
-      payment.trackID = String(query.TrackID).toString();
+      payment.trackId = String(query.TrackID).toString();
 
     if (query.Ref != null) payment.ref = String(query.Ref).toString();
 
-    if (query.TranID != null) payment.tranID = String(query.TranID).toString();
+    if (query.TranID != null) payment.tranId = String(query.TranID).toString();
 
     payment = await payment.save({ transaction: request.transaction });
 

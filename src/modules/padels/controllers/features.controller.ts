@@ -1,6 +1,22 @@
-import { Body, Request, Query, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Request,
+  Query,
+  Controller,
+  Get,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { validateOrReject } from 'class-validator';
+import { diskStorage } from 'multer';
+import { join } from 'path';
+import { TransactionInterceptor } from '../../../core/database/decorators/transaction.interceptor';
+import {
+  editFileName,
+  imageFileFilter,
+} from '../../../core/dto/file.upload.util';
 import { WrapperDto } from '../../../core/dto/wrapper.dto';
+import { FastifyFileFieldsInterceptor } from '../../../fastify.file.fields.interceptor';
 import { Roles } from '../../auth/domain/guards/roles.decorator';
 import { ROLE } from '../../users/infrastructure/dto/user.dto';
 import { FeatureService } from '../domain/services/feature.service';
@@ -24,6 +40,19 @@ export class FeaturesController {
 
   @Roles(ROLE.ADMIN)
   @Post('edit')
+  @UseInterceptors(TransactionInterceptor)
+  @UseInterceptors(
+    FastifyFileFieldsInterceptor([{ name: 'icon', maxCount: 1 }], {
+      storage: diskStorage({
+        destination: join(process.cwd(), 'assets', 'img'),
+        filename: editFileName,
+      }),
+      limits: {
+        fieldSize: 10485760,
+      },
+      fileFilter: imageFileFilter,
+    }),
+  )
   async edit(@Request() request, @Body() body) {
     try {
       const featureDto = new FeatureEditDto(body);
@@ -38,6 +67,19 @@ export class FeaturesController {
 
   @Roles(ROLE.ADMIN)
   @Post('store')
+  @UseInterceptors(TransactionInterceptor)
+  @UseInterceptors(
+    FastifyFileFieldsInterceptor([{ name: 'icon', maxCount: 1 }], {
+      storage: diskStorage({
+        destination: join(process.cwd(), 'assets', 'img'),
+        filename: editFileName,
+      }),
+      limits: {
+        fieldSize: 10485760,
+      },
+      fileFilter: imageFileFilter,
+    }),
+  )
   async store(@Request() request, @Body() body) {
     try {
       const featureDto = new FeatureDto(body);

@@ -68,6 +68,9 @@ export class PostsController {
         destination: join(process.cwd(), 'assets', 'public'),
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 10485760,
+      },
       fileFilter: imageFileFilter,
     }),
   )
@@ -104,6 +107,9 @@ export class PostsController {
         destination: join(process.cwd(), 'assets', 'public'),
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 10485760,
+      },
       fileFilter: imageFileFilter,
     }),
   )
