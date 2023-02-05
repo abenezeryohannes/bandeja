@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { ValidateInputPipe } from './core/pipes/validate.pipe';
 import { contentParser } from 'fastify-multer';
 import 'reflect-metadata';
+import { json, urlencoded } from 'express';
 
 process.env.TZ = '+0:00';
 
@@ -43,6 +44,10 @@ async function bootstrap() {
   );
   app.register(contentParser);
   app.setGlobalPrefix('api/v1');
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
+
   app.useGlobalPipes(new ValidateInputPipe());
   await app.listen(process.env.PORT || 5000, '0.0.0.0');
 }
