@@ -262,26 +262,29 @@ export class BookingService {
     const result = order['dataValues'];
     result.PadelSchedule = schedule['dataValues'];
 
-    const title = 'New Reservation';
+    const padelOwner = await this.userService.findOneById(padel.userId);
 
-    const desc =
-      request.user.fullName +
-      ' has made a reservation for ' +
-      padel.name +
-      ' court on ' +
-      moment(Date.parse(order.createdAt)).format('ddd MMMM hh:mm A') +
-      '.';
+    if (padelOwner.Setting.bookingNotification) {
+      const title = 'New Reservation';
+      const desc =
+        request.user.fullName +
+        ' has made a reservation for ' +
+        padel.name +
+        ' court on ' +
+        moment(Date.parse(order.createdAt)).format('ddd MMMM hh:mm A') +
+        '.';
 
-    await this.notificationService.SendMessage(
-      request,
-      new NotificationDto({
-        title: title,
-        desc: desc,
-        seen: false,
-        userId: padel.userId,
-      }),
-      true,
-    );
+      await this.notificationService.SendMessage(
+        request,
+        new NotificationDto({
+          title: title,
+          desc: desc,
+          seen: false,
+          userId: padel.userId,
+        }),
+        true,
+      );
+    }
 
     return result;
   }
