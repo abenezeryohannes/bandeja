@@ -206,14 +206,30 @@ class BookingRemoteDataSource {
 
   Future<PadelOrderModel?>? notifyPayment({required data}) async {
     Map<String, String?> queryParams = {
-      'PaymentID': data['PaymentID'],
-      'payment_type': data['payment_type'],
-      'Result': data['Result'],
-      'PostDate': data['PostDate'],
-      'TranID': data['TranID'],
-      'OrderID': data['OrderID'],
-      'TrackID': data['TrackID'],
-      'Ref': data['Ref'],
+      'PaymentID': (data['PaymentID'] as List<String>).isNotEmpty
+          ? (data['PaymentID'] as List<String>).first
+          : null,
+      'Auth': (data['Auth'] as List<String>).isNotEmpty
+          ? (data['Auth'] as List<String>).first
+          : null,
+      'Result': (data['Result'] as List<String>).isNotEmpty
+          ? (data['Result'] as List<String>).first
+          : null,
+      'PostDate': (data['PostDate'] as List<String>).isNotEmpty
+          ? (data['PostDate'] as List<String>).first
+          : null,
+      'TranID': (data['TranID'] as List<String>).isNotEmpty
+          ? (data['TranID'] as List<String>).first
+          : null,
+      'OrderID': (data['OrderID'] as List<String>).isNotEmpty
+          ? (data['OrderID'] as List<String>).first
+          : null,
+      'TrackID': (data['TrackID'] as List<String>).isNotEmpty
+          ? (data['TrackID'] as List<String>).first
+          : null,
+      'Ref': (data['Ref'] as List<String>).isNotEmpty
+          ? (data['Ref'] as List<String>).first
+          : null,
     };
 
     http.Response response = await client.get(

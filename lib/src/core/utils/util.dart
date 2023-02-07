@@ -339,4 +339,23 @@ class Util {
       ),
     );
   }
+
+  static getOrderIdHash(int? id) {
+    if (id == null) {
+      return '#0000000';
+    }
+
+    const placeholder = '0000000';
+    int maxLength = id.toString().length;
+
+    String result;
+
+    if (maxLength < 7) {
+      result = placeholder.substring(0, 7 - maxLength) + id.toString();
+    } else {
+      result = id.toString();
+    }
+
+    return '#$result';
+  }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/presentation/widgets/custom.shimmer.dart';
+import '../../../../core/utils/util.dart';
 
 class AdminBookingCard extends StatefulWidget {
   const AdminBookingCard({Key? key, this.order, required this.onClick})
@@ -144,8 +145,7 @@ class _AdminBookingCardState extends State<AdminBookingCard> {
                                     const BorderRadius.all(Radius.circular(5)),
                                 color: Colors.grey.shade200),
                             child: Text(
-                              widget.order?.Payment?.amount.toString() ??
-                                  '#0000000',
+                              Util.getOrderIdHash(widget.order?.id),
                               maxLines: 1,
                               style: Theme.of(context)
                                   .textTheme

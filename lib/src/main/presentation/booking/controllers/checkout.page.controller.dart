@@ -133,11 +133,13 @@ class CheckoutPageController extends GetxController {
 
   void onPaymentFailure(isSuccess, transactionDetails, message) async {
     //print(transactionDetails.toString());
-    await Get.off(BookingPage(
-      padel: padel,
-      order: padelOrder.value!,
-    ));
-    await Get.off(const MyBookingPage());
+    transactionDetails['Result'] = 'No Successfull';
+    onPaymentSuccess(isSuccess, transactionDetails, message);
+    // await Get.off(BookingPage(
+    //   padel: padel,
+    //   order: padelOrder.value!,
+    // ));
+    // await Get.off(const MyBookingPage());
   }
 
   void onPaymentSuccess(isSuccess, data, message) async {
@@ -154,7 +156,7 @@ class CheckoutPageController extends GetxController {
       AppSnackBar.failure(failure: l);
     }, (r) async {
       if (padelOrder.value == null) return;
-      await Get.off(PaymentPage(
+      await Get.off(BookingPage(
         padel: padel,
         order: r,
       ));

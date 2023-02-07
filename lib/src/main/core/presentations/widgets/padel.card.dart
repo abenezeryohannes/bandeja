@@ -29,18 +29,25 @@ class _PadelCardState extends State<PadelCard> {
   @override
   void initState() {
     bookmarked = !(widget.item == null || widget.item!.isBookmarked());
-    loadIsBookmark(widget.item?.id);
+    // loadIsBookmark(widget.item?.id);
     super.initState();
   }
 
   void loadIsBookmark(int? padelId) async {
     if (padelId == null) return;
-    (await getIt<IPadelRepository>().isBookmark(padelId: padelId))
-        ?.fold((_) {}, (r) => bookmarked = r);
+    (await getIt<IPadelRepository>().isBookmark(padelId: padelId))?.fold((_) {},
+        (r) {
+      if (mounted) {
+        setState(() {
+          bookmarked = r;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    loadIsBookmark(widget.item?.id);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

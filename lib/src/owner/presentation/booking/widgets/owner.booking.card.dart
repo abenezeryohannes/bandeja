@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/presentation/widgets/custom.shimmer.dart';
+import '../../../../core/utils/util.dart';
 
 class OwnerBookingCard extends StatefulWidget {
   const OwnerBookingCard({Key? key, this.order, required this.onClick})
@@ -142,15 +143,16 @@ class _OwnerBookingCardState extends State<OwnerBookingCard> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(5)),
                               color: Colors.grey.shade200),
-                          child: Text(
-                            widget.order?.Payment?.amount.toString() ??
-                                '#0000000',
-                            maxLines: 1,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
+                          child: (widget.order?.id == null)
+                              ? const SizedBox()
+                              : Text(
+                                  Util.getOrderIdHash(widget.order?.id),
+                                  maxLines: 1,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
                         ),
                       ),
                     ],

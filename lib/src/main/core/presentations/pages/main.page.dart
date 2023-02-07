@@ -48,10 +48,18 @@ class _MainPageState extends State<MainPage> {
                   child: Icon(CupertinoIcons.search,
                       size: 28, color: Theme.of(context).cardColor),
                   onPressed: () {
-                    c.fabAnimationController.reset();
-                    c.borderRadiusAnimationController.reset();
-                    c.borderRadiusAnimationController.forward();
-                    c.fabAnimationController.forward();
+                    if (mounted) {
+                      c.fabAnimationController.reset();
+                    }
+                    if (mounted) {
+                      c.borderRadiusAnimationController.reset();
+                    }
+                    if (mounted) {
+                      c.borderRadiusAnimationController.forward();
+                    }
+                    if (mounted) {
+                      c.fabAnimationController.forward();
+                    }
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         opaque: false, // set to false
@@ -110,5 +118,13 @@ class _MainPageState extends State<MainPage> {
                 ),
               ))),
     );
+  }
+
+  @override
+  void dispose() {
+    c.fabAnimationController.dispose();
+    c.borderRadiusAnimationController.dispose();
+    c.hideBottomBarAnimationController.dispose();
+    super.dispose();
   }
 }

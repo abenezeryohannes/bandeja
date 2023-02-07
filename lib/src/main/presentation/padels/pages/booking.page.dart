@@ -138,6 +138,7 @@ class _BookingPageState extends State<BookingPage> {
                 if (!widget.order.hasPayed() && !takingScreenShot) {
                   Get.off(CheckoutPage(
                       padel: widget.padel,
+                      givenOrder: widget.order,
                       schedule: widget.order.getSchedule()));
                 }
               },

@@ -54,7 +54,8 @@ class _PadelCardWithAvatarState extends State<PadelCardWithAvatar> {
 
   @override
   void initState() {
-    bookmarked = !(widget.item == null || widget.item!.isBookmarked());
+    bookmarked =
+        !(widget.item == null || (widget.item?.isBookmarked() ?? false));
     super.initState();
   }
 
